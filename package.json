@@ -1,0 +1,7 @@
+{
+  "name": "paprize",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "core:dev": "npm run dev -w packages/core"
+  }
+}
