@@ -1,20 +1,20 @@
-    .pp-current-element {
+    .pz-current-element {
         box-shadow: 0 0 0 2px #3c00ff;
     }
 
-    .pp-current-text {
+    .pz-current-text {
         box-shadow: 0 0 0 2px #14c5e7;
     }
 
-    .pp-ignored-element {
+    .pz-ignored-element {
         box-shadow: 0 0 0 2px #ff1e00d1;
     }
 
-    .pp-ignored-text {
+    .pz-ignored-text {
         box-shadow: 0 0 0 2px #e77314;
     }
 
-    .pp-page {
+    .pz-page {
         border: 1px solid black;
         padding: 1rem;
         margin: 1rem;

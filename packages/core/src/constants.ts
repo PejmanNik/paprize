@@ -1,8 +1,8 @@
-export const currentElementClassName = "pp-current-element";
-export const currentTextClassName = "pp-current-text";
+export const currentElementClassName = 'pz-current-element';
+export const currentTextClassName = 'pz-current-text';
 
-export const ignoredElementClassName = "pp-ignored-element";
-export const ignoredTextClassName = "pp-ignored-text";
+export const ignoredElementClassName = 'pz-ignored-element';
+export const ignoredTextClassName = 'pz-ignored-text';
 
-export const pageClassName = "pp-page";
-export const attributePrefix = "data-pp-";
+export const pageClassName = 'pz-page';
+export const attributePrefix = 'data-pz-';

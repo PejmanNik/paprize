@@ -1,38 +1,38 @@
 import {
-  getNodeConfigAttribute,
-  defaultConfigAttribute,
-  type ConfigAttribute,
-} from "./attributes";
-import type { PageElement } from "./PageNodes";
+    getNodeConfigAttribute,
+    defaultConfigAttribute,
+    type ConfigAttribute,
+} from './attributes';
+import type { PageElement } from './PageNodes';
 
 export interface PaginationPlugin {
-  name: string;
-  onClone: (source: Element, cloned: PageElement) => void;
+    name: string;
+    onClone: (source: Element, cloned: PageElement) => void;
 }
 
 export type PaginationConfig = ConfigAttribute & {
-  plugins: PaginationPlugin[];
+    plugins: PaginationPlugin[];
 };
 
 export const defaultConfig: PaginationConfig = {
-  plugins: [],
-  ...defaultConfigAttribute,
+    plugins: [],
+    ...defaultConfigAttribute,
 };
 
 export function getConfigFromAttributes(
-  node: Node | null,
-  globalConfig?: PaginationConfig
+    node: Node | null,
+    globalConfig?: PaginationConfig
 ): PaginationConfig {
-  const attributes = getNodeConfigAttribute(node);
+    const attributes = getNodeConfigAttribute(node);
 
-  return { ...attributes, plugins: [], ...globalConfig };
+    return { ...defaultConfig, ...globalConfig, ...attributes };
 }
 
 export function triggerPlugins(
-  plugins: PaginationPlugin[],
-  action: (plugin: PaginationPlugin) => void
+    plugins: PaginationPlugin[],
+    action: (plugin: PaginationPlugin) => void
 ) {
-  plugins.forEach((plugin) => {
-    action(plugin);
-  });
+    plugins.forEach((plugin) => {
+        action(plugin);
+    });
 }

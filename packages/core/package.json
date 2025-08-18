@@ -1,47 +1,52 @@
 {
-  "name": "@paprize/core",
-  "version": "0.0.1",
-  "description": "Paginate DOM elements for professional, print-ready reports",
-  "type": "module",
-  "files": ["dist"],
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.esm.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.umd.cjs"
+    "name": "@paprize/core",
+    "version": "0.0.1",
+    "description": "Paginate DOM elements for professional, print-ready reports",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.umd.cjs",
+    "module": "./dist/index.esm.js",
+    "exports": {
+        ".": {
+            "import": "./dist/index.esm.js",
+            "require": "./dist/index.umd.cjs"
+        }
+    },
+    "keywords": [
+        "paper",
+        "print",
+        "report"
+    ],
+    "homepage": "https://github.com/PejmanNik/paprize#readme",
+    "bugs": {
+        "url": "https://github.com/PejmanNik/paprize/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PejmanNik/paprize.git"
+    },
+    "license": "MIT",
+    "author": "PejmanNikram",
+    "scripts": {
+        "dev": "vite",
+        "test": "vitest",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "@microsoft/api-extractor": "^7.52.10",
+        "happy-dom": "^18.0.1",
+        "preact": "^10.27.0",
+        "typescript": "~5.8.3",
+        "unplugin-dts": "^1.0.0-beta.6",
+        "vite": "^7.0.4",
+        "vite-plugin-checker": "^0.10.2",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@preact/signals-core": "^1.11.0",
+        "loglevel": "^1.9.2"
     }
-  },
-  "keywords": [
-    "paper",
-    "print",
-    "report"
-  ],
-  "homepage": "https://github.com/PejmanNik/paprize#readme",
-  "bugs": {
-    "url": "https://github.com/PejmanNik/paprize/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PejmanNik/paprize.git"
-  },
-  "license": "MIT",
-  "author": "PejmanNikram",  
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@microsoft/api-extractor": "^7.52.10",
-    "preact": "^10.27.0",
-    "typescript": "~5.8.3",
-    "unplugin-dts": "^1.0.0-beta.6",
-    "vite": "^7.0.4",
-    "vite-plugin-checker": "^0.10.2"    
-  },
-  "dependencies": {
-    "@preact/signals-core": "^1.11.0",
-    "loglevel": "^1.9.2"
-  }
 }

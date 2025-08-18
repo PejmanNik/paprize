@@ -1,7 +1,12 @@
 {
-  "name": "paprize",
-  "workspaces": ["packages/*"],
-  "scripts": {
-    "core:dev": "npm run dev -w packages/core"
-  }
+    "name": "paprize",
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "core:dev": "npm run dev -w packages/core"
+    },
+    "devDependencies": {
+        "prettier": "3.6.2"
+    }
 }
