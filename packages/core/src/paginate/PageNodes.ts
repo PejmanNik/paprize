@@ -93,7 +93,7 @@ export class PageText {
     }
 
     get textContent(): string {
-        return this._node.textContent ?? '';
+        return this._node.textContent;
     }
 
     set textContent(value: string) {

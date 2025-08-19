@@ -32,11 +32,13 @@
     "scripts": {
         "dev": "vite",
         "test": "vitest",
+        "coverage": "vitest run --coverage",
         "build": "tsc && vite build",
         "preview": "vite preview"
     },
     "devDependencies": {
         "@microsoft/api-extractor": "^7.52.10",
+        "@vitest/coverage-v8": "^3.2.4",
         "happy-dom": "^18.0.1",
         "preact": "^10.27.0",
         "typescript": "~5.8.3",
