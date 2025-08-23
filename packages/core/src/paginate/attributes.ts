@@ -51,12 +51,13 @@ export type ConfigAttribute = {
     [K in AttributeKey]?: AttributeValue<K>;
 };
 
-export const defaultConfigAttribute: ConfigAttribute = Object.fromEntries(
-    Object.entries(AttributeDef).map(([key, configValue]) => [
-        key,
-        configValue.defaultValue,
-    ])
-) as ConfigAttribute;
+export const defaultConfigAttribute: Required<ConfigAttribute> =
+    Object.fromEntries(
+        Object.entries(AttributeDef).map(([key, configValue]) => [
+            key,
+            configValue.defaultValue,
+        ])
+    ) as Required<ConfigAttribute>;
 
 export function getNodeConfigAttribute(node: Node | null): ConfigAttribute {
     if (!node) {

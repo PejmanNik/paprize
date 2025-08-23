@@ -130,6 +130,19 @@ describe('PageElement', () => {
 
         expect(pageElem.getHeight()).toBe(nodeHeight);
     });
+
+    it('should return true when element is empty', () => {
+        const pageElem = new PageElement(element, transaction, defaultConfig);
+
+        expect(pageElem.isEmpty()).toBe(true);
+    });
+
+    it('should return false when element is not empty', () => {
+        element.appendChild(document.createTextNode('text'));
+        const pageElem = new PageElement(element, transaction, defaultConfig);
+
+        expect(pageElem.isEmpty()).toBe(false);
+    });
 });
 
 describe('PageText', () => {

@@ -59,10 +59,10 @@ class PageState {
 
 export class PageManager {
     private _pageState: PageState;
-    private _pageSize: PageSize;
-    private _transaction: Transaction;
-    private _tempBook: Element;
-    private _config: PaginationConfig;
+    private readonly _pageSize: PageSize;
+    private readonly _transaction: Transaction;
+    private readonly _tempBook: Element;
+    private readonly _config: PaginationConfig;
 
     public constructor(
         tempBook: Element,
@@ -107,7 +107,7 @@ export class PageManager {
             // iterate backwards to check the element in order
             for (let i = parentStack.length - 1; i >= 0; i--) {
                 const parent = parentStack[i];
-                if (parent.getNode().innerHTML === '') {
+                if (parent.isEmpty()) {
                     parent.remove();
                 }
             }
@@ -147,7 +147,6 @@ export class PageManager {
 
     private createNewPage(): PageElement {
         const page = document.createElement('div');
-        this._tempBook.appendChild(page);
         page.style.maxHeight = `${this._pageSize.height}px`;
         page.style.width = `${this._pageSize.width}px`;
         page.style.maxWidth = `${this._pageSize.width}px`;
@@ -156,6 +155,8 @@ export class PageManager {
         if (isInHighlightMode()) {
             page.classList.add(pageClassName);
         }
+
+        this._tempBook.appendChild(page);
 
         if (this._transaction.isActive) {
             this._transaction.addRollbackCallback(() => {
@@ -180,7 +181,7 @@ export class PageManager {
     public hasEmptySpace(elementHeight?: number): boolean {
         return (
             !this._pageState.pageIsFull &&
-            this._pageState.currentPage.getHeight() + (elementHeight || 0) <=
+            this._pageState.currentPage.getHeight() + (elementHeight || 1) <=
                 this._pageSize.height
         );
     }

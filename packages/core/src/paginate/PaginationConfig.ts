@@ -10,7 +10,7 @@ export interface PaginationPlugin {
     onClone: (source: Element, cloned: PageElement) => void;
 }
 
-export type PaginationConfig = ConfigAttribute & {
+export type PaginationConfig = Required<ConfigAttribute> & {
     plugins: PaginationPlugin[];
 };
 

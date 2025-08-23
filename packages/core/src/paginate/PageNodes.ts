@@ -15,11 +15,11 @@ export const PageNodeType = {
 } as const;
 
 export class PageElement {
-    private _node: Element;
-    private _transaction: Transaction;
+    private readonly _node: Element;
+    private readonly _transaction: Transaction;
 
-    public type: 'element' = PageNodeType.Element;
-    public config: PaginationConfig;
+    public readonly type: 'element' = PageNodeType.Element;
+    public readonly config: PaginationConfig;
 
     constructor(
         element: Element,
@@ -66,6 +66,10 @@ export class PageElement {
         });
     }
 
+    isEmpty(): boolean {
+        return this._node.innerHTML === '';
+    }
+
     getChildrenCount(): number {
         return this._node.childNodes.length;
     }
@@ -76,11 +80,11 @@ export class PageElement {
 }
 
 export class PageText {
-    private _node: Text;
-    private _transaction: Transaction;
+    private readonly _node: Text;
+    private readonly _transaction: Transaction;
 
-    public type: 'text' = PageNodeType.Text;
-    public config: PaginationConfig;
+    public readonly type: 'text' = PageNodeType.Text;
+    public readonly config: PaginationConfig;
 
     constructor(
         text: Text,

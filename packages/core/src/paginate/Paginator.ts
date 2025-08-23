@@ -9,17 +9,24 @@ import { Transaction } from './Transaction';
 import logger from 'loglevel';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
 import { markIgnoredNode } from '../utilities/pageNodeMarker';
+import { tempBookClassName } from '../constants';
 
 const logPrefix = '\x1b[103mPAGINATOR\x1b[0m';
 
+export interface PaginateResult {
+    pages: ChildNode[];
+    dispose: () => void;
+}
+
 export class Paginator {
-    private _domState: DomState;
-    private _pageManager: PageManager;
-    private _transaction: Transaction;
-    private _tempBook: Element;
+    private readonly _domState: DomState;
+    private readonly _pageManager: PageManager;
+    private readonly _transaction: Transaction;
+    private readonly _tempBook: Element;
 
     constructor(root: Element, pageSize: PageSize, config?: PaginationConfig) {
         this._tempBook = document.createElement('div');
+        this._tempBook.classList.add(tempBookClassName);
         document.body.appendChild(this._tempBook);
 
         this._transaction = new Transaction();
@@ -36,16 +43,11 @@ export class Paginator {
         );
     }
 
-    public paginate(): {
-        hasPage: boolean;
-        firstPage: ChildNode;
-        dispose: () => void;
-    } {
+    public paginate(): PaginateResult {
         this.processAllNodes();
 
         return {
-            hasPage: this._tempBook.firstChild !== null,
-            firstPage: this._tempBook.firstChild!,
+            pages: Array.from(this._tempBook.childNodes),
             dispose: () => {
                 this._tempBook.remove();
             },
@@ -75,7 +77,7 @@ export class Paginator {
                     this.handleChildrenSplit();
                     break;
             }
-        } while (!this._domState.completed);
+        } while (this._domState.completed === false);
 
         logger.info(logPrefix, 'pagination completed');
     }

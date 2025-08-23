@@ -1,3 +1,5 @@
+export const tempBookClassName = 'pz-temp-book';
+
 export const currentElementClassName = 'pz-current-element';
 export const currentTextClassName = 'pz-current-text';
 
