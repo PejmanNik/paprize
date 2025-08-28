@@ -3,14 +3,14 @@ import {
     it,
     expect,
     beforeEach,
-    afterEach,
     vi,
     type MockInstance,
+    type Mock,
 } from 'vitest';
 import { Paginator } from './Paginator';
 import { PageManager } from './PageManager';
 import { DomState } from './DomState';
-import { PageElement, PageNodeType } from './PageNodes';
+import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
 import type { PageSize } from './PageSize';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
@@ -34,8 +34,8 @@ describe('Paginator', () => {
     let paginator: Paginator;
 
     let mockDomState: {
-        nextNode: () => void;
-        currentNode: PageElement | null;
+        nextNode: Mock;
+        currentNode: PageElement | PageText | null;
         completed: boolean;
         nextSiblingOrParentSibling: MockInstance;
         firstChildOrNextNode: MockInstance;
@@ -47,8 +47,9 @@ describe('Paginator', () => {
     };
 
     beforeEach(() => {
+        document.body.innerHTML = '';
         root = document.createElement('div');
-        pageSize = { width: 100, height: 100 } as PageSize;
+        pageSize = { width: 100, height: 100 };
         config = {} as PaginationConfig;
 
         mockDomState = {
@@ -77,9 +78,53 @@ describe('Paginator', () => {
         );
     });
 
-    afterEach(() => {
-        document.body.innerHTML = '';
-        vi.clearAllMocks();
+    it('should return plugin result for element node if plugin sets ctx.result', () => {
+        config.plugins = [
+            {
+                name: 'test-plugin',
+                onVisitElement: (_pe, _pm, ctx) => {
+                    ctx.result = SplitResult.SplitChildren;
+                },
+            },
+        ];
+
+        paginator = new Paginator(root, pageSize, config);
+        const elementNode = { type: PageNodeType.Element } as PageElement;
+        mockDomState.currentNode = elementNode;
+        mockDomState.completed = false;
+
+        mockDomState.nextNode.mockImplementation(() => {
+            mockDomState.completed = true;
+        });
+
+        paginator.paginate();
+        expect(mockDomState.nextNode).toBeCalledTimes(1);
+        // The plugin result should have been used, so paginateElementAcrossPages should not be called
+        expect(paginateElementAcrossPages).not.toHaveBeenCalled();
+    });
+
+    it('should return plugin result for text node if plugin sets ctx.result', () => {
+        config.plugins = [
+            {
+                name: 'test-plugin',
+                onVisitText: (_pe, _pm, ctx) => {
+                    ctx.result = SplitResult.SplitChildren;
+                },
+            },
+        ];
+        paginator = new Paginator(root, pageSize, config);
+        const textNode = { type: PageNodeType.Text } as PageText;
+        mockDomState.currentNode = textNode;
+        mockDomState.completed = false;
+
+        mockDomState.nextNode.mockImplementation(() => {
+            mockDomState.completed = true;
+        });
+
+        paginator.paginate();
+        expect(mockDomState.nextNode).toBeCalledTimes(1);
+        // The plugin result should have been used, so paginateTextByWord should not be called
+        expect(paginateTextByWord).not.toHaveBeenCalled();
     });
 
     it('should use default config when input config is undifind', () => {
@@ -134,7 +179,7 @@ describe('Paginator', () => {
 
     it('should handle text node pagination', () => {
         paginator = new Paginator(root, pageSize, config);
-        const textNode = { type: PageNodeType.Text } as any;
+        const textNode = { type: PageNodeType.Text } as PageText;
 
         mockDomState.currentNode = textNode;
         mockDomState.completed = true;
@@ -154,7 +199,7 @@ describe('Paginator', () => {
 
     it('should handle element node pagination', () => {
         paginator = new Paginator(root, pageSize, config);
-        const elementNode = { type: PageNodeType.Element } as any;
+        const elementNode = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = elementNode;
         mockDomState.completed = true;
@@ -173,7 +218,7 @@ describe('Paginator', () => {
 
     it('should handle node skipping when pagination returns None', () => {
         paginator = new Paginator(root, pageSize, config);
-        const node = { type: PageNodeType.Element } as any;
+        const node = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = node;
         mockDomState.completed = true;
@@ -186,7 +231,7 @@ describe('Paginator', () => {
 
     it('should handle split children scenario', () => {
         paginator = new Paginator(root, pageSize, config);
-        const elementNode = { type: PageNodeType.Element } as any;
+        const elementNode = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = elementNode;
         mockDomState.previousNode = {
@@ -208,7 +253,7 @@ describe('Paginator', () => {
 
     it('should handle multiple parent traversals when placing full node', () => {
         paginator = new Paginator(root, pageSize, config);
-        const node = { type: PageNodeType.Element } as any;
+        const node = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = node;
         mockDomState.completed = true;

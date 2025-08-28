@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getTotalHeight } from './domUtilities';
+import { getVisibleHeight } from './domUtilities';
 
 function defineGlobalGetComputedStyle() {
     // Patch global getComputedStyle to return element.style values
@@ -42,7 +42,7 @@ describe('getTotalHeight', () => {
         element.style.marginTop = '10px';
         element.style.marginBottom = '15px';
 
-        expect(getTotalHeight(element)).toBe(50 + 10 + 15);
+        expect(getVisibleHeight(element)).toBe(50 + 10 + 15);
     });
 
     it('returns just the height if margins are zero', () => {
@@ -59,6 +59,6 @@ describe('getTotalHeight', () => {
         });
         element.style.marginTop = '0px';
         element.style.marginBottom = '0px';
-        expect(getTotalHeight(element)).toBe(40);
+        expect(getVisibleHeight(element)).toBe(40);
     });
 });

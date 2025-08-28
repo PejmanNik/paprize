@@ -1,10 +1,15 @@
-import { getTotalHeight, isElement, isTextNode } from './domUtilities';
-import { triggerPlugins, type PaginationConfig } from './PaginationConfig';
+import {
+    getVisibleHeight,
+    isElement,
+    isTextNode,
+} from '../utilities/domUtilities';
+import { type PaginationConfig } from './PaginationConfig';
+import { callPluginHook } from './PaginationPlugin';
 import type { Transaction } from './Transaction';
 
 export type SafeElement = Omit<
     Element,
-    'removeChild' | 'appendChild' | 'replaceChild' | 'cloneNode' | 'remove'
+    'removeChild' | 'appendChild' | 'replaceChild' | 'remove'
 >;
 
 export type SafeText = Omit<Text, 'remove'>;
@@ -49,15 +54,18 @@ export class PageElement {
             this.config
         );
 
-        triggerPlugins(this.config.plugins, (plugin) => {
-            plugin.onClone(this._node, clonedPageElement);
-        });
+        callPluginHook(
+            this.config.plugins,
+            'onClone',
+            this._node,
+            clonedPageElement
+        );
 
         return clonedPageElement;
     }
 
     getHeight(): number {
-        return getTotalHeight(this._node);
+        return getVisibleHeight(this._node);
     }
 
     remove(): void {
@@ -97,7 +105,7 @@ export class PageText {
     }
 
     get textContent(): string {
-        return this._node.textContent;
+        return this._node.textContent ?? '';
     }
 
     set textContent(value: string) {

@@ -1,14 +1,9 @@
+import type { PaginationPlugin } from './PaginationPlugin';
 import {
     getNodeConfigAttribute,
     defaultConfigAttribute,
     type ConfigAttribute,
 } from './attributes';
-import type { PageElement } from './PageNodes';
-
-export interface PaginationPlugin {
-    name: string;
-    onClone: (source: Element, cloned: PageElement) => void;
-}
 
 export type PaginationConfig = Required<ConfigAttribute> & {
     plugins: PaginationPlugin[];
@@ -26,13 +21,4 @@ export function getConfigFromAttributes(
     const attributes = getNodeConfigAttribute(node);
 
     return { ...defaultConfig, ...globalConfig, ...attributes };
-}
-
-export function triggerPlugins(
-    plugins: PaginationPlugin[],
-    action: (plugin: PaginationPlugin) => void
-) {
-    plugins.forEach((plugin) => {
-        action(plugin);
-    });
 }

@@ -6,7 +6,7 @@ export function isTextNode(node: Node): node is Text {
     return node.nodeType === Node.TEXT_NODE;
 }
 
-export function getTotalHeight(element: Element): number {
+export function getVisibleHeight(element: Element): number {
     const rect = element.getBoundingClientRect();
     const computedStyle = getComputedStyle(element);
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, type Mock } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { paginateElementAcrossPages } from './paginateElement';
 import { SplitResult } from './SplitResult';
 import type { PageElement } from './PageNodes';

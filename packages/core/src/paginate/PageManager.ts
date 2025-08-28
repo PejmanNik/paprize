@@ -11,38 +11,52 @@ import { pageClassName } from '../constants';
 import type { PageSize } from './PageSize';
 import { unmarkCurrentNode } from '../utilities/pageNodeMarker';
 import logger from 'loglevel';
-import type { PaginationConfig } from './PaginationConfig';
+import { type PaginationConfig } from './PaginationConfig';
+import { callPluginHook } from './PaginationPlugin';
 
-const logPrefix = '\x1b[102mPAGE: \x1b[0m';
+const logPrefix = '\x1b[102mPAGE\x1b[0m';
 
-class PageState {
+export class PageState {
     public currentPage: PageElement;
     public activeElement: PageNode | null;
     public currentElement: PageElement;
     public parentStack: PageElement[];
     public pageIsFull: boolean;
+    public pageIndex: number;
+    public pageHeight: number;
 
     constructor(
         currentPage: PageElement,
         activeElement: PageNode | null,
         currentElement: PageElement,
         parentStack: PageElement[],
-        pageIsFull: boolean
+        pageIsFull: boolean,
+        pageIndex: number,
+        pageHeight: number
     ) {
         this.currentPage = currentPage;
         this.activeElement = activeElement;
         this.currentElement = currentElement;
         this.parentStack = parentStack;
         this.pageIsFull = pageIsFull;
+        this.pageIndex = pageIndex;
+        this.pageHeight = pageHeight;
     }
 
-    public static create(currentPage: PageElement, parentStack: PageElement[]) {
+    public static create(
+        currentPage: PageElement,
+        parentStack: PageElement[],
+        pageIndex: number,
+        pageHeight: number
+    ) {
         return new PageState(
             currentPage,
             null,
             currentPage,
             parentStack,
-            false
+            false,
+            pageIndex,
+            pageHeight
         );
     }
 
@@ -52,14 +66,16 @@ class PageState {
             this.activeElement,
             this.currentElement,
             [...this.parentStack],
-            this.pageIsFull
+            this.pageIsFull,
+            this.pageIndex,
+            this.pageHeight
         );
     };
 }
 
 export class PageManager {
     private _pageState: PageState;
-    private readonly _pageSize: PageSize;
+
     private readonly _transaction: Transaction;
     private readonly _tempBook: Element;
     private readonly _config: PaginationConfig;
@@ -72,23 +88,35 @@ export class PageManager {
     ) {
         this._tempBook = tempBook;
         this._config = config;
-        this._pageSize = pageSize;
         this._transaction = transaction;
-        const page = this.createNewPage();
 
-        this._pageState = PageState.create(page, []);
+        const pageHtmlElement = PageManager.createPageHtmlElement(
+            pageSize.width
+        );
+
+        const page = this.createNewPage(pageHtmlElement);
+        this._pageState = PageState.create(page, [], 0, pageSize.height);
+        callPluginHook(this._config.plugins, 'onNewPage', this._pageState);
     }
 
     public nextPage(): void {
-        const page = this.createNewPage();
-        const newParentStack: PageElement[] = [];
-        const newPageState = PageState.create(page, newParentStack);
+        const page = this.createNewPage(
+            this._pageState.currentPage.getNode().cloneNode(false) as Element
+        );
+
+        const newPageState = PageState.create(
+            page,
+            [],
+            this._pageState.pageIndex + 1,
+            this._pageState.pageHeight
+        );
 
         // add uncompleted parents elements to the new page
         this.cloneParentStackToNewPage(newPageState);
         this.cleanupEmptyParent();
 
         this._pageState = newPageState;
+        callPluginHook(this._config.plugins, 'onNewPage', this._pageState);
     }
 
     private cloneParentStackToNewPage(newPageState: PageState): void {
@@ -145,26 +173,30 @@ export class PageManager {
         this._pageState.currentElement = parent ?? this._pageState.currentPage;
     }
 
-    private createNewPage(): PageElement {
+    private static createPageHtmlElement(pageWidth: number): Element {
         const page = document.createElement('div');
-        page.style.maxHeight = `${this._pageSize.height}px`;
-        page.style.width = `${this._pageSize.width}px`;
-        page.style.maxWidth = `${this._pageSize.width}px`;
-        page.style.overflow = 'hidden';
+        page.style.display = 'flex'; // to avoid margin collapsing
+        page.style.flexDirection = 'column';
+        page.style.width = `${pageWidth}px`;
+        page.style.maxWidth = `${pageWidth}px`;
 
         if (isInHighlightMode()) {
             page.classList.add(pageClassName);
         }
 
-        this._tempBook.appendChild(page);
+        return page;
+    }
+
+    private createNewPage(pageHtmlElement: Element): PageElement {
+        this._tempBook.appendChild(pageHtmlElement);
 
         if (this._transaction.isActive) {
             this._transaction.addRollbackCallback(() => {
-                this._tempBook.removeChild(page);
+                this._tempBook.removeChild(pageHtmlElement);
             });
         }
 
-        return createPageNode(page, this._transaction, this._config);
+        return createPageNode(pageHtmlElement, this._transaction, this._config);
     }
 
     public startTransaction(): { rollback: () => void; commit: () => void } {
@@ -182,12 +214,14 @@ export class PageManager {
         return (
             !this._pageState.pageIsFull &&
             this._pageState.currentPage.getHeight() + (elementHeight || 1) <=
-                this._pageSize.height
+                this._pageState.pageHeight
         );
     }
 
     public isOverFlow(): boolean {
-        return this._pageState.currentPage.getHeight() > this._pageSize.height;
+        return (
+            this._pageState.currentPage.getHeight() > this._pageState.pageHeight
+        );
     }
 
     public markPageAsFull(): void {

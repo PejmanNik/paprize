@@ -2,9 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
     defaultConfig,
     getConfigFromAttributes,
-    triggerPlugins,
     type PaginationConfig,
-    type PaginationPlugin,
 } from './PaginationConfig';
 import * as attributesModule from './attributes';
 
@@ -53,33 +51,6 @@ describe('PaginationConfig', () => {
                 defaultConfig.hyphenationEnabled
             );
             expect(result.plugins).toEqual([]);
-        });
-    });
-
-    describe('triggerPlugins', () => {
-        it('should call action for each plugin', () => {
-            const plugins: PaginationPlugin[] = [
-                {
-                    name: 'one',
-                    onClone: vi.fn(),
-                },
-                {
-                    name: 'two',
-                    onClone: vi.fn(),
-                },
-            ];
-
-            const action = vi.fn();
-
-            triggerPlugins(plugins, action);
-
-            expect(action).toHaveBeenCalledTimes(2);
-            expect(action).toHaveBeenNthCalledWith(1, plugins[0]);
-            expect(action).toHaveBeenNthCalledWith(2, plugins[1]);
-        });
-
-        it('should not throw on empty plugins array', () => {
-            expect(() => triggerPlugins([], vi.fn())).not.toThrow();
         });
     });
 });

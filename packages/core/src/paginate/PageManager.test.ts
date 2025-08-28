@@ -41,7 +41,7 @@ describe('PageManager', () => {
 
     beforeEach(() => {
         const transaction = new Transaction();
-        const config = {} as PaginationConfig;
+        const config = { plugins: [] } as unknown as PaginationConfig;
 
         vi.clearAllMocks();
 
@@ -88,13 +88,19 @@ describe('PageManager', () => {
     });
 
     describe('nextPage', () => {
+        beforeEach(() => {
+            mockPageElement.getNode.mockImplementation(
+                () => tempBook.lastElementChild as Element
+            );
+        });
+
         test('should create a new page with correct styles', () => {
             pageManager.nextPage();
 
             const page = tempBook.lastElementChild;
             const style = (page as HTMLDivElement).style;
 
-            expect(style.maxHeight).toBe(`${pageSize.height}px`);
+            expect(style.display).toBe('flex');
             expect(style.width).toBe(`${pageSize.width}px`);
             expect(style.maxWidth).toBe(`${pageSize.width}px`);
         });
@@ -122,12 +128,21 @@ describe('PageManager', () => {
             expect(mockPageElement.isEmpty).toHaveBeenCalled();
             expect(mockPageElement.remove).toHaveBeenCalled();
         });
-    });
 
-    describe('createNewPage', () => {
         test('should add highlight in debug mode', async () => {
             vi.mocked(isInHighlightMode).mockReturnValue(true);
+
+            const transaction = new Transaction();
+            const config = { plugins: [] } as unknown as PaginationConfig;
+            const pageManager = new PageManager(
+                tempBook,
+                pageSize,
+                transaction,
+                config
+            );
+
             pageManager.nextPage();
+
             expect(
                 tempBook.lastElementChild?.classList.contains(pageClassName)
             ).toBe(true);
@@ -258,7 +273,7 @@ describe('PageManager', () => {
                 addCommitCallback: vi.fn(),
                 isActive: false,
             } as unknown as Mocked<Transaction>;
-            const config = {} as PaginationConfig;
+            const config = { plugins: [] } as unknown as PaginationConfig;
             tempBook = document.createElement('section');
             pageManager = new PageManager(
                 tempBook,
@@ -272,6 +287,10 @@ describe('PageManager', () => {
             const callbacks: Function[] = [];
             transaction.addRollbackCallback.mockImplementation((cb) =>
                 callbacks.push(cb)
+            );
+
+            mockPageElement.getNode.mockImplementation(
+                () => tempBook.lastElementChild as Element
             );
 
             // call nextPage to trigger createNewPage with active transaction

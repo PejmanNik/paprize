@@ -6,8 +6,9 @@ import {
     PageNodeType,
 } from './PageNodes';
 import { Transaction } from './Transaction';
-import { defaultConfig, type PaginationPlugin } from './PaginationConfig';
-import * as DomUtilities from './domUtilities';
+import { defaultConfig } from './PaginationConfig';
+import * as DomUtilities from '../utilities/domUtilities';
+import type { PaginationPlugin } from './PaginationPlugin';
 
 describe('PageElement', () => {
     let element: Element;
@@ -126,7 +127,7 @@ describe('PageElement', () => {
         const pageElem = new PageElement(element, transaction, defaultConfig);
 
         const nodeHeight = 9;
-        vi.spyOn(DomUtilities, 'getTotalHeight').mockReturnValue(nodeHeight);
+        vi.spyOn(DomUtilities, 'getVisibleHeight').mockReturnValue(nodeHeight);
 
         expect(pageElem.getHeight()).toBe(nodeHeight);
     });
@@ -193,6 +194,17 @@ describe('PageText', () => {
     it('should return the underlying text node with getNode', () => {
         const pageText = new PageText(text, transaction, defaultConfig);
         expect(pageText.getNode()).toBe(text);
+    });
+
+    it('should return empty string when text is null', () => {
+        const pageText = new PageText(
+            vi.fn().mockImplementation(() => ({
+                textContent: null,
+            })) as unknown as Text,
+            transaction,
+            defaultConfig
+        );
+        expect(pageText.textContent).toBe('');
     });
 });
 

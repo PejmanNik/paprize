@@ -10,6 +10,7 @@ import logger from 'loglevel';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
 import { markIgnoredNode } from '../utilities/pageNodeMarker';
 import { tempBookClassName } from '../constants';
+import { callPluginHook, type VisitContext } from './PaginationPlugin';
 
 const logPrefix = '\x1b[103mPAGINATOR\x1b[0m';
 
@@ -23,23 +24,25 @@ export class Paginator {
     private readonly _pageManager: PageManager;
     private readonly _transaction: Transaction;
     private readonly _tempBook: Element;
+    private readonly _config: PaginationConfig;
 
-    constructor(root: Element, pageSize: PageSize, config?: PaginationConfig) {
+    constructor(
+        root: Element,
+        pageSize: PageSize,
+        config?: Partial<PaginationConfig>
+    ) {
+        this._config = { ...defaultConfig, ...config };
         this._tempBook = document.createElement('div');
         this._tempBook.classList.add(tempBookClassName);
         document.body.appendChild(this._tempBook);
 
         this._transaction = new Transaction();
-        this._domState = new DomState(
-            root,
-            this._transaction,
-            config ?? defaultConfig
-        );
+        this._domState = new DomState(root, this._transaction, this._config);
         this._pageManager = new PageManager(
             this._tempBook,
             pageSize,
             this._transaction,
-            config ?? defaultConfig
+            this._config
         );
     }
 
@@ -116,11 +119,39 @@ export class Paginator {
         }
 
         if (this._domState.currentNode.type === PageNodeType.Element) {
+            // call plugins ...
+            const ctx: VisitContext = {};
+            callPluginHook(
+                this._config.plugins,
+                'onVisitElement',
+                this._domState.currentNode,
+                this._pageManager,
+                ctx
+            );
+            if (ctx.result !== undefined) {
+                return ctx.result;
+            }
+            // ... plugins called
+
             return paginateElementAcrossPages(
                 this._domState.currentNode,
                 this._pageManager
             );
         } else {
+            // call plugins ...
+            const ctx: VisitContext = {};
+            callPluginHook(
+                this._config.plugins,
+                'onVisitText',
+                this._domState.currentNode,
+                this._pageManager,
+                ctx
+            );
+            if (ctx.result !== undefined) {
+                return ctx.result;
+            }
+            // ... plugins called
+
             return paginateTextByWord(
                 this._domState.currentNode,
                 this._pageManager
