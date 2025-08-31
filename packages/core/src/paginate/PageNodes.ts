@@ -1,8 +1,4 @@
-import {
-    getVisibleHeight,
-    isElement,
-    isTextNode,
-} from '../utilities/domUtilities';
+import { getVisibleHeight, isElement, isTextNode } from './domUtilities';
 import { type PaginationConfig } from './PaginationConfig';
 import { callPluginHook } from './PaginationPlugin';
 import type { Transaction } from './Transaction';

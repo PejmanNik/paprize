@@ -15,3 +15,10 @@ export function getVisibleHeight(element: Element): number {
 
     return rect.height + marginTop + marginBottom;
 }
+
+export function moveOffscreen(element: HTMLDivElement): void {
+    element.style.visibility = 'hidden';
+    element.style.position = 'absolute';
+    element.style.left = '-9999px';
+    element.style.top = '-9999px';
+}

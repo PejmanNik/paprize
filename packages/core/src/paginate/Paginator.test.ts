@@ -14,7 +14,7 @@ import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
 import type { PageSize } from './PageSize';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
-import { tempBookClassName } from '../constants';
+import { tempContainerClassName } from '../constants';
 import { paginateTextByWord } from './paginateText';
 import { paginateElementAcrossPages } from './paginateElement';
 
@@ -31,7 +31,6 @@ describe('Paginator', () => {
     let root: Element;
     let pageSize: PageSize;
     let config: PaginationConfig;
-    let paginator: Paginator;
 
     let mockDomState: {
         nextNode: Mock;
@@ -88,7 +87,6 @@ describe('Paginator', () => {
             },
         ];
 
-        paginator = new Paginator(root, pageSize, config);
         const elementNode = { type: PageNodeType.Element } as PageElement;
         mockDomState.currentNode = elementNode;
         mockDomState.completed = false;
@@ -97,7 +95,8 @@ describe('Paginator', () => {
             mockDomState.completed = true;
         });
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
+
         expect(mockDomState.nextNode).toBeCalledTimes(1);
         // The plugin result should have been used, so paginateElementAcrossPages should not be called
         expect(paginateElementAcrossPages).not.toHaveBeenCalled();
@@ -112,7 +111,7 @@ describe('Paginator', () => {
                 },
             },
         ];
-        paginator = new Paginator(root, pageSize, config);
+
         const textNode = { type: PageNodeType.Text } as PageText;
         mockDomState.currentNode = textNode;
         mockDomState.completed = false;
@@ -121,15 +120,14 @@ describe('Paginator', () => {
             mockDomState.completed = true;
         });
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
         expect(mockDomState.nextNode).toBeCalledTimes(1);
         // The plugin result should have been used, so paginateTextByWord should not be called
         expect(paginateTextByWord).not.toHaveBeenCalled();
     });
 
-    it('should use default config when input config is undifind', () => {
-        paginator = new Paginator(root, pageSize);
-
+    it('should use default config when input config is undefined', () => {
+        Paginator.paginate(root, pageSize, config);
         expect(PageManager).toHaveBeenCalledWith(
             expect.anything(),
             expect.anything(),
@@ -143,42 +141,30 @@ describe('Paginator', () => {
         );
     });
 
-    it('should create a tempBook element appended to the body', () => {
-        paginator = new Paginator(root, pageSize, config);
-        const tempBook = document.body.querySelector(`.${tempBookClassName}`);
+    it('should create a tempContainer element appended to the body and remove it', () => {
+        const mockedAppendChild = vi.spyOn(document.body, 'appendChild');
 
-        expect(tempBook).not.toBeNull();
-        expect(tempBook?.childNodes.length).toBe(0);
+        Paginator.paginate(root, pageSize, config);
+        const tempContainer = document.body.querySelector(
+            `.${tempContainerClassName}`
+        );
+
+        expect(mockedAppendChild).toHaveBeenCalled();
+        expect(
+            (mockedAppendChild.mock.calls[0][0] as Element).classList.contains(
+                tempContainerClassName
+            )
+        ).toBe(true);
+        expect(tempContainer).toBeNull();
     });
 
-    it('paginate() returns hasPage true and a firstPage element, and dispose removes tempBook', () => {
-        paginator = new Paginator(root, pageSize, config);
+    it('paginate() returns empty array if there is no result', () => {
+        const result = Paginator.paginate(root, pageSize, config);
 
-        const tempBook = document.body.querySelector(`.${tempBookClassName}`);
-        const element = document.createElement('div');
-        element.textContent = 'Test content';
-        tempBook?.appendChild(element);
-
-        const result = paginator.paginate();
-
-        expect(result.pages.length).toBe(1);
-        expect(tempBook?.childNodes.length).toBe(1);
-
-        // call dispose, the tempBook should be removed from DOM
-        result.dispose();
-        expect(document.body.contains(tempBook)).toBe(false);
-    });
-
-    it('paginate() returns hasPage false if there is no firstChild', () => {
-        paginator = new Paginator(root, pageSize, config);
-
-        const result = paginator.paginate();
-
-        expect(result.pages.length).toBe(0);
+        expect(result.length).toBe(0);
     });
 
     it('should handle text node pagination', () => {
-        paginator = new Paginator(root, pageSize, config);
         const textNode = { type: PageNodeType.Text } as PageText;
 
         mockDomState.currentNode = textNode;
@@ -188,7 +174,7 @@ describe('Paginator', () => {
             SplitResult.FullNodePlaced
         );
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
 
         expect(paginateTextByWord).toHaveBeenCalledWith(
             textNode,
@@ -198,7 +184,6 @@ describe('Paginator', () => {
     });
 
     it('should handle element node pagination', () => {
-        paginator = new Paginator(root, pageSize, config);
         const elementNode = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = elementNode;
@@ -207,7 +192,7 @@ describe('Paginator', () => {
             SplitResult.FullNodePlaced
         );
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
 
         expect(paginateElementAcrossPages).toHaveBeenCalledWith(
             elementNode,
@@ -217,20 +202,18 @@ describe('Paginator', () => {
     });
 
     it('should handle node skipping when pagination returns None', () => {
-        paginator = new Paginator(root, pageSize, config);
         const node = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = node;
         mockDomState.completed = true;
         vi.mocked(paginateElementAcrossPages).mockReturnValue(SplitResult.None);
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
 
         expect(mockDomState.nextNode).toHaveBeenCalledTimes(2);
     });
 
     it('should handle split children scenario', () => {
-        paginator = new Paginator(root, pageSize, config);
         const elementNode = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = elementNode;
@@ -246,13 +229,12 @@ describe('Paginator', () => {
             parentsTraversed: 1,
         });
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
 
         expect(mockPageManager.enterElement).toHaveBeenCalled();
     });
 
     it('should handle multiple parent traversals when placing full node', () => {
-        paginator = new Paginator(root, pageSize, config);
         const node = { type: PageNodeType.Element } as PageElement;
 
         mockDomState.currentNode = node;
@@ -264,7 +246,7 @@ describe('Paginator', () => {
             parentsTraversed: 2,
         });
 
-        paginator.paginate();
+        Paginator.paginate(root, pageSize, config);
 
         expect(mockPageManager.leaveElement).toHaveBeenCalledTimes(2);
     });

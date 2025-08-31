@@ -1,7 +1,7 @@
 import type { PageManager, PageState } from './PageManager';
 import type { PageElement, PageText } from './PageNodes';
 import type { SplitResult } from './SplitResult';
-import logger from 'loglevel';
+import logger from '../logger';
 
 const logPrefix = '\x1b[46mPLUGIN\x1b[0m';
 

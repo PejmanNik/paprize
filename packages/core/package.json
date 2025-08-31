@@ -6,18 +6,19 @@
     "files": [
         "dist"
     ],
-    "main": "./dist/index.umd.cjs",
-    "module": "./dist/index.esm.js",
+    "main": "./dist/paprize-core.umd.cjs",
+    "module": "./dist/paprize-core.esm.js",
     "exports": {
         ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.esm.js",
-            "require": "./dist/index.umd.cjs"
+            "types": "./dist/paprize-core.d.ts",
+            "import": "./dist/paprize-core.esm.js",
+            "require": "./dist/paprize-core.umd.cjs"
         },
         "./src": {
             "types": "./src/index.ts",
             "import": "./src/index.ts"
-        }
+        },
+        "./src/styles.css": "./src/devTools/styles.css"
     },
     "keywords": [
         "paper",
@@ -53,7 +54,6 @@
         "vitest": "^3.2.4"
     },
     "dependencies": {
-        "@preact/signals-core": "^1.11.0",
         "loglevel": "^1.9.2"
     }
 }

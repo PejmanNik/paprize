@@ -1,4 +1,4 @@
-import log from 'loglevel';
+import log from '../logger';
 import type { PageManager } from './PageManager';
 import type { PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';

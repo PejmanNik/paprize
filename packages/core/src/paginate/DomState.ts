@@ -1,14 +1,14 @@
 import {
     markCurrentNode,
     unmarkCurrentNode,
-} from '../utilities/pageNodeMarker';
+} from '../debugUtilities/pageNodeMarker';
 import { type PageNode, createPageNode } from './PageNodes';
 import {
     getConfigFromAttributes,
     type PaginationConfig,
 } from './PaginationConfig';
 import type { Transaction } from './Transaction';
-import logger from 'loglevel';
+import logger from '../logger';
 
 const logPrefix = '\x1b[106mDOM\x1b[0m';
 
@@ -94,8 +94,8 @@ export class DomState {
             getConfigFromAttributes(this._treeWalker.currentNode, this._config)
         );
 
-        markCurrentNode(this.currentNode);
-        unmarkCurrentNode(this.previousNode);
+        DEV: markCurrentNode(this.currentNode);
+        DEV: unmarkCurrentNode(this.previousNode);
 
         logger.info(logPrefix, 'moved to node', {
             currentNode: this.currentNode,

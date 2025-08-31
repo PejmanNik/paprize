@@ -1,8 +1,9 @@
-import logger from 'loglevel';
-import { Paginator } from '../paginate/Paginator';
-import { DebugModeType, setDebugMode } from '../utilities/debugMode';
 import { h, render } from 'preact';
-import { createParagraph } from './words';
+import logger from '../logger';
+import { Paginator } from '../paginate/Paginator';
+import { enableDebugMode } from './debugMode';
+import { createParagraph } from './loremIpsum';
+import './styles.css';
 
 const App = () => {
     return h('div', { id: 'app' }, [
@@ -33,10 +34,8 @@ const App = () => {
 render(App(), document.body);
 
 logger.setLevel('trace');
-setDebugMode(DebugModeType.highlight);
-const paginator = new Paginator(document.getElementById('app')!, {
+enableDebugMode();
+Paginator.paginate(document.getElementById('app')!, {
     width: 870,
     height: 220,
 });
-
-paginator.paginate();

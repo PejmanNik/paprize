@@ -4,7 +4,7 @@ import {
     ignoredElementClassName,
     ignoredTextClassName,
 } from '../constants';
-import { isInHighlightMode } from './debugMode';
+import { isDebugMode } from './debugMode';
 import { PageNodeType, type PageNode } from '../paginate/PageNodes';
 
 export function markNode(
@@ -32,7 +32,7 @@ export function unmarkNode(
 }
 
 export function markIgnoredNode(node: PageNode | undefined | null) {
-    if (!isInHighlightMode()) {
+    if (!isDebugMode()) {
         return;
     }
     if (node && node.type == PageNodeType.Element) {
@@ -43,7 +43,7 @@ export function markIgnoredNode(node: PageNode | undefined | null) {
 }
 
 export function markCurrentNode(node: PageNode | undefined | null) {
-    if (!isInHighlightMode()) {
+    if (!isDebugMode()) {
         return;
     }
     if (node && node.type == PageNodeType.Element) {
@@ -54,7 +54,7 @@ export function markCurrentNode(node: PageNode | undefined | null) {
 }
 
 export function unmarkCurrentNode(node: PageNode | undefined | null) {
-    if (!isInHighlightMode()) {
+    if (!isDebugMode()) {
         return;
     }
     if (node && node.type == PageNodeType.Element) {

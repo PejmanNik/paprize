@@ -2,14 +2,17 @@ import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 import dts from 'unplugin-dts/vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     build: {
         lib: {
             entry: 'src/index.ts',
             name: 'paprize_core',
-            fileName: 'index',
+            fileName: 'paprize-core',
             formats: ['esm', 'umd'],
         },
+    },
+    esbuild: {
+        dropLabels: mode === 'production' ? ['DEV'] : []
     },
     plugins: [
         dts({
@@ -20,4 +23,4 @@ export default defineConfig({
             typescript: true,
         }),
     ],
-});
+}));

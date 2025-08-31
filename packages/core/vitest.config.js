@@ -6,7 +6,9 @@ export default defineConfig({
         coverage: {
             exclude: [
                 'src/index.ts',
-                'src/devTools/**',
+                'src/debugUtilities/**',
+                'src/plugins/index.ts',
+                'src/plugins/defaultPlugins.ts',
                 ...coverageConfigDefaults.exclude,
             ],
             reporter: ['text']

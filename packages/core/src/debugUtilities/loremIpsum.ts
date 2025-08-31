@@ -79,7 +79,7 @@ export function createParagraph(wordCount: number, seed: number): string {
         selectedWords.push(words[randomIndex]);
     }
 
-    // Capitalize first word and join with spaces
+    // capitalize first word and join with spaces
     if (selectedWords.length > 0) {
         selectedWords[0] =
             selectedWords[0].charAt(0).toUpperCase() +

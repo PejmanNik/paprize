@@ -1,4 +1,5 @@
-export const tempBookClassName = 'pz-temp-book';
+export const loggerName = 'paprize';
+export const tempContainerClassName = 'pz-temp-container';
 
 export const currentElementClassName = 'pz-current-element';
 export const currentTextClassName = 'pz-current-text';

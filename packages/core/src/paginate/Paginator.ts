@@ -8,53 +8,67 @@ import { SplitResult } from './SplitResult';
 import { Transaction } from './Transaction';
 import logger from 'loglevel';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
-import { markIgnoredNode } from '../utilities/pageNodeMarker';
-import { tempBookClassName } from '../constants';
+import { markIgnoredNode } from '../debugUtilities/pageNodeMarker';
 import { callPluginHook, type VisitContext } from './PaginationPlugin';
+import { tempContainerClassName } from '../constants';
+import { isDebugMode } from '../debugUtilities/debugMode';
+import { isElement, moveOffscreen } from './domUtilities';
 
 const logPrefix = '\x1b[103mPAGINATOR\x1b[0m';
 
-export interface PaginateResult {
-    pages: ChildNode[];
-    dispose: () => void;
-}
+export type PaginateResult = string[];
 
 export class Paginator {
     private readonly _domState: DomState;
     private readonly _pageManager: PageManager;
     private readonly _transaction: Transaction;
-    private readonly _tempBook: Element;
+    private readonly _tempContainer: Element;
     private readonly _config: PaginationConfig;
 
-    constructor(
+    private constructor(
         root: Element,
         pageSize: PageSize,
         config?: Partial<PaginationConfig>
     ) {
         this._config = { ...defaultConfig, ...config };
-        this._tempBook = document.createElement('div');
-        this._tempBook.classList.add(tempBookClassName);
-        document.body.appendChild(this._tempBook);
-
+        this._tempContainer = Paginator.createTempContainer();
         this._transaction = new Transaction();
         this._domState = new DomState(root, this._transaction, this._config);
         this._pageManager = new PageManager(
-            this._tempBook,
+            this._tempContainer,
             pageSize,
             this._transaction,
             this._config
         );
     }
 
-    public paginate(): PaginateResult {
-        this.processAllNodes();
+    private static createTempContainer(): Element {
+        const tempContainer = document.createElement('div');
+        tempContainer.classList.add(tempContainerClassName);
+        DEV: if (!isDebugMode()) {
+            moveOffscreen(tempContainer);
+        }
+        document.body.appendChild(tempContainer);
+        return tempContainer;
+    }
 
-        return {
-            pages: Array.from(this._tempBook.childNodes),
-            dispose: () => {
-                this._tempBook.remove();
-            },
-        };
+    public static paginate(
+        root: Element,
+        pageSize: PageSize,
+        config?: Partial<PaginationConfig>
+    ): PaginateResult {
+        const paginator = new Paginator(root, pageSize, config);
+        paginator.processAllNodes();
+
+        const result = Array.from(paginator._tempContainer.childNodes)
+            .filter((x) => isElement(x))
+            .map((x) => x.innerHTML);
+
+        DEV: if (!isDebugMode()) {
+            paginator._tempContainer.remove();
+        }
+
+        return result;
     }
 
     private processAllNodes(): void {
@@ -88,7 +102,7 @@ export class Paginator {
     private handleNodeSkipped(): void {
         logger.info(logPrefix, "node skipped - couldn't paginate");
 
-        markIgnoredNode(this._domState.currentNode);
+        DEV: markIgnoredNode(this._domState.currentNode);
         this._domState.nextNode();
     }
 

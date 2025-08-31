@@ -7,7 +7,7 @@ import {
 } from './PageNodes';
 import { Transaction } from './Transaction';
 import { defaultConfig } from './PaginationConfig';
-import * as DomUtilities from '../utilities/domUtilities';
+import * as DomUtilities from './domUtilities';
 import type { PaginationPlugin } from './PaginationPlugin';
 
 describe('PageElement', () => {

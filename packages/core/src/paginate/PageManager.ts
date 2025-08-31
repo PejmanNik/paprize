@@ -6,11 +6,11 @@ import {
     type PageText,
 } from './PageNodes';
 import { Transaction } from './Transaction';
-import { isInHighlightMode } from '../utilities/debugMode';
+import { isDebugMode } from '../debugUtilities/debugMode';
 import { pageClassName } from '../constants';
 import type { PageSize } from './PageSize';
-import { unmarkCurrentNode } from '../utilities/pageNodeMarker';
-import logger from 'loglevel';
+import { unmarkCurrentNode } from '../debugUtilities/pageNodeMarker';
+import logger from '../logger';
 import { type PaginationConfig } from './PaginationConfig';
 import { callPluginHook } from './PaginationPlugin';
 
@@ -77,16 +77,16 @@ export class PageManager {
     private _pageState: PageState;
 
     private readonly _transaction: Transaction;
-    private readonly _tempBook: Element;
+    private readonly _tempContainer: Element;
     private readonly _config: PaginationConfig;
 
     public constructor(
-        tempBook: Element,
+        tempContainer: Element,
         pageSize: PageSize,
         transaction: Transaction,
         config: PaginationConfig
     ) {
-        this._tempBook = tempBook;
+        this._tempContainer = tempContainer;
         this._config = config;
         this._transaction = transaction;
 
@@ -180,7 +180,7 @@ export class PageManager {
         page.style.width = `${pageWidth}px`;
         page.style.maxWidth = `${pageWidth}px`;
 
-        if (isInHighlightMode()) {
+        DEV: if (isDebugMode()) {
             page.classList.add(pageClassName);
         }
 
@@ -188,11 +188,11 @@ export class PageManager {
     }
 
     private createNewPage(pageHtmlElement: Element): PageElement {
-        this._tempBook.appendChild(pageHtmlElement);
+        this._tempContainer.appendChild(pageHtmlElement);
 
         if (this._transaction.isActive) {
             this._transaction.addRollbackCallback(() => {
-                this._tempBook.removeChild(pageHtmlElement);
+                this._tempContainer.removeChild(pageHtmlElement);
             });
         }
 
@@ -231,7 +231,7 @@ export class PageManager {
     public appendChild(node: PageElement, withChildren: boolean): PageElement {
         const clonedNode = node.clone(withChildren);
 
-        unmarkCurrentNode(clonedNode);
+        DEV: unmarkCurrentNode(clonedNode);
 
         this._pageState.currentElement.appendChild(clonedNode);
         this._pageState.activeElement = clonedNode;
