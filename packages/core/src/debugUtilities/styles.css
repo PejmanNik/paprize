@@ -1,10 +1,10 @@
-    :root{
+    :root {
         --paprize-current-element-color: #3c00ff;
         --paprize-current-text-color: #14c5e7;
         --paprize-ignored-element-color: #ff1e00d1;
         --paprize-ignored-text-color: #e77314;
     }
-    
+
     .pz-current-element {
         box-shadow: 0 0 0 2px var(--paprize-current-element-color);
     }
@@ -23,6 +23,4 @@
 
     .pz-page {
         border: 1px solid black;
-        padding: 1rem;
-        margin: 1rem;
     }

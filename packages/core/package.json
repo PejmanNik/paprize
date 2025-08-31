@@ -7,23 +7,25 @@
         "dist"
     ],
     "main": "./dist/paprize-core.umd.cjs",
-    "module": "./dist/paprize-core.esm.js",
+    "module": "./dist/paprize-core.js",
     "exports": {
         ".": {
             "types": "./dist/paprize-core.d.ts",
-            "import": "./dist/paprize-core.esm.js",
+            "import": "./dist/paprize-core.js",
             "require": "./dist/paprize-core.umd.cjs"
         },
         "./src": {
             "types": "./src/index.ts",
             "import": "./src/index.ts"
         },
-        "./src/styles.css": "./src/devTools/styles.css"
+        "./src/debug-styles.css": "./src/debugUtilities/styles.css"
     },
     "keywords": [
         "paper",
         "print",
-        "report"
+        "report",
+        "html2pdf",
+        "pdf"
     ],
     "homepage": "https://github.com/PejmanNik/paprize#readme",
     "bugs": {

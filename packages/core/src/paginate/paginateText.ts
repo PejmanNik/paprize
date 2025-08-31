@@ -1,4 +1,4 @@
-import log from '../logger';
+import logger from '../logger';
 import type { PageManager } from './PageManager';
 import type { PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
@@ -109,7 +109,7 @@ function handleTokenOverflow(
     if (!config.hyphenationEnabled) {
         // If hyphenation is not enabled and the token is too long, we need to skip the token
 
-        log.warn('Hyphenation disabled, skipping oversized token:', token);
+        logger.warn('Hyphenation disabled, skipping oversized token:', token);
 
         return {
             completed: false,

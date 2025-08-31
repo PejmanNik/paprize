@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
             entry: 'src/index.ts',
             name: 'paprize_core',
             fileName: 'paprize-core',
-            formats: ['esm', 'umd'],
+            formats: ['es', 'umd'],
         },
     },
     esbuild: {

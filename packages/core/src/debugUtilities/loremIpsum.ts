@@ -63,7 +63,10 @@ const words = [
     'voluptate',
 ];
 
-export function createParagraph(wordCount: number, seed: number): string {
+export function createLoremIpsumParagraph(
+    wordCount: number,
+    seed: number
+): string {
     if (wordCount <= 0) {
         return '';
     }

@@ -40,7 +40,7 @@ export class DomState {
             this.completed = true;
         }
 
-        logger.info(logPrefix, 'moving to next node');
+        logger.debug(logPrefix, 'moving to next node');
 
         this.setState();
     }
@@ -49,7 +49,7 @@ export class DomState {
         let parentsTraversed = 0;
 
         if (this._treeWalker.nextSibling()) {
-            logger.info(logPrefix, 'moving to next sibling node');
+            logger.debug(logPrefix, 'moving to next sibling node');
 
             this.setState();
             return { parentsTraversed };
@@ -60,7 +60,7 @@ export class DomState {
             parentsTraversed++;
 
             if (this._treeWalker.nextSibling()) {
-                logger.info(
+                logger.debug(
                     logPrefix,
                     'moving to parent sibling node, traversed:',
                     parentsTraversed
@@ -77,7 +77,7 @@ export class DomState {
 
     public firstChildOrNextNode(): { parentsTraversed: number } {
         if (this._treeWalker.firstChild()) {
-            logger.info(logPrefix, 'moving to first child node');
+            logger.debug(logPrefix, 'moving to first child node');
             this.setState();
             return { parentsTraversed: 1 };
         }
@@ -97,7 +97,7 @@ export class DomState {
         DEV: markCurrentNode(this.currentNode);
         DEV: unmarkCurrentNode(this.previousNode);
 
-        logger.info(logPrefix, 'moved to node', {
+        logger.debug(logPrefix, 'moved to node', {
             currentNode: this.currentNode,
             previousNode: this.previousNode,
         });

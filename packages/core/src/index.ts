@@ -5,6 +5,7 @@ export * from './paginate/domUtilities';
 export type * from './paginate/PageSize';
 export type * from './paginate/PaginationPlugin';
 export type { PaginationConfig } from './paginate/PaginationConfig';
-export { default as log } from './logger';
+export { default as logger } from './logger';
 export { enableDebugMode, isDebugMode } from './debugUtilities/debugMode';
+export * from './debugUtilities/loremIpsum';
 export * from './plugins';

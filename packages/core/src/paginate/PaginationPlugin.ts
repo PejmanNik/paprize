@@ -47,7 +47,7 @@ export function callPluginHook<T extends PluginHookNames>(
             return;
         }
 
-        logger.info(
+        logger.debug(
             logPrefix,
             `executing plugin ${plugin.name}:${String(hookName)}`,
             args
@@ -55,13 +55,13 @@ export function callPluginHook<T extends PluginHookNames>(
 
         try {
             (hook as Function)(...args);
-            logger.info(
+            logger.debug(
                 logPrefix,
                 `plugin ${plugin.name}:${String(hookName)} executed`,
                 args
             );
         } catch (error) {
-            logger.error(
+            logger.debug(
                 logPrefix,
                 `plugin ${plugin.name}:${String(hookName)} failed`,
                 error

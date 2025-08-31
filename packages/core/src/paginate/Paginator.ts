@@ -75,7 +75,7 @@ export class Paginator {
         this._domState.nextNode();
 
         do {
-            logger.info(
+            logger.debug(
                 logPrefix,
                 'paginating node',
                 this._domState.currentNode
@@ -96,18 +96,18 @@ export class Paginator {
             }
         } while (this._domState.completed === false);
 
-        logger.info(logPrefix, 'pagination completed');
+        logger.debug(logPrefix, 'pagination completed');
     }
 
     private handleNodeSkipped(): void {
-        logger.info(logPrefix, "node skipped - couldn't paginate");
+        logger.debug(logPrefix, "node skipped - couldn't paginate");
 
         DEV: markIgnoredNode(this._domState.currentNode);
         this._domState.nextNode();
     }
 
     private handleFullNodePlaced(): void {
-        logger.info(logPrefix, 'node fully paginated');
+        logger.debug(logPrefix, 'node fully paginated');
 
         const { parentsTraversed } =
             this._domState.nextSiblingOrParentSibling();
@@ -117,7 +117,10 @@ export class Paginator {
     }
 
     private handleChildrenSplit(): void {
-        logger.info(logPrefix, 'node partially paginated - splitting children');
+        logger.debug(
+            logPrefix,
+            'node partially paginated - splitting children'
+        );
 
         if (
             this._domState.firstChildOrNextNode().parentsTraversed === 1 &&

@@ -152,7 +152,7 @@ export class PageManager {
             throw new Error('Invalid state: activeElement is not an Element');
         }
 
-        logger.info(
+        logger.debug(
             logPrefix,
             'entering an element',
             this._pageState.activeElement
@@ -166,7 +166,7 @@ export class PageManager {
 
         // remove last parent as we are leaving it
         const popped = this._pageState.parentStack.pop();
-        logger.info(logPrefix, 'leaving a parent element', popped);
+        logger.debug(logPrefix, 'leaving a parent element', popped);
 
         // find the original parent
         const parent = this._pageState.parentStack.at(-1);
