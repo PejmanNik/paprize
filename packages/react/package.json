@@ -1,0 +1,69 @@
+{
+    "name": "@paprize/react",
+    "version": "0.0.1",
+    "description": "React library for creating professional, print-ready reports",
+    "private": true,
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/paprize-react.umd.cjs",
+    "module": "./dist/paprize-react.js",
+    "exports": {
+        ".": {
+            "types": "./dist/paprize-react.d.ts",
+            "import": "./dist/paprize-react.js",
+            "require": "./dist/paprize-core.umd.cjs"
+        }
+    },
+    "keywords": [
+        "paper",
+        "print",
+        "report",
+        "pdf",
+        "html2pdf",
+        "react"
+    ],
+    "homepage": "https://github.com/PejmanNik/paprize#readme",
+    "bugs": {
+        "url": "https://github.com/PejmanNik/paprize/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PejmanNik/paprize.git"
+    },
+    "license": "MIT",
+    "author": "PejmanNikram",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc -b && vite build",
+        "lint": "eslint .",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.14.0",
+        "@paprize/core": "^0.0.1",
+        "jotai": "^2.13.1",
+        "loglevel": "^1.9.2"
+    },
+    "peerDependencies": {
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.30.1",
+        "@types/react": "^19.1.8",
+        "@types/react-dom": "^19.1.6",
+        "@vitejs/plugin-react-swc": "^3.10.2",
+        "eslint": "^9.30.1",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.20",
+        "globals": "^16.3.0",
+        "typescript": "~5.8.3",
+        "typescript-eslint": "^8.35.1",
+        "unplugin-dts": "^1.0.0-beta.6",
+        "vite": "^7.0.4",
+        "vite-plugin-checker": "^0.10.3",
+        "vite-plugin-lib-inject-css": "^2.2.2"
+    }
+}
