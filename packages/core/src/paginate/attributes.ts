@@ -51,6 +51,20 @@ export type ConfigAttribute = {
     [K in AttributeKey]?: AttributeValue<K>;
 };
 
+export function configToAttributes(
+    config: ConfigAttribute
+): Record<string, string> {
+    const map: Record<string, string> = {};
+    for (const key in config) {
+        const value = config[key as AttributeKey];
+        if (value !== undefined) {
+            const def = AttributeDef[key as AttributeKey];
+            map[`${attributePrefix}${def.name}`] = String(value);
+        }
+    }
+    return map;
+}
+
 export const defaultConfigAttribute: Required<ConfigAttribute> =
     Object.fromEntries(
         Object.entries(AttributeDef).map(([key, configValue]) => [
@@ -58,6 +72,8 @@ export const defaultConfigAttribute: Required<ConfigAttribute> =
             configValue.defaultValue,
         ])
     ) as Required<ConfigAttribute>;
+
+const attributeCache = new WeakMap<Node, ConfigAttribute>();
 
 export function getNodeConfigAttribute(node: Node | null): ConfigAttribute {
     if (!node) {
@@ -78,5 +94,15 @@ export function getNodeConfigAttribute(node: Node | null): ConfigAttribute {
         }
     }
 
-    return attributes;
+    // each node inherits attributes from its ancestors
+    // since the DOM tree is traversed from top to bottom,
+    // the parent attributes have already been read.
+    const parentAttributes = node.parentNode
+        ? attributeCache.get(node.parentNode)
+        : undefined;
+
+    const result = { ...parentAttributes, ...attributes };
+    attributeCache.set(node, result);
+
+    return result;
 }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     AttributeValueDef,
+    configToAttributes,
     defaultConfigAttribute,
     getNodeConfigAttribute,
 } from './attributes';
@@ -53,5 +54,64 @@ describe('getNodeConfigAttribute', () => {
         expect(config.hyphen).toBe('x');
         expect(config.keepOnSamePage).toBe(true);
         expect(config.hyphenationEnabled).toBe(false);
+    });
+
+    it('should handle deep nesting of parent attributes', () => {
+        const grandparentElement = document.createElement('div');
+        const parentElement = document.createElement('div');
+        const childElement = document.createElement('div');
+
+        grandparentElement.appendChild(parentElement);
+        parentElement.appendChild(childElement);
+
+        // Set attributes at different levels
+        grandparentElement.setAttribute('data-pz-hyphen', 'gp');
+        grandparentElement.setAttribute('data-pz-keep-on-same-page', 'false');
+        grandparentElement.setAttribute('data-pz-hyphenation-enabled', 'false');
+        parentElement.setAttribute('data-pz-hyphen', 'p');
+        parentElement.setAttribute('data-pz-hyphenation-enabled', 'true');
+        childElement.setAttribute('data-pz-hyphen', 'c');
+
+        getNodeConfigAttribute(grandparentElement);
+        getNodeConfigAttribute(parentElement);
+        const result = getNodeConfigAttribute(childElement);
+
+        expect(result).toEqual({
+            keepOnSamePage: false, // inherited from grandparent
+            hyphenationEnabled: true, // inherited from parent
+            hyphen: 'c', // child's own
+        });
+    });
+});
+
+describe('configToAttributes', () => {
+    it('should convert config object to attribute map with correct prefix and string values', () => {
+        const config = {
+            hyphen: 'foo',
+            keepOnSamePage: true,
+            hyphenationEnabled: false,
+        };
+        const result = configToAttributes(config);
+        expect(result).toEqual({
+            'data-pz-hyphen': 'foo',
+            'data-pz-keepOnSamePage': 'true',
+            'data-pz-hyphenationEnabled': 'false',
+        });
+    });
+
+    it('should skip undefined values', () => {
+        const config = {
+            hyphen: undefined,
+            keepOnSamePage: true,
+        };
+        const result = configToAttributes(config);
+        expect(result).toEqual({
+            'data-pz-keepOnSamePage': 'true',
+        });
+    });
+
+    it('should return an empty object for empty config', () => {
+        const result = configToAttributes({});
+        expect(result).toEqual({});
     });
 });
