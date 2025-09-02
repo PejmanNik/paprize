@@ -9,14 +9,14 @@ import {
     calculatePageDimensions,
     createSectionPageHeightPlugin,
 } from './Section.utilities';
-import { use, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import type { PageElements } from './parseSectionChildren';
 import type { PageDimension, PageMargin } from './pageTypes';
 import type { SectionLayoutProps } from './SectionLayout';
-import { useSetAtom } from 'jotai';
-import { reportInfo } from './reportInfo';
 import { SectionContext } from './SectionContext';
 import type { PaginationConfig } from '@paprize/core/src';
+import { useIsSectionSuspendedCallback } from './useIsSectionSuspendedCallback';
+import { useSetSectionInfo } from './useSetSectionInfo';
 
 const logPrefix = '\x1b[41mREACT\x1b[0m';
 
@@ -47,8 +47,9 @@ export function usePagination(
     margin?: PageMargin,
     options?: PaginationConfig
 ) {
-    const sectionName = use(SectionContext);
-    const setReportInfo = useSetAtom(reportInfo);
+    const sectionName = useContext(SectionContext);
+    const readIsSectionSuspended = useIsSectionSuspendedCallback(sectionName);
+    const setSectionInfo = useSetSectionInfo(sectionName);
     const cacheRef = useRef<SectionLayoutProps | null>(null);
     const [state, setState] = useState<PaginationState>({
         results: null,
@@ -89,6 +90,11 @@ export function usePagination(
             return;
         }
 
+        if (readIsSectionSuspended()) {
+            logger.info(logPrefix, `Section "${sectionName}" is suspended`);
+            return;
+        }
+
         const { height, width, heightWithoutSection } = calculatePageDimensions(
             refs.content!,
             refs.sectionHeader!,
@@ -108,6 +114,7 @@ export function usePagination(
         }
 
         logger.debug(logPrefix, 'Calling Paginator', {
+            sectionName,
             height,
             heightWithoutSection,
             plugins,
@@ -120,6 +127,7 @@ export function usePagination(
         );
 
         logger.debug(logPrefix, 'Paginator Result', {
+            sectionName,
             paginatorResult,
         });
 
@@ -128,11 +136,10 @@ export function usePagination(
             isLoading: false,
         });
 
-        setReportInfo((pre) =>
-            new Map(pre).set(sectionName, {
-                totalPages: paginatorResult.length,
-            })
-        );
+        setSectionInfo((pre) => ({
+            ...pre,
+            totalPages: paginatorResult.length,
+        }));
 
         cacheRef.current = { elements, dimensions, margin };
     });

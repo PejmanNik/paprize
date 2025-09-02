@@ -1,8 +1,8 @@
-import { use } from 'react';
+import { useContext } from 'react';
 import { PageContext } from './PageContext';
 
 export const usePageInfo = () => {
-    const pageContext = use(PageContext);
+    const pageContext = useContext(PageContext);
 
     return {
         pageNumber: pageContext.pageNumber,

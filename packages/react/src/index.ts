@@ -7,8 +7,11 @@ export * from './components/PageFooter';
 export * from './components/SectionHeader';
 export * from './components/SectionFooter';
 export * from './components/PageBreak';
-export * from './components/usePageInfo';
 export * from './components/Layout';
+export * from './components/usePageInfo';
+export * from './components/useSectionSuspension';
+export * from './components/useSectionInfo';
+export * from './components/useReportInfo';
 export type * from './components/pageTypes';
 
 export { defaultPlugins } from '@paprize/core/src';

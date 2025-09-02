@@ -1,9 +1,9 @@
 import { useAtomValue } from 'jotai';
-import { reportInfo } from './reportInfo';
+import { reportInfoAtom } from './reportInfo';
 import { useMemo } from 'react';
 
 export function useReportInfo() {
-    const value = useAtomValue(reportInfo);
+    const value = useAtomValue(reportInfoAtom);
 
     return useMemo(
         () => ({
