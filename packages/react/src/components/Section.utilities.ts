@@ -1,6 +1,4 @@
-import { getVisibleHeight, type PaginationPlugin } from '@paprize/core/src';
 import type { PageDimension, PageOrientation } from './pageTypes';
-import { getVisibleSize } from './Page.utilities';
 
 export function adjustDimension(
     dimension: PageDimension,
@@ -30,34 +28,4 @@ export function buildSectionStyle(
     );
 
     return style;
-}
-
-export function calculatePageDimensions(
-    current: HTMLDivElement,
-    sectionHeader: HTMLDivElement,
-    sectionFooter: HTMLDivElement
-): { height: number; width: number; heightWithoutSection: number } {
-    const { height, width } = getVisibleSize(current);
-    const sectionHeaderHeight = getVisibleHeight(sectionHeader);
-    const sectionFooterHeight = getVisibleHeight(sectionFooter);
-    const heightWithoutSection =
-        height + sectionHeaderHeight + sectionFooterHeight;
-
-    return { height, width, heightWithoutSection };
-}
-
-export function createSectionPageHeightPlugin(
-    height: number,
-    heightWithoutSection: number
-): PaginationPlugin {
-    return {
-        name: 'sectionPageHeight',
-        onNewPage: (pageState) => {
-            if (pageState.pageIndex === 0) {
-                pageState.pageHeight = height;
-            } else {
-                pageState.pageHeight = heightWithoutSection;
-            }
-        },
-    };
 }

@@ -8,7 +8,8 @@ export interface PageProps {
     elements: PageElements;
     dimensions: PageDimension;
     margin?: PageMargin;
-    pageIndex: number;
+    pageNumber: number;
+    totalPages: number;
     ref?: Ref<HTMLDivElement>;
     sectionHeaderRef?: Ref<HTMLDivElement>;
     sectionFooterRef?: Ref<HTMLDivElement>;
@@ -19,15 +20,16 @@ export function Page({
     elements,
     dimensions,
     margin,
-    pageIndex,
+    pageNumber,
+    totalPages,
     ref,
     sectionHeaderRef,
     sectionFooterRef,
     contentRef,
 }: PageProps) {
     const contextValue = useMemo(
-        () => ({ pageNumber: pageIndex + 1 }),
-        [pageIndex]
+        () => ({ pageNumber, totalPages }),
+        [pageNumber, totalPages]
     );
 
     return (
@@ -44,7 +46,7 @@ export function Page({
                     zIndex: 1,
                 }}
             >
-                {pageIndex == 0 && (
+                {elements.sectionHeader && pageNumber == 1 && (
                     <div
                         className="paprize-page-component"
                         ref={sectionHeaderRef}
@@ -52,7 +54,11 @@ export function Page({
                         {elements.sectionHeader}
                     </div>
                 )}
-                <div className="paprize-page-component"> {elements.header}</div>
+                {elements.header && (
+                    <div className="paprize-page-component">
+                        {elements.header}
+                    </div>
+                )}
 
                 <div
                     style={{
@@ -63,24 +69,40 @@ export function Page({
                     {elements.content}
                 </div>
 
-                <div style={{ position: 'absolute' }}> {elements.overlay}</div>
-
-                <div
-                    className="paprize-page-component"
-                    style={{ marginTop: 'auto' }}
-                >
-                    <div className="paprize-page-component">
-                        {elements.footer}
+                {elements.overlay && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            left: 0,
+                            top: 0,
+                        }}
+                    >
+                        {elements.overlay}
                     </div>
-                    {pageIndex == 0 && (
-                        <div
-                            className="paprize-page-component"
-                            ref={sectionFooterRef}
-                        >
-                            {elements.sectionFooter}
-                        </div>
-                    )}
-                </div>
+                )}
+
+                {(elements.footer || elements.sectionFooter) && (
+                    <div
+                        className="paprize-page-component"
+                        style={{ marginTop: 'auto' }}
+                    >
+                        {elements.footer && (
+                            <div className="paprize-page-component">
+                                {elements.footer}
+                            </div>
+                        )}
+                        {elements.sectionFooter && pageNumber == totalPages && (
+                            <div
+                                className="paprize-page-component"
+                                ref={sectionFooterRef}
+                            >
+                                {elements.sectionFooter}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </PageContext>
     );

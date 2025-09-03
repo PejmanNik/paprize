@@ -42,7 +42,8 @@ export function SectionLayout({
                         }}
                         dimensions={dimensions}
                         margin={margin}
-                        pageIndex={index}
+                        pageNumber={index + 1}
+                        totalPages={results.length}
                     />
                 ))}
             </>
@@ -64,7 +65,8 @@ export function SectionLayout({
                 elements={elements}
                 dimensions={dimensions}
                 margin={margin}
-                pageIndex={0}
+                pageNumber={1}
+                totalPages={1}
                 ref={pageRef}
                 sectionHeaderRef={sectionHeaderRef}
                 sectionFooterRef={sectionFooterRef}

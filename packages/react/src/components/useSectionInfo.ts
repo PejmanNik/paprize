@@ -17,7 +17,7 @@ export const useSectionInfo = () => {
     const value = useAtomValue(sectionAtom);
 
     return {
-        name: sectionName,
-        ...value,
+        sectionName: sectionName,
+        totalPages: value.totalPages,
     };
 };

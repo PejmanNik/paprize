@@ -8,7 +8,7 @@ import {
 import {
     calculatePageDimensions,
     createSectionPageHeightPlugin,
-} from './Section.utilities';
+} from './usePagination.utilities';
 import { useContext, useEffect, useRef, useState } from 'react';
 import type { PageElements } from './parseSectionChildren';
 import type { PageDimension, PageMargin } from './pageTypes';
@@ -75,16 +75,10 @@ export function usePagination(
     // the following condition will avoid infinite loops
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        const refs = {
-            page: pageRef.current,
-            sectionHeader: sectionHeaderRef.current,
-            sectionFooter: sectionFooterRef.current,
-            content: contentRef.current,
-        };
-
-        // early return if refs aren't ready or cache is valid
+        // early return if page ref isn't ready or cache is valid
         if (
-            !Object.values(refs).every((x) => x) ||
+            !pageRef.current ||
+            !contentRef.current ||
             isCacheValid(cacheRef.current, elements, dimensions, margin)
         ) {
             return;
@@ -95,34 +89,41 @@ export function usePagination(
             return;
         }
 
-        const { height, width, heightWithoutSection } = calculatePageDimensions(
-            refs.content!,
-            refs.sectionHeader!,
-            refs.sectionFooter!
-        );
+        const { height, width, sectionFooterHeight, sectionHeaderHeight } =
+            calculatePageDimensions(
+                contentRef.current,
+                sectionHeaderRef.current,
+                sectionFooterRef.current
+            );
 
         const plugins = options?.plugins.length
             ? options.plugins
             : [
                   ...defaultPlugins,
-                  createSectionPageHeightPlugin(height, heightWithoutSection),
+                  createSectionPageHeightPlugin(
+                      height,
+                      sectionHeaderHeight,
+                      sectionFooterHeight
+                  ),
               ];
 
-        if (isDebugMode() && refs.page) {
-            refs.page.style.maxHeight = 'none';
-            refs.page.style.height = 'auto';
+        if (isDebugMode()) {
+            pageRef.current.style.maxHeight = 'none';
+            pageRef.current.style.height = 'auto';
         }
 
         logger.debug(logPrefix, 'Calling Paginator', {
             sectionName,
             height,
-            heightWithoutSection,
+            width,
+            sectionFooterHeight,
+            sectionHeaderHeight,
             plugins,
         });
 
         const paginatorResult = Paginator.paginate(
-            refs.content!,
-            { height: heightWithoutSection, width },
+            contentRef.current,
+            { height, width },
             { ...options, plugins }
         );
 

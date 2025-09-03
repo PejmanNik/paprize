@@ -6,5 +6,6 @@ export const usePageInfo = () => {
 
     return {
         pageNumber: pageContext.pageNumber,
+        totalPages: pageContext.totalPages,
     };
 };
