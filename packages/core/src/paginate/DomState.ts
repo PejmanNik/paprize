@@ -13,13 +13,13 @@ import logger from '../logger';
 const logPrefix = '\x1b[106mDOM\x1b[0m';
 
 export class DomState {
-    private _transaction: Transaction;
-    private _treeWalker: TreeWalker;
-    private _config: PaginationConfig;
+    private readonly _transaction: Transaction;
+    private readonly _treeWalker: TreeWalker;
+    private readonly _config: PaginationConfig;
 
-    public completed: boolean = false;
-    public currentNode: PageNode | null = null;
-    public previousNode: PageNode | null = null;
+    private _completed: boolean = false;
+    private _currentNode: PageNode | null = null;
+    private _previousNode: PageNode | null = null;
 
     constructor(
         root: Element,
@@ -34,10 +34,20 @@ export class DomState {
         );
     }
 
+    public get completed(): boolean {
+        return this._completed;
+    }
+    public get currentNode(): PageNode | null {
+        return this._currentNode;
+    }
+    public get previousNode(): PageNode | null {
+        return this._previousNode;
+    }
+
     public nextNode() {
         const result = this._treeWalker.nextNode();
         if (!result) {
-            this.completed = true;
+            this._completed = true;
         }
 
         logger.debug(logPrefix, 'moving to next node');
@@ -71,7 +81,7 @@ export class DomState {
             }
         }
 
-        this.completed = true;
+        this._completed = true;
         return { parentsTraversed };
     }
 
@@ -87,8 +97,8 @@ export class DomState {
     }
 
     private setState() {
-        this.previousNode = this.currentNode;
-        this.currentNode = createPageNode(
+        this._previousNode = this._currentNode;
+        this._currentNode = createPageNode(
             this._treeWalker.currentNode,
             this._transaction,
             getConfigFromAttributes(this._treeWalker.currentNode, this._config)

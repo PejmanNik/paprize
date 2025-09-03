@@ -94,8 +94,8 @@ describe('configToAttributes', () => {
         const result = configToAttributes(config);
         expect(result).toEqual({
             'data-pz-hyphen': 'foo',
-            'data-pz-keepOnSamePage': 'true',
-            'data-pz-hyphenationEnabled': 'false',
+            'data-pz-keep-on-same-page': 'true',
+            'data-pz-hyphenation-enabled': 'false',
         });
     });
 
@@ -106,7 +106,7 @@ describe('configToAttributes', () => {
         };
         const result = configToAttributes(config);
         expect(result).toEqual({
-            'data-pz-keepOnSamePage': 'true',
+            'data-pz-keep-on-same-page': 'true',
         });
     });
 

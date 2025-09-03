@@ -1,18 +1,21 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { callPluginHook } from './PaginationPlugin';
 import type { PaginationPlugin, VisitContext } from './PaginationPlugin';
 import type { PageManager } from './PageManager';
 import type { PageText } from './PageNodes';
+import type { DomState } from './DomState';
 
 describe('callPluginHook', () => {
-    let mockText: PageText;
+    let mockDomState: Mocked<DomState & { currentNode: PageText }>;
     let mockPageManager: PageManager;
-    let mockContext: VisitContext;
+    let context: VisitContext;
 
     beforeEach(() => {
-        mockText = {} as PageText;
+        mockDomState = {
+            currentNode: {} as PageText,
+        } as unknown as Mocked<DomState & { currentNode: PageText }>;
         mockPageManager = {} as PageManager;
-        mockContext = {};
+        context = {};
     });
 
     it('should call the specified hook on all plugins that have it', () => {
@@ -31,20 +34,20 @@ describe('callPluginHook', () => {
         callPluginHook(
             plugins,
             'onVisitText',
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
 
         expect(mockPlugin1.onVisitText).toHaveBeenCalledWith(
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
         expect(mockPlugin2.onVisitText).toHaveBeenCalledWith(
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
     });
 
@@ -60,22 +63,19 @@ describe('callPluginHook', () => {
         };
 
         const plugins = [mockPlugin1, mockPlugin2];
-        const mockText = {} as PageText;
-        const mockPageManager = {} as PageManager;
-        const mockContext: VisitContext = {};
 
         callPluginHook(
             plugins,
             'onVisitText',
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
 
         expect(mockPlugin1.onVisitText).toHaveBeenCalledWith(
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
         // plugin2 should not throw an error
     });
@@ -90,16 +90,13 @@ describe('callPluginHook', () => {
         };
 
         const plugins = [mockPlugin];
-        const mockText = {} as PageText;
-        const mockPageManager = {} as PageManager;
-        const mockContext: VisitContext = {};
 
         callPluginHook(
             plugins,
             'onVisitText',
-            mockText,
+            mockDomState,
             mockPageManager,
-            mockContext
+            context
         );
 
         // no error thrown

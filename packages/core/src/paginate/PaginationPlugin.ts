@@ -2,6 +2,7 @@ import type { PageManager, PageState } from './PageManager';
 import type { PageElement, PageText } from './PageNodes';
 import type { SplitResult } from './SplitResult';
 import logger from '../logger';
+import type { DomState } from './DomState';
 
 const logPrefix = '\x1b[46mPLUGIN\x1b[0m';
 
@@ -13,15 +14,16 @@ export interface PaginationPlugin {
     readonly name: string;
 
     onVisitText?: (
-        currentNode: PageText,
+        domState: DomState & { currentNode: PageText },
         pageManager: PageManager,
         context: VisitContext
     ) => void;
     onVisitElement?: (
-        currentNode: PageElement,
+        domState: DomState & { currentNode: PageElement },
         pageManager: PageManager,
         context: VisitContext
     ) => void;
+    afterVisitNode?: (domState: DomState, pageManager: PageManager) => void;
     onNewPage?: (newPageState: PageState) => void;
     onClone?: (source: Element, cloned: PageElement) => void;
 }

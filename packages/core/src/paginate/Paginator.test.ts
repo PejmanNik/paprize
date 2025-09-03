@@ -250,4 +250,33 @@ describe('Paginator', () => {
 
         expect(mockPageManager.leaveElement).toHaveBeenCalledTimes(2);
     });
+
+    it('should call afterVisitNode plugin hook after each node visit', () => {
+        const afterVisitNode = vi.fn();
+        config.plugins = [
+            {
+                name: 'test-plugin',
+                afterVisitNode,
+            },
+        ];
+
+        // setup a node and make sure pagination completes after one iteration
+        const node = { type: PageNodeType.Element } as PageElement;
+        mockDomState.currentNode = node;
+        mockDomState.completed = false;
+        mockDomState.nextNode.mockImplementation(() => {
+            mockDomState.completed = true;
+        });
+        vi.mocked(paginateElementAcrossPages).mockReturnValue(
+            SplitResult.FullNodePlaced
+        );
+
+        Paginator.paginate(root, pageSize, config);
+
+        expect(afterVisitNode).toHaveBeenCalledWith(
+            mockDomState,
+            mockPageManager
+        );
+        expect(afterVisitNode).toHaveBeenCalledTimes(1);
+    });
 });

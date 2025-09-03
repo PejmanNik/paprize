@@ -6,10 +6,11 @@ export const pageBreakPluginName = 'pageBreak';
 
 export const pageBreakPlugin: PaginationPlugin = {
     name: pageBreakPluginName,
-    onVisitElement: (currentNode, pageManager, context) => {
+    onVisitElement: (domState, pageManager, context) => {
         if (
-            currentNode.getNode().getAttribute(pageBreakAttributeName) ===
-            'true'
+            domState.currentNode
+                .getNode()
+                .getAttribute(pageBreakAttributeName) === 'true'
         ) {
             pageManager.markPageAsFull();
 

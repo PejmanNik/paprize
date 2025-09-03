@@ -1,7 +1,7 @@
 import { DomState } from './DomState';
 import { PageManager } from './PageManager';
 import type { PageSize } from './PageSize';
-import { PageNodeType } from './PageNodes';
+import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { paginateElementAcrossPages } from './paginateElement';
 import { paginateTextByWord } from './paginateText';
 import { SplitResult } from './SplitResult';
@@ -81,6 +81,7 @@ export class Paginator {
                 this._domState.currentNode
             );
             const result = this.processCurrentNode();
+
             switch (result) {
                 case SplitResult.None:
                     this.handleNodeSkipped();
@@ -94,6 +95,13 @@ export class Paginator {
                     this.handleChildrenSplit();
                     break;
             }
+
+            callPluginHook(
+                this._config.plugins,
+                'afterVisitNode',
+                this._domState,
+                this._pageManager
+            );
         } while (this._domState.completed === false);
 
         logger.debug(logPrefix, 'pagination completed');
@@ -141,7 +149,7 @@ export class Paginator {
             callPluginHook(
                 this._config.plugins,
                 'onVisitElement',
-                this._domState.currentNode,
+                this._domState as DomState & { currentNode: PageElement },
                 this._pageManager,
                 ctx
             );
@@ -160,7 +168,7 @@ export class Paginator {
             callPluginHook(
                 this._config.plugins,
                 'onVisitText',
-                this._domState.currentNode,
+                this._domState as DomState & { currentNode: PageText },
                 this._pageManager,
                 ctx
             );

@@ -3,6 +3,7 @@ export * from './constants';
 export * from './paginate/SplitResult';
 export * from './paginate/domUtilities';
 export type * from './paginate/PageSize';
+export type * from './paginate/DomState';
 export type * from './paginate/PaginationPlugin';
 export {
     configToAttributes as configToAttributeMap,
