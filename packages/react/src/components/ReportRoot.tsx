@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Provider } from 'jotai';
 import { css, Global } from '@emotion/react';
+import { ReportStatus } from './ReportStatus';
+import { store } from './store';
 
 export interface ReportRootProps {
     children: ReactNode;
@@ -25,9 +27,10 @@ const globalStyles = css`
 
 export function ReportRoot({ children }: ReportRootProps) {
     return (
-        <Provider>
+        <Provider store={store}>
             <Global styles={globalStyles} />
             {children}
+            <ReportStatus />
         </Provider>
     );
 }

@@ -1,5 +1,5 @@
-export const paprize_isReady = '__paprize_is_ready';
-export const paprize_readJsonDataFile = '__paprize_read_json_data_file';
+export const paprize_isReady = '__PAPRIZE_IS_READY';
+export const paprize_readJsonDataFile = '__PAPRIZE_READ_JSON_DATA_FILE';
 
 declare global {
     interface Window {
