@@ -1,22 +1,17 @@
 import { atom, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
-import { reportInfoAtom, type SectionInfo } from './reportInfo';
+import { defaultSectionState, sectionsAtom, type SectionState } from './store';
 
-export const useSetSectionInfo = (sectionName: string) => {
+export const useSetSectionState = (sectionName: string) => {
     const sectionAtom = useMemo(
         () =>
             atom(
                 () => 0,
-                (_, set, update: (pre: SectionInfo) => SectionInfo) => {
-                    set(reportInfoAtom, (prev) =>
+                (_, set, update: (pre: SectionState) => SectionState) => {
+                    set(sectionsAtom, (prev) =>
                         new Map(prev).set(
                             sectionName,
-                            update(
-                                prev.get(sectionName) ?? {
-                                    pendingSuspensions: new Set(),
-                                    totalPages: 0,
-                                }
-                            )
+                            update(prev.get(sectionName) ?? defaultSectionState)
                         )
                     );
                 }

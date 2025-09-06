@@ -1,16 +1,21 @@
 import { useId, useMemo } from 'react';
-import { useSetSectionInfo } from './useSetSectionInfo';
+import { useSetSectionState } from './useSetSectionInfo';
 
-export function useSectionSuspension(sectionName: string) {
+export function useSectionSuspension(
+    sectionName: string,
+    suspend: boolean = true
+) {
     const id = useId();
-    const setSectionInfo = useSetSectionInfo(sectionName);
+    const setSectionInfo = useSetSectionState(sectionName);
 
     useMemo(() => {
+        if (!suspend) return;
+
         setSectionInfo((prev) => ({
             ...prev,
-            pendingSuspensions: prev.pendingSuspensions.add(id),
+            pendingSuspensions: new Set(prev.pendingSuspensions).add(id),
         }));
-    }, [id, setSectionInfo]);
+    }, [id, setSectionInfo, suspend]);
 
     return useMemo(() => {
         return {

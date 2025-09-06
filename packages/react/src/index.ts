@@ -9,9 +9,12 @@ export * from './components/SectionFooter';
 export * from './components/PageBreak';
 export * from './components/Layout';
 export * from './components/usePageInfo';
-export * from './components/useSectionSuspension';
 export * from './components/useSectionInfo';
 export * from './components/useReportInfo';
+export * from './components/useSectionSuspension';
+export * from './components/useSuspenseForPromise';
+export * from './components/useJsonData';
+export * from './pageConst';
 export type * from './components/pageTypes';
 
 export { defaultPlugins } from '@paprize/core/src';

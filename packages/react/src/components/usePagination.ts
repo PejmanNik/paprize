@@ -16,7 +16,7 @@ import type { SectionLayoutProps } from './SectionLayout';
 import { SectionContext } from './SectionContext';
 import type { PaginationConfig } from '@paprize/core/src';
 import { useIsSectionSuspendedCallback } from './useIsSectionSuspendedCallback';
-import { useSetSectionInfo } from './useSetSectionInfo';
+import { useSetSectionState } from './useSetSectionInfo';
 
 const logPrefix = '\x1b[41mREACT\x1b[0m';
 
@@ -49,7 +49,7 @@ export function usePagination(
 ) {
     const sectionName = useContext(SectionContext);
     const readIsSectionSuspended = useIsSectionSuspendedCallback(sectionName);
-    const setSectionInfo = useSetSectionInfo(sectionName);
+    const setSectionInfo = useSetSectionState(sectionName);
     const cacheRef = useRef<SectionLayoutProps | null>(null);
     const [state, setState] = useState<PaginationState>({
         results: null,
@@ -140,6 +140,7 @@ export function usePagination(
         setSectionInfo((pre) => ({
             ...pre,
             totalPages: paginatorResult.length,
+            isPaginated: true,
         }));
 
         cacheRef.current = { elements, dimensions, margin };

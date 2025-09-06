@@ -1,17 +1,50 @@
 import { atom, useAtomValue } from 'jotai';
 import { useContext, useMemo } from 'react';
-import { reportInfoAtom, type SectionInfo } from './reportInfo';
+import { sectionsAtom } from './store';
 import { SectionContext } from './SectionContext';
+
+/**
+ * Represents information about a section, including pagination details and pending suspensions.
+ */
+export interface SectionInfo {
+    /**
+     * The total number of pages in the section.
+     * When isPaginated is false, this value is 0.
+     */
+    totalPages: number;
+
+    /**
+     * Indicates whether the section is paginated.
+     */
+    isPaginated: boolean;
+
+    /**
+     * The number of pending suspensions in the section.
+     */
+    pendingSuspensions: number;
+}
+
+const defaultSectionInfo: SectionInfo = {
+    totalPages: 0,
+    isPaginated: false,
+    pendingSuspensions: 0,
+};
 
 export const useSectionInfo = () => {
     const sectionName = useContext(SectionContext);
     const sectionAtom = useMemo(
         () =>
-            atom(
-                (get) =>
-                    get(reportInfoAtom).get(sectionName) ??
-                    ({ totalPages: 0 } as SectionInfo)
-            ),
+            atom((get): SectionInfo => {
+                const state = get(sectionsAtom).get(sectionName);
+                if (state) {
+                    return {
+                        totalPages: state.totalPages,
+                        isPaginated: state.isPaginated,
+                        pendingSuspensions: state.pendingSuspensions.size,
+                    };
+                }
+                return defaultSectionInfo;
+            }),
         [sectionName]
     );
     const value = useAtomValue(sectionAtom);

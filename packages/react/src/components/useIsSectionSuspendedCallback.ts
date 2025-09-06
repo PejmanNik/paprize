@@ -1,5 +1,5 @@
 import { useAtomCallback } from 'jotai/utils';
-import { reportInfoAtom } from './reportInfo';
+import { sectionsAtom } from './store';
 import { useSectionInfo } from './useSectionInfo';
 
 export function useIsSectionSuspendedCallback(sectionName: string) {
@@ -8,7 +8,7 @@ export function useIsSectionSuspendedCallback(sectionName: string) {
 
     // but read the live value
     const readCallback = useAtomCallback((get) => {
-        const reportInfo = get(reportInfoAtom);
+        const reportInfo = get(sectionsAtom);
         return (reportInfo.get(sectionName)?.pendingSuspensions?.size ?? 0) > 0;
     });
 
