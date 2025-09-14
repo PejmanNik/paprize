@@ -29,14 +29,14 @@ const isCacheValid = (
     cache: SectionLayoutProps | null,
     elements: PageElements,
     dimensions: PageDimension,
-    margin?: PageMargin,
-    options?: PaginationConfig
+    margin: PageMargin | undefined,
+    config: PaginationConfig | undefined
 ) => {
     return (
         cache?.dimensions === dimensions &&
         cache?.margin === margin &&
         cache?.elements === elements &&
-        cache?.options === options &&
+        cache?.config === config &&
         cache?.elements === elements
     );
 };
@@ -44,8 +44,8 @@ const isCacheValid = (
 export function usePagination(
     elements: PageElements,
     dimensions: PageDimension,
-    margin?: PageMargin,
-    options?: PaginationConfig
+    margin: PageMargin | undefined,
+    config: PaginationConfig | undefined
 ) {
     const sectionName = useContext(SectionContext);
     const readIsSectionSuspended = useIsSectionSuspendedCallback(sectionName);
@@ -63,13 +63,21 @@ export function usePagination(
 
     // reset state when dependencies change
     useEffect(() => {
-        if (!isCacheValid(cacheRef.current, elements, dimensions, margin)) {
+        if (
+            !isCacheValid(
+                cacheRef.current,
+                elements,
+                dimensions,
+                margin,
+                config
+            )
+        ) {
             setState({
                 results: null,
                 isLoading: true,
             });
         }
-    }, [dimensions, elements, margin]);
+    }, [dimensions, elements, margin, config]);
 
     // main pagination logic
     // the following condition will avoid infinite loops
@@ -79,7 +87,7 @@ export function usePagination(
         if (
             !pageRef.current ||
             !contentRef.current ||
-            isCacheValid(cacheRef.current, elements, dimensions, margin)
+            isCacheValid(cacheRef.current, elements, dimensions, margin, config)
         ) {
             return;
         }
@@ -96,8 +104,8 @@ export function usePagination(
                 sectionFooterRef.current
             );
 
-        const plugins = options?.plugins.length
-            ? options.plugins
+        const plugins = config?.plugins.length
+            ? config.plugins
             : [
                   ...defaultPlugins,
                   createSectionPageHeightPlugin(
@@ -124,7 +132,7 @@ export function usePagination(
         const paginatorResult = Paginator.paginate(
             contentRef.current,
             { height, width },
-            { ...options, plugins }
+            { ...config, plugins }
         );
 
         logger.debug(logPrefix, 'Paginator Result', {
@@ -143,7 +151,7 @@ export function usePagination(
             isPaginated: true,
         }));
 
-        cacheRef.current = { elements, dimensions, margin };
+        cacheRef.current = { elements, dimensions, margin, config };
     });
 
     return {

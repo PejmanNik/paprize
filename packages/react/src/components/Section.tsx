@@ -13,7 +13,7 @@ export interface SectionProps {
     dimension: PageDimension;
     orientation?: PageOrientation;
     margin?: PageMargin;
-    options?: PaginationConfig;
+    config?: PaginationConfig;
     name?: string;
 }
 
@@ -22,7 +22,7 @@ export function Section({
     dimension,
     orientation = 'portrait',
     margin,
-    options,
+    config,
     name,
 }: SectionProps) {
     const id = useId();
@@ -38,9 +38,9 @@ export function Section({
             dimensions: adjustDimension(dimension, orientation),
             elements: parseSectionChildren(children),
             margin: margin,
-            options: options,
+            config: config,
         }),
-        [children, dimension, margin, options, orientation]
+        [children, dimension, margin, config, orientation]
     );
 
     useStyle(buildSectionStyle(id, props.dimensions));
@@ -56,7 +56,7 @@ export function Section({
                     elements={props.elements}
                     dimensions={props.dimensions}
                     margin={props.margin}
-                    options={props.options}
+                    config={props.config}
                 />
             </SectionContext>
         </section>

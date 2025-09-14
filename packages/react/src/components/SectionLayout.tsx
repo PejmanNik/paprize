@@ -12,17 +12,18 @@ import { usePagination } from './usePagination';
 export interface SectionLayoutProps {
     elements: PageElements;
     dimensions: PageDimension;
-    margin?: PageMargin;
-    options?: PaginationConfig;
+    margin: PageMargin | undefined;
+    config: PaginationConfig | undefined;
 }
 
 export function SectionLayout({
     elements,
     dimensions,
     margin,
+    config,
 }: SectionLayoutProps) {
     const { results, pageRef, sectionHeaderRef, sectionFooterRef, contentRef } =
-        usePagination(elements, dimensions, margin);
+        usePagination(elements, dimensions, margin, config);
 
     if (results !== null) {
         return (
