@@ -1,0 +1,23 @@
+.admonition {
+    --ifm-alert-border-color: rgb(92 5 209);
+    --ifm-alert-background-color: rgb(238 240 253);
+}
+.container {
+    display: grid;
+    grid-template-columns: auto 2fr;
+    row-gap: 1rem;  
+    padding-top: 1rem; 
+}
+
+.title {
+    font-weight: bold;  
+    font-size: 0.8rem;  
+    padding-right: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.border {
+    grid-column: 1 / 3;
+    border-bottom: 1px solid var(--ifm-color-secondary-dark);
+}
