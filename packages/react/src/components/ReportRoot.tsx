@@ -1,14 +1,14 @@
 import { type ReactNode } from 'react';
 import { Provider } from 'jotai';
-import { css, Global } from '@emotion/react';
 import { ReportStatus } from './ReportStatus';
 import { store } from './store';
+import { useStyle } from './useStyle';
 
 export interface ReportRootProps {
     children: ReactNode;
 }
 
-const globalStyles = css`
+const globalStyles = `
     html {
         box-sizing: border-box;
     }
@@ -26,9 +26,9 @@ const globalStyles = css`
 `;
 
 export function ReportRoot({ children }: ReportRootProps) {
+    useStyle(globalStyles);
     return (
         <Provider store={store}>
-            <Global styles={globalStyles} />
             {children}
             <ReportStatus />
         </Provider>

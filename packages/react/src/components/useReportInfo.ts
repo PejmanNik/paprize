@@ -9,6 +9,7 @@ export interface ReportInfo {
     /**
      * The total number of sections in the report.
      * When isFirstPaginationCompleted is false, this value is 0.
+     * When isPaginated is false, this value is not guaranteed to be accurate.
      */
     totalSections: number;
 

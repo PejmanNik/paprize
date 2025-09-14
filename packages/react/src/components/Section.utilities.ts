@@ -14,18 +14,11 @@ export function adjustDimension(
 export function buildSectionStyle(
     sectionId: string,
     dimension: PageDimension
-): HTMLStyleElement {
-    const style = document.createElement('style');
-    style.appendChild(
-        document.createTextNode(`
-    @page section-${sectionId} {
+): string {
+    return `@page section-${sectionId} {
       margin: none; 
       size:${dimension.width} ${dimension.height}; 
       width:${dimension.width};
       height:${dimension.height};
-    }
-    `)
-    );
-
-    return style;
+    }`;
 }

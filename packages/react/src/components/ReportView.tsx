@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { css, Global } from '@emotion/react';
+import { useStyle } from './useStyle';
 
-const globalStyles = css`
+const globalStyles = `
     :root {
         --paprize-page-background-color: #ffffff;
         --paprize-page-margin-bottom: 10px;
@@ -42,10 +42,6 @@ const globalStyles = css`
  * Use this component to render reports or documents with a print-friendly layout and consistent visual formatting in client side application.
  */
 export function ReportView({ children }: { children: ReactNode }) {
-    return (
-        <>
-            <Global styles={globalStyles} />
-            <div className="paprize-view">{children}</div>
-        </>
-    );
+    useStyle(globalStyles);
+    return <div className="paprize-view">{children}</div>;
 }

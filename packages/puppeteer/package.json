@@ -1,5 +1,6 @@
 {
   "name": "@paprize/puppeteer",
+  "version": "0.0.1",  
   "private": true,
   "description": "Convert HTML reports to print-ready PDFs",
   "type": "module",
