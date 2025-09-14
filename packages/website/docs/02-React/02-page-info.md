@@ -28,7 +28,7 @@ const { sectionName, totalPages, isPaginated, pendingSuspensions } : SectionInfo
 ```
 
 <ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[Section](./quick-start/#section)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[Section](/02-React/01-quick-start.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 | Name               | Type   | Description                                                                           |
@@ -40,7 +40,7 @@ const { sectionName, totalPages, isPaginated, pendingSuspensions } : SectionInfo
 
 ## useReportInfo
 
-Retrieves information about all sections within the report. To use this as part of the [PageContent](./Components/page-content), you need to use [Layout Suspension](./layout-suspension). You can learn more about this in the `PageContent`.
+Retrieves information about all sections within the report. To use this as part of the [PageContent](/02-React/01-quick-start.md#pagecontent), you need to use [Layout Suspension](/02-React/05-layout-suspension.md). You can learn more about this in the `PageContent`.
 
 ```jsx
 const { sections, isPaginated, totalPages, isFirstPaginationCompleted } =
@@ -48,7 +48,7 @@ const { sections, isPaginated, totalPages, isFirstPaginationCompleted } =
 ```
 
 <ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[ReportRoot](./quick-start/#reportRoot)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[ReportRoot](./quick-start/#reportroot)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 | Name                       | Type          | Description                                                                                                                                                                 |

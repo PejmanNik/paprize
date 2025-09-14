@@ -191,5 +191,5 @@ The PageContent component is the main container for your report content. Paginat
 </ComponentCatalog.Container>
 
 :::info
-All children of `PageContent` are subject to [ComponentSnapshot](../component-snapshot).
+All children of `PageContent` are subject to [ComponentSnapshot](/02-React/04-component-snapshot.md).
 :::

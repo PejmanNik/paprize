@@ -4,7 +4,8 @@
         "packages/*"
     ],
     "scripts": {
-        "core:dev": "npm run dev -w packages/core"
+        "core:dev": "npm run dev -w packages/core",
+        "website:build": "npm run build -w packages/website"
     },
     "devDependencies": {
         "prettier": "3.6.2"

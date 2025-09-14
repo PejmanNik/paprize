@@ -1,8 +1,6 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import LandingPage from '@site/src/components/LandingPage';
 import Layout from '../theme/Layout';
-import { Hero } from './Hero';
-import { FeatureContent } from './Features';
-import { Footer } from './Footer';
 
 export default function HomePage() {
     const { siteConfig } = useDocusaurusContext();
@@ -14,9 +12,7 @@ export default function HomePage() {
             noNavbar={true}
             noFooter={true}
         >
-            <Hero />
-            <FeatureContent />
-            <Footer />
+            <LandingPage />
         </Layout>
     );
 }
