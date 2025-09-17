@@ -1,4 +1,4 @@
-export * from './components/ReportView';
+export * from './components/ReportPreview';
 export * from './components/ReportRoot';
 export * from './components/Section';
 export * from './components/PageHeader';

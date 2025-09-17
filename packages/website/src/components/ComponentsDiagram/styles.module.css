@@ -1,0 +1,18 @@
+    .container {
+        tspan {
+            font-family: 'Roboto Slab';
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    [data-theme='dark'] {
+        .container {
+            tspan {
+                fill: white !important;
+            }
+        }
+    }

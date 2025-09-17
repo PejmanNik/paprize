@@ -7,8 +7,8 @@ const globalStyles = `
         --paprize-page-margin-bottom: 10px;
         --paprize-page-box-shadow: rgb(142 138 138) -1px 3px 5px 2px;
         --paprize-section-margin-bottom: 10px;
-        --paprize-view-background-color: rgb(218 220 224);
-        --paprize-view-padding: 30px 10px;
+        --paprize-preview-background-color: rgb(218 220 224);
+        --paprize-preview-padding: 30px 10px;
     }
 
     body {
@@ -16,13 +16,13 @@ const globalStyles = `
     }
 
     @media screen {
-        .paprize-view {
+        .paprize-preview {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: var(--paprize-view-background-color);
-            padding: var(--paprize-view-padding);
+            background-color: var(--paprize-preview-background-color);
+            padding: var(--paprize-preview-padding);
         }
 
         .paprize-page {
@@ -38,10 +38,10 @@ const globalStyles = `
 `;
 
 /**
- * ReportView is a wrapper component that applies styles to its children, mimicking the appearance of the Chrome Print Preview screen.
+ * ReportPreview is a wrapper component that applies styles to its children, mimicking the appearance of the Chrome Print Preview screen.
  * Use this component to render reports or documents with a print-friendly layout and consistent visual formatting in client side application.
  */
-export function ReportView({ children }: { children: ReactNode }) {
+export function ReportPreview({ children }: { children: ReactNode }) {
     useStyle(globalStyles);
-    return <div className="paprize-view">{children}</div>;
+    return <div className="paprize-preview">{children}</div>;
 }

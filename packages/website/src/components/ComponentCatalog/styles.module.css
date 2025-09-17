@@ -21,3 +21,10 @@
     grid-column: 1 / 3;
     border-bottom: 1px solid var(--ifm-color-secondary-dark);
 }
+
+[data-theme='dark'] {
+    .admonition {
+        --ifm-alert-border-color: rgb(115 10 255);
+        --ifm-alert-background-color: rgb(9 2 44 / 73%);
+    }    
+}

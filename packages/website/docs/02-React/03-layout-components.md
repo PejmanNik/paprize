@@ -20,7 +20,7 @@ The PageBreak component forces a new page break and pushes any subsequent conten
 
 ## Layout
 
-The Layout component allows you to customize the layout engine’s behavior for its children.
+The Layout component allows you to customize the pagination engine’s behavior for its children.
 All props are optional and follow this order of precedence:
 
 1. Props defined on this `Layout` component (highest priority)

@@ -1,10 +1,10 @@
 import ComponentCatalog from "@site/src/components/ComponentCatalog";
 
-# Layout Suspension
+# Section Suspension
 
-The layout engine runs immediately after the initial render of each section. In some cases, you may need to suspend the layout engine until your data is available—for example, when fetching data from an API or external service, or when you require information from other sections of the report (such as when generating a table of contents).
+The pagination engine runs immediately after the initial render of each section. In some cases, you may need to suspend the engine until your data is available; for example, when fetching data from an API or external service, or when you require information from other sections of the report (such as when generating a table of contents).
 
-`useSectionSuspension` hook will suspense the layout process for the selected section until you release it:
+`useSectionSuspension` hook will suspense the pagination process for the selected section until you release it:
 
 ```jsx
 const { release } = useSectionSuspension(sectionName);
@@ -22,7 +22,7 @@ function SectionList() {
         if (isFirstPaginationCompleted) {
             release();
         }
-    }, [release, sections.length]);
+    }, [release, isFirstPaginationCompleted]);
 
     return (
         <nav>

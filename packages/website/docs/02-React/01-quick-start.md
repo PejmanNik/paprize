@@ -42,19 +42,17 @@ This component must be used as the parent component for the report, and all othe
 
 ## ReportView
 
-This component is intended for use in Client-Side Pagination only. It applies default CSS styles to make the output resemble the Chrome Print Preview screen.
+This component is intended for use in Client-Side Pagination only. It applies default CSS styles to make the output resemble the Chrome Print Preview screen. [More info](/02-React/04-report-preview.md)
 
 ```
 <ReportRoot>
-    <ReportView>...</ReportView>
+    <ReportPreview>...</ReportPreview>
 </ReportRoot>
 ```
 
 <ComponentCatalog.Container>
 <ComponentCatalog.Parent>[ReportRoot](#reportroot)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
-
-![Sample Report](/img/sample-report-1.png)
 
 ## Section
 
@@ -157,7 +155,7 @@ This component is responsible for rendering the page footer content. It will aut
 
 ## PageOverlay
 
-This component provides an overlay for the page and will be rendered on every page. The children of this component are not paginated or processed by the layout engine; they are rendered **on top of the pages** as an overlay.
+This component provides an overlay for the page and will be rendered on every page. The children of this component are not paginated or processed by the pagination engine; they are rendered **on top of the pages** as an overlay.
 
 ```jsx
 <PageOverlay>
@@ -191,5 +189,5 @@ The PageContent component is the main container for your report content. Paginat
 </ComponentCatalog.Container>
 
 :::info
-All children of `PageContent` are subject to [ComponentSnapshot](/02-React/04-component-snapshot.md).
+All children of `PageContent` are subject to [ComponentSnapshot](/02-React/05-component-snapshot.md).
 :::

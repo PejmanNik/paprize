@@ -3,7 +3,7 @@ import PageComponents from './\_page-components.md';
 
 # Page Info
 
-Pagination information is provided through several different hooks, as the data becomes available at various stages of React’s rendering lifecycle. Using these hooks can cause the page to re-render, which may in turn trigger the layout engine to run again.
+Pagination information is provided through several different hooks, as the data becomes available at various stages of React’s rendering lifecycle. Using these hooks can cause the page to re-render, which may in turn trigger the pagination engine to run again.
 
 ## usePageInfo
 
@@ -40,7 +40,7 @@ const { sectionName, totalPages, isPaginated, pendingSuspensions } : SectionInfo
 
 ## useReportInfo
 
-Retrieves information about all sections within the report. To use this as part of the [PageContent](/02-React/01-quick-start.md#pagecontent), you need to use [Layout Suspension](/02-React/05-layout-suspension.md). You can learn more about this in the `PageContent`.
+Retrieves information about all sections within the report. To use this as part of the [PageContent](/02-React/01-quick-start.md#pagecontent), you need to use [Layout Suspension](/02-React/06-section-suspension.md). You can learn more about this in the `PageContent`.
 
 ```jsx
 const { sections, isPaginated, totalPages, isFirstPaginationCompleted } =
