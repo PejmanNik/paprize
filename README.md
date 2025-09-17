@@ -1,7 +1,5 @@
-import ComponentsDiagram from '@site/src/components/ComponentsDiagram';
-
-# Getting Started
+# Paprize
 
 Design your report using the full power of JavaScript and CSS, mark the report section by paprize components and then paprize pagination engine will transforming it into a beautiful, professional, print-ready pages.
 
-<ComponentsDiagram />
+![Components](https://raw.githubusercontent.com/PejmanNik/paprize/refs/heads/bootstrap/packages/website/static/img/components.svg)

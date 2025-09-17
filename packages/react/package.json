@@ -1,8 +1,7 @@
 {
     "name": "@paprize/react",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "React library for creating professional, print-ready reports",
-    "private": true,
     "type": "module",
     "files": [
         "dist"
@@ -38,11 +37,12 @@
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "prepack": "node ../../scripts/prepack.mjs"
     },
     "dependencies": {
-        "@paprize/core": "^0.0.1",
-        "@paprize/puppeteer": "^0.0.1",
+        "@paprize/core": "*",
+        "@paprize/puppeteer": "*",
         "jotai": "^2.13.1",
         "loglevel": "^1.9.2"
     },

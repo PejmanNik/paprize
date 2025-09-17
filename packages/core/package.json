@@ -1,10 +1,11 @@
 {
     "name": "@paprize/core",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Paginate DOM elements for professional, print-ready reports",
     "type": "module",
     "files": [
-        "dist"
+        "dist",
+        "CHANGELOG.md"
     ],
     "main": "./dist/paprize-core.umd.cjs",
     "module": "./dist/paprize-core.js",
@@ -42,7 +43,8 @@
         "test": "vitest",
         "coverage": "vitest run --coverage",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "prepack": "node ../../scripts/prepack.mjs"
     },
     "devDependencies": {
         "@microsoft/api-extractor": "^7.52.10",

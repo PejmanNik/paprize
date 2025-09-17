@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import * as Paprize from '@paprize/core/src';
 
 import {
-    ReportView,
+    ReportPreview,
     ReportRoot,
     Section,
     SectionHeader,
@@ -27,7 +27,7 @@ export default function App() {
         <ReportRoot>
             <input type="checkbox" id="debug" />
             {/* <DevTools /> */}
-            <ReportView>
+            <ReportPreview>
                 <Section
                     name={'section-1'}
                     dimension={{ height: '300px', width: '400px' }}
@@ -114,7 +114,7 @@ export default function App() {
                         <p>5- {Paprize.createLoremIpsumParagraph(100, 0.1)}</p>
                     </PageContent>
                 </Section>
-            </ReportView>
+            </ReportPreview>
         </ReportRoot>
     );
 }

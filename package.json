@@ -5,7 +5,9 @@
     ],
     "scripts": {
         "core:dev": "npm run dev -w packages/core",
-        "website:build": "npm run build -w packages/website"
+        "website:build": "npm run build -w packages/website",
+        "build": "npm run build -w packages/core -w packages/react -w packages/puppeteer",
+        "release": "npm publish --workspace packages/core --workspace packages/react --workspace packages/puppeteer --access public"
     },
     "devDependencies": {
         "prettier": "3.6.2"
