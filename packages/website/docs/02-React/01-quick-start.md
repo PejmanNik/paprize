@@ -40,7 +40,7 @@ This component must be used as the parent component for the report, and all othe
 
 <ComponentCatalog.Container isMandatory />
 
-## ReportView
+## ReportPreview
 
 This component is intended for use in Client-Side Pagination only. It applies default CSS styles to make the output resemble the Chrome Print Preview screen. [More info](/02-React/04-report-preview.md)
 

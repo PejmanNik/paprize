@@ -37,11 +37,11 @@ function Container({
             className={styles.admonition}
         >
             <div className={styles.container}>
-                <div className={styles.title}>Type</div>
-                <div>{isMandatory ? 'Mandatory' : 'Optional'}</div>
-                <div className={styles.border} />
                 {!isHook && (
                     <>
+                        <div className={styles.title}>Type</div>
+                        <div>{isMandatory ? 'Mandatory' : 'Optional'}</div>
+                        <div className={styles.border} />
                         <div className={styles.title}>Dynamic Height</div>
                         <div>
                             {hasFixedHight ? (
