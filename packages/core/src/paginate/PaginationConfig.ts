@@ -6,10 +6,12 @@ import {
 } from './attributes';
 
 export type PaginationConfig = Required<ConfigAttribute> & {
+    id: string;
     plugins: PaginationPlugin[];
 };
 
 export const defaultConfig: PaginationConfig = {
+    id: 'default',
     plugins: [],
     ...defaultConfigAttribute,
 };

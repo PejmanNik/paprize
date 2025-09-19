@@ -14,18 +14,24 @@ export interface PaginationPlugin {
     readonly name: string;
 
     onVisitText?: (
+        id: string,
         domState: DomState & { currentNode: PageText },
         pageManager: PageManager,
         context: VisitContext
     ) => void;
     onVisitElement?: (
+        id: string,
         domState: DomState & { currentNode: PageElement },
         pageManager: PageManager,
         context: VisitContext
     ) => void;
-    afterVisitNode?: (domState: DomState, pageManager: PageManager) => void;
-    onNewPage?: (newPageState: PageState) => void;
-    onClone?: (source: Element, cloned: PageElement) => void;
+    afterVisitNode?: (
+        id: string,
+        domState: DomState,
+        pageManager: PageManager
+    ) => void;
+    onNewPage?: (id: string, pageManager: PageManager) => void;
+    onClone?: (id: string, source: Element, cloned: PageElement) => void;
 }
 
 type PluginKeys = {

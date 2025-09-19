@@ -13,7 +13,7 @@ export interface SectionLayoutProps {
     elements: PageElements;
     dimensions: PageDimension;
     margin: PageMargin | undefined;
-    config: PaginationConfig | undefined;
+    config: Partial<PaginationConfig>;
 }
 
 export function SectionLayout({

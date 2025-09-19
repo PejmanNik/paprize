@@ -29,9 +29,9 @@ export interface ReportInfo {
      */
     sections: {
         /**
-         * The name of the section.
+         * The id of the section.
          */
-        sectionName: string;
+        sectionId: string;
 
         /**
          * The total number of pages in the section.
@@ -56,7 +56,7 @@ export function useReportInfo() {
             isFirstPaginationCompleted: report.totalSections > 0,
             sections: Array.from(sections.entries()).map(
                 ([key, { totalPages, isPaginated }]) => ({
-                    sectionName: key,
+                    sectionId: key,
                     totalPages,
                     isPaginated,
                 })

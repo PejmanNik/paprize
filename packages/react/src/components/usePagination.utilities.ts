@@ -29,7 +29,7 @@ export function createSectionPageHeightPlugin(
 ): PaginationPlugin {
     return {
         name: 'sectionPageHeight',
-        afterVisitNode: (domState, pageManager) => {
+        afterVisitNode: (_, domState, pageManager) => {
             const lastPage = domState.completed;
             if (!lastPage || sectionFooterHeight <= 0) return;
 
@@ -38,7 +38,8 @@ export function createSectionPageHeightPlugin(
                 pageManager.nextPage();
             }
         },
-        onNewPage: (pageState) => {
+        onNewPage: (_, pageManager) => {
+            const pageState = pageManager.getPageState();
             if (pageState.pageIndex === 0) {
                 pageState.pageHeight = height + sectionFooterHeight; // reserve sectionHeaderHeight
             } else {

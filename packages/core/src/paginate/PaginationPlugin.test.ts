@@ -6,6 +6,7 @@ import type { PageText } from './PageNodes';
 import type { DomState } from './DomState';
 
 describe('callPluginHook', () => {
+    const id = 'default';
     let mockDomState: Mocked<DomState & { currentNode: PageText }>;
     let mockPageManager: PageManager;
     let context: VisitContext;
@@ -34,17 +35,20 @@ describe('callPluginHook', () => {
         callPluginHook(
             plugins,
             'onVisitText',
+            id,
             mockDomState,
             mockPageManager,
             context
         );
 
         expect(mockPlugin1.onVisitText).toHaveBeenCalledWith(
+            id,
             mockDomState,
             mockPageManager,
             context
         );
         expect(mockPlugin2.onVisitText).toHaveBeenCalledWith(
+            id,
             mockDomState,
             mockPageManager,
             context
@@ -67,12 +71,14 @@ describe('callPluginHook', () => {
         callPluginHook(
             plugins,
             'onVisitText',
+            id,
             mockDomState,
             mockPageManager,
             context
         );
 
         expect(mockPlugin1.onVisitText).toHaveBeenCalledWith(
+            id,
             mockDomState,
             mockPageManager,
             context
@@ -94,6 +100,7 @@ describe('callPluginHook', () => {
         callPluginHook(
             plugins,
             'onVisitText',
+            id,
             mockDomState,
             mockPageManager,
             context

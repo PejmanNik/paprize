@@ -96,7 +96,7 @@ export class PageManager {
 
         const page = this.createNewPage(pageHtmlElement);
         this._pageState = PageState.create(page, [], 0, pageSize.height);
-        callPluginHook(this._config.plugins, 'onNewPage', this._pageState);
+        callPluginHook(this._config.plugins, 'onNewPage', config.id, this);
     }
 
     public nextPage(): void {
@@ -116,7 +116,12 @@ export class PageManager {
         this.cleanupEmptyParent();
 
         this._pageState = newPageState;
-        callPluginHook(this._config.plugins, 'onNewPage', this._pageState);
+        callPluginHook(
+            this._config.plugins,
+            'onNewPage',
+            this._config.id,
+            this
+        );
     }
 
     private cloneParentStackToNewPage(newPageState: PageState): void {
@@ -255,5 +260,9 @@ export class PageManager {
         this._pageState.activeElement = newTextNode;
 
         return newTextNode;
+    }
+
+    public getPageState(): PageState {
+        return this._pageState;
     }
 }

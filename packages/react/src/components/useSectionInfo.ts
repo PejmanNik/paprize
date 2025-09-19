@@ -31,11 +31,11 @@ const defaultSectionInfo: SectionInfo = {
 };
 
 export const useSectionInfo = () => {
-    const sectionName = useContext(SectionContext);
+    const sectionId = useContext(SectionContext);
     const sectionAtom = useMemo(
         () =>
             atom((get): SectionInfo => {
-                const state = get(sectionsAtom).get(sectionName);
+                const state = get(sectionsAtom).get(sectionId);
                 if (state) {
                     return {
                         totalPages: state.totalPages,
@@ -45,12 +45,12 @@ export const useSectionInfo = () => {
                 }
                 return defaultSectionInfo;
             }),
-        [sectionName]
+        [sectionId]
     );
     const value = useAtomValue(sectionAtom);
 
     return {
-        sectionName: sectionName,
+        sectionId: sectionId,
         totalPages: value.totalPages,
     };
 };

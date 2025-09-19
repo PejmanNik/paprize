@@ -13,8 +13,7 @@ export interface SectionProps {
     dimension: PageDimension;
     orientation?: PageOrientation;
     margin?: PageMargin;
-    config?: PaginationConfig;
-    name?: string;
+    config?: Partial<PaginationConfig>;
 }
 
 export function Section({
@@ -23,11 +22,14 @@ export function Section({
     orientation = 'portrait',
     margin,
     config,
-    name,
 }: SectionProps) {
     const id = useId();
-    const sectionName = name ?? id;
-    const setSectionInfo = useSetSectionState(sectionName);
+    const configWithId = useMemo(
+        () => ({ ...config, id: config?.id ?? id }),
+        [config, id]
+    );
+    const sectionId = configWithId.id;
+    const setSectionInfo = useSetSectionState(sectionId);
 
     useMemo(() => {
         setSectionInfo((pre) => ({ ...pre, isPaginated: false }));
@@ -38,20 +40,20 @@ export function Section({
             dimensions: adjustDimension(dimension, orientation),
             elements: parseSectionChildren(children),
             margin: margin,
-            config: config,
+            config: configWithId,
         }),
-        [children, dimension, margin, config, orientation]
+        [children, dimension, margin, configWithId, orientation]
     );
 
-    useStyle(buildSectionStyle(id, props.dimensions));
+    useStyle(buildSectionStyle(sectionId, props.dimensions));
 
     return (
         <section
             className="paprize-section"
-            id={`section-${sectionName}`}
-            style={{ page: `section-${sectionName}` }}
+            id={`section-${sectionId}`}
+            style={{ page: `section-${sectionId}` }}
         >
-            <SectionContext value={sectionName}>
+            <SectionContext value={sectionId}>
                 <SectionLayout
                     elements={props.elements}
                     dimensions={props.dimensions}

@@ -2,11 +2,11 @@ import { useId, useMemo } from 'react';
 import { useSetSectionState } from './useSetSectionInfo';
 
 export function useSectionSuspension(
-    sectionName: string,
+    sectionId: string,
     suspend: boolean = true
 ) {
     const id = useId();
-    const setSectionInfo = useSetSectionState(sectionName);
+    const setSectionInfo = useSetSectionState(sectionId);
 
     useMemo(() => {
         if (!suspend) return;

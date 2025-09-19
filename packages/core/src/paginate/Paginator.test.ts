@@ -49,7 +49,7 @@ describe('Paginator', () => {
         document.body.innerHTML = '';
         root = document.createElement('div');
         pageSize = { width: 100, height: 100 };
-        config = {} as PaginationConfig;
+        config = { id: 'X' } as PaginationConfig;
 
         mockDomState = {
             nextNode: vi.fn(),
@@ -81,7 +81,7 @@ describe('Paginator', () => {
         config.plugins = [
             {
                 name: 'test-plugin',
-                onVisitElement: (_pe, _pm, ctx) => {
+                onVisitElement: (_id, _pe, _pm, ctx) => {
                     ctx.result = SplitResult.SplitChildren;
                 },
             },
@@ -106,7 +106,7 @@ describe('Paginator', () => {
         config.plugins = [
             {
                 name: 'test-plugin',
-                onVisitText: (_pe, _pm, ctx) => {
+                onVisitText: (_id, _pe, _pm, ctx) => {
                     ctx.result = SplitResult.SplitChildren;
                 },
             },
@@ -132,13 +132,12 @@ describe('Paginator', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
-            defaultConfig
+            { ...defaultConfig, ...config }
         );
-        expect(DomState).toHaveBeenCalledWith(
-            root,
-            expect.anything(),
-            defaultConfig
-        );
+        expect(DomState).toHaveBeenCalledWith(root, expect.anything(), {
+            ...defaultConfig,
+            ...config,
+        });
     });
 
     it('should create a tempContainer element appended to the body and remove it', () => {
@@ -274,6 +273,7 @@ describe('Paginator', () => {
         Paginator.paginate(root, pageSize, config);
 
         expect(afterVisitNode).toHaveBeenCalledWith(
+            config.id,
             mockDomState,
             mockPageManager
         );

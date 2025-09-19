@@ -74,8 +74,16 @@ describe('PageElement', () => {
         });
         const clone = pageElem.clone();
 
-        expect(plugin1.onClone).toHaveBeenCalledWith(pageElem.getNode(), clone);
-        expect(plugin2.onClone).toHaveBeenCalledWith(pageElem.getNode(), clone);
+        expect(plugin1.onClone).toHaveBeenCalledWith(
+            defaultConfig.id,
+            pageElem.getNode(),
+            clone
+        );
+        expect(plugin2.onClone).toHaveBeenCalledWith(
+            defaultConfig.id,
+            pageElem.getNode(),
+            clone
+        );
     });
 
     it('should return the correct number of children for the element', () => {

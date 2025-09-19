@@ -17,5 +17,4 @@ export * from './components/useJsonData';
 export * from './pageConst';
 export type * from './components/pageTypes';
 
-export { defaultPlugins } from '@paprize/core/src';
 export type { PaginationPlugin, PaginationConfig } from '@paprize/core/src';

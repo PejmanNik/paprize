@@ -1,8 +1,9 @@
-import { useMemo, type Ref } from 'react';
+import { useContext, useMemo, type Ref } from 'react';
 import { type PageElements } from './parseSectionChildren';
 import type { PageDimension, PageMargin } from './pageTypes';
 import { PageContext } from './PageContext';
 import { shorthand } from './Page.utilities';
+import { SectionContext } from './SectionContext';
 
 export interface PageProps {
     elements: PageElements;
@@ -27,6 +28,7 @@ export function Page({
     sectionFooterRef,
     contentRef,
 }: PageProps) {
+    const sectionId = useContext(SectionContext);
     const contextValue = useMemo(
         () => ({ pageNumber, totalPages }),
         [pageNumber, totalPages]
@@ -35,6 +37,7 @@ export function Page({
     return (
         <PageContext value={contextValue}>
             <div
+                id={`${sectionId}-${pageNumber}`}
                 className="paprize-page paprize-page-component"
                 ref={ref}
                 style={{

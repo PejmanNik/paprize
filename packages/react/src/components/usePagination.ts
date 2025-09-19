@@ -30,7 +30,7 @@ const isCacheValid = (
     elements: PageElements,
     dimensions: PageDimension,
     margin: PageMargin | undefined,
-    config: PaginationConfig | undefined
+    config: Partial<PaginationConfig>
 ) => {
     return (
         cache?.dimensions === dimensions &&
@@ -45,11 +45,11 @@ export function usePagination(
     elements: PageElements,
     dimensions: PageDimension,
     margin: PageMargin | undefined,
-    config: PaginationConfig | undefined
+    config: Partial<PaginationConfig>
 ) {
-    const sectionName = useContext(SectionContext);
-    const readIsSectionSuspended = useIsSectionSuspendedCallback(sectionName);
-    const setSectionInfo = useSetSectionState(sectionName);
+    const sectionId = useContext(SectionContext);
+    const readIsSectionSuspended = useIsSectionSuspendedCallback(sectionId);
+    const setSectionInfo = useSetSectionState(sectionId);
     const cacheRef = useRef<SectionLayoutProps | null>(null);
     const [state, setState] = useState<PaginationState>({
         results: null,
@@ -93,7 +93,7 @@ export function usePagination(
         }
 
         if (readIsSectionSuspended()) {
-            logger.info(logPrefix, `Section "${sectionName}" is suspended`);
+            logger.info(logPrefix, `Section "${sectionId}" is suspended`);
             return;
         }
 
@@ -104,16 +104,14 @@ export function usePagination(
                 sectionFooterRef.current
             );
 
-        const plugins = config?.plugins.length
-            ? config.plugins
-            : [
-                  ...defaultPlugins,
-                  createSectionPageHeightPlugin(
-                      height,
-                      sectionHeaderHeight,
-                      sectionFooterHeight
-                  ),
-              ];
+        const plugins = [
+            ...(config.plugins ?? defaultPlugins),
+            createSectionPageHeightPlugin(
+                height,
+                sectionHeaderHeight,
+                sectionFooterHeight
+            ),
+        ];
 
         if (isDebugMode()) {
             pageRef.current.style.maxHeight = 'none';
@@ -121,7 +119,7 @@ export function usePagination(
         }
 
         logger.debug(logPrefix, 'Calling Paginator', {
-            sectionName,
+            sectionName: sectionId,
             height,
             width,
             sectionFooterHeight,
@@ -136,7 +134,7 @@ export function usePagination(
         );
 
         logger.debug(logPrefix, 'Paginator Result', {
-            sectionName,
+            sectionName: sectionId,
             paginatorResult,
         });
 

@@ -6,7 +6,7 @@ export const pageBreakPluginName = 'pageBreak';
 
 export const pageBreakPlugin: PaginationPlugin = {
     name: pageBreakPluginName,
-    onVisitElement: (domState, pageManager, context) => {
+    onVisitElement: (_, domState, pageManager, context) => {
         if (
             domState.currentNode
                 .getNode()

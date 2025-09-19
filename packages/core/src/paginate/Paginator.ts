@@ -99,6 +99,7 @@ export class Paginator {
             callPluginHook(
                 this._config.plugins,
                 'afterVisitNode',
+                this._config.id,
                 this._domState,
                 this._pageManager
             );
@@ -149,6 +150,7 @@ export class Paginator {
             callPluginHook(
                 this._config.plugins,
                 'onVisitElement',
+                this._config.id,
                 this._domState as DomState & { currentNode: PageElement },
                 this._pageManager,
                 ctx
@@ -168,6 +170,7 @@ export class Paginator {
             callPluginHook(
                 this._config.plugins,
                 'onVisitText',
+                this._config.id,
                 this._domState as DomState & { currentNode: PageText },
                 this._pageManager,
                 ctx

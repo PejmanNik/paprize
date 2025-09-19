@@ -53,6 +53,7 @@ export class PageElement {
         callPluginHook(
             this.config.plugins,
             'onClone',
+            this.config.id,
             this._node,
             clonedPageElement
         );
