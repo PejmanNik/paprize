@@ -66,6 +66,8 @@ export function Page({
                 <div
                     style={{
                         overflow: 'hidden',
+                        width: '100%',
+                        height: `100%`,
                     }}
                     ref={contentRef}
                 >

@@ -7,6 +7,7 @@ export * from './components/PageFooter';
 export * from './components/SectionHeader';
 export * from './components/SectionFooter';
 export * from './components/PageBreak';
+export * from './components/PageOverlay';
 export * from './components/Layout';
 export * from './components/usePageInfo';
 export * from './components/useSectionInfo';

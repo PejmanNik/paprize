@@ -17,9 +17,11 @@ describe('PaginationConfig', () => {
             });
 
             const globalConfig: PaginationConfig = {
+                id: 'id',
                 plugins: [
                     {
                         name: 'testPlugin',
+                        order: 1,
                         onClone: vi.fn(),
                     },
                 ],

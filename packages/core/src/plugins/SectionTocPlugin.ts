@@ -15,6 +15,7 @@ export type SectionTocState = {
 export class SectionTocPlugin implements PaginationPlugin {
     public readonly state: SectionTocState[] = [];
     public readonly name = sectionTocName;
+    public readonly order = 1;
 
     public onVisitElement = (
         id: string,

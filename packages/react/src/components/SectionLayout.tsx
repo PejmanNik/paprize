@@ -35,6 +35,7 @@ export function SectionLayout({
                             ...elements,
                             content: (
                                 <div
+                                    style={{ display: 'contents' }}
                                     dangerouslySetInnerHTML={{
                                         __html: page,
                                     }}

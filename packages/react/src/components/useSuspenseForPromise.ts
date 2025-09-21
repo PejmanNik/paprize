@@ -12,8 +12,8 @@ export function useSuspenseForPromise<T>(
     promise: Promise<T>,
     defaultValue?: T
 ): T | undefined {
-    const { sectionName } = useSectionInfo();
-    const { release } = useSectionSuspension(sectionName);
+    const { sectionId } = useSectionInfo();
+    const { release } = useSectionSuspension(sectionId);
     const [value, setValue] = useState<State<T>>({
         state: 'loading',
         value: defaultValue,

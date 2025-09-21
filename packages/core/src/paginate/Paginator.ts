@@ -10,7 +10,7 @@ import logger from 'loglevel';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
 import { markIgnoredNode } from '../debugUtilities/pageNodeMarker';
 import { callPluginHook, type VisitContext } from './PaginationPlugin';
-import { tempContainerClassName } from '../constants';
+import { attributePrefix, tempContainerClassName } from '../constants';
 import { isDebugMode } from '../debugUtilities/debugMode';
 import { isElement, moveOffscreen } from './domUtilities';
 
@@ -31,7 +31,7 @@ export class Paginator {
         config?: Partial<PaginationConfig>
     ) {
         this._config = { ...defaultConfig, ...config };
-        this._tempContainer = Paginator.createTempContainer();
+        this._tempContainer = Paginator.createTempContainer(this._config.id);
         this._transaction = new Transaction();
         this._domState = new DomState(root, this._transaction, this._config);
         this._pageManager = new PageManager(
@@ -42,8 +42,13 @@ export class Paginator {
         );
     }
 
-    private static createTempContainer(): Element {
+    private static createTempContainer(id: string): Element {
         const tempContainer = document.createElement('div');
+        tempContainer.style.display = 'flex'; // to avoid margin collapsing between pages
+        tempContainer.style.flexDirection = 'column';
+        tempContainer.style.gap = '20px';
+        tempContainer.setAttribute(`${attributePrefix}-section-id`, id);
+
         tempContainer.classList.add(tempContainerClassName);
         DEV: if (!isDebugMode()) {
             moveOffscreen(tempContainer);

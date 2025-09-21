@@ -1,4 +1,4 @@
-import type { PageManager, PageState } from './PageManager';
+import type { PageManager } from './PageManager';
 import type { PageElement, PageText } from './PageNodes';
 import type { SplitResult } from './SplitResult';
 import logger from '../logger';
@@ -12,7 +12,7 @@ export interface VisitContext {
 
 export interface PaginationPlugin {
     readonly name: string;
-
+    readonly order: number;
     onVisitText?: (
         id: string,
         domState: DomState & { currentNode: PageText },
@@ -49,31 +49,33 @@ export function callPluginHook<T extends PluginHookNames>(
     hookName: T,
     ...args: Parameters<NonNullable<PaginationPlugin[T]>>
 ): void {
-    plugins.forEach((plugin) => {
-        const hook = plugin[hookName];
-        if (!hook) {
-            return;
-        }
+    plugins
+        .sort((a, b) => a.order - b.order)
+        .forEach((plugin) => {
+            const hook = plugin[hookName];
+            if (!hook) {
+                return;
+            }
 
-        logger.debug(
-            logPrefix,
-            `executing plugin ${plugin.name}:${String(hookName)}`,
-            args
-        );
-
-        try {
-            (hook as Function)(...args);
             logger.debug(
                 logPrefix,
-                `plugin ${plugin.name}:${String(hookName)} executed`,
+                `executing plugin ${plugin.name}:${String(hookName)} (${String()})`,
                 args
             );
-        } catch (error) {
-            logger.debug(
-                logPrefix,
-                `plugin ${plugin.name}:${String(hookName)} failed`,
-                error
-            );
-        }
-    });
+
+            try {
+                (hook as Function)(...args);
+                logger.debug(
+                    logPrefix,
+                    `plugin ${plugin.name}:${String(hookName)} executed`,
+                    args
+                );
+            } catch (error) {
+                logger.debug(
+                    logPrefix,
+                    `plugin ${plugin.name}:${String(hookName)} failed`,
+                    error
+                );
+            }
+        });
 }

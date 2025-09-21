@@ -19,15 +19,23 @@ describe('callPluginHook', () => {
         context = {};
     });
 
-    it('should call the specified hook on all plugins that have it', () => {
+    it('should call the specified hook on all plugins that have it in order', () => {
+        const callOrder: string[] = [];
+
         const mockPlugin1: PaginationPlugin = {
             name: 'plugin1',
-            onVisitText: vi.fn(),
+            order: 2,
+            onVisitText: vi.fn().mockImplementation(() => {
+                callOrder.push('plugin1');
+            }),
         };
 
         const mockPlugin2: PaginationPlugin = {
             name: 'plugin2',
-            onVisitText: vi.fn(),
+            order: 1,
+            onVisitText: vi.fn().mockImplementation(() => {
+                callOrder.push('plugin2');
+            }),
         };
 
         const plugins = [mockPlugin1, mockPlugin2];
@@ -53,16 +61,19 @@ describe('callPluginHook', () => {
             mockPageManager,
             context
         );
+        expect(callOrder).toEqual(['plugin2', 'plugin1']);
     });
 
     it('should skip plugins that do not have the specified hook', () => {
         const mockPlugin1: PaginationPlugin = {
             name: 'plugin1',
+            order: 1,
             onVisitText: vi.fn(),
         };
 
         const mockPlugin2: PaginationPlugin = {
             name: 'plugin2',
+            order: 2,
             // no onVisitText hook
         };
 
@@ -90,6 +101,7 @@ describe('callPluginHook', () => {
         const error = new Error('Plugin error');
         const mockPlugin: PaginationPlugin = {
             name: 'errorPlugin',
+            order: 1,
             onVisitText: vi.fn().mockImplementation(() => {
                 throw error;
             }),

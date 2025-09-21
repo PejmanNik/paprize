@@ -8,8 +8,6 @@ import {
     PageText,
     createPageNode,
 } from './PageNodes';
-import { isDebugMode } from '../debugUtilities/debugMode';
-import { pageClassName } from '../constants';
 
 vi.mock('./PageNodes');
 vi.mock('../debugUtilities/pageNodeMarker');
@@ -105,7 +103,6 @@ describe('PageManager', () => {
             const page = tempContainer.lastElementChild;
             const style = (page as HTMLDivElement).style;
 
-            expect(style.display).toBe('flex');
             expect(style.width).toBe(`${pageSize.width}px`);
             expect(style.maxWidth).toBe(`${pageSize.width}px`);
         });
@@ -132,27 +129,6 @@ describe('PageManager', () => {
 
             expect(mockPageElement.isEmpty).toHaveBeenCalled();
             expect(mockPageElement.remove).toHaveBeenCalled();
-        });
-
-        test('should add highlight in debug mode', async () => {
-            vi.mocked(isDebugMode).mockReturnValue(true);
-
-            const transaction = new Transaction();
-            const config = { plugins: [] } as unknown as PaginationConfig;
-            const pageManager = new PageManager(
-                tempContainer,
-                pageSize,
-                transaction,
-                config
-            );
-
-            pageManager.nextPage();
-
-            expect(
-                tempContainer.lastElementChild?.classList.contains(
-                    pageClassName
-                )
-            ).toBe(true);
         });
     });
 
@@ -323,6 +299,13 @@ describe('PageManager', () => {
             callbacks.forEach((cb) => cb());
 
             expect(pageManager.hasEmptySpace()).toBe(true);
+        });
+    });
+
+    describe('getPageState', () => {
+        test('should return the current page state', () => {
+            expect(pageManager.getPageState()).toBeInstanceOf(Object);
+            expect(pageManager.getPageState().pageIndex).toBe(0);
         });
     });
 });

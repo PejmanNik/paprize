@@ -6,8 +6,6 @@ import {
     type PageText,
 } from './PageNodes';
 import { Transaction } from './Transaction';
-import { isDebugMode } from '../debugUtilities/debugMode';
-import { pageClassName } from '../constants';
 import type { PageSize } from './PageSize';
 import { unmarkCurrentNode } from '../debugUtilities/pageNodeMarker';
 import logger from '../logger';
@@ -180,14 +178,8 @@ export class PageManager {
 
     private static createPageHtmlElement(pageWidth: number): Element {
         const page = document.createElement('div');
-        page.style.display = 'flex'; // to avoid margin collapsing
-        page.style.flexDirection = 'column';
         page.style.width = `${pageWidth}px`;
         page.style.maxWidth = `${pageWidth}px`;
-
-        DEV: if (isDebugMode()) {
-            page.classList.add(pageClassName);
-        }
 
         return page;
     }
@@ -218,7 +210,8 @@ export class PageManager {
     public hasEmptySpace(elementHeight?: number): boolean {
         return (
             !this._pageState.pageIsFull &&
-            this._pageState.currentPage.getHeight() + (elementHeight || 1) <=
+            this._pageState.currentPage.getHeight() +
+                (elementHeight || 0.0001) <=
                 this._pageState.pageHeight
         );
     }

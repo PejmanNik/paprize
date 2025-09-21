@@ -81,6 +81,7 @@ describe('Paginator', () => {
         config.plugins = [
             {
                 name: 'test-plugin',
+                order: 1,
                 onVisitElement: (_id, _pe, _pm, ctx) => {
                     ctx.result = SplitResult.SplitChildren;
                 },
@@ -106,6 +107,7 @@ describe('Paginator', () => {
         config.plugins = [
             {
                 name: 'test-plugin',
+                order: 1,
                 onVisitText: (_id, _pe, _pm, ctx) => {
                     ctx.result = SplitResult.SplitChildren;
                 },
@@ -255,6 +257,7 @@ describe('Paginator', () => {
         config.plugins = [
             {
                 name: 'test-plugin',
+                order: 1,
                 afterVisitNode,
             },
         ];

@@ -11,6 +11,7 @@ describe('pageBreakPlugin', () => {
     let mockPageManager: Mocked<PageManager>;
     let mockContext: VisitContext;
     let mockElement: HTMLElement;
+    const id = 'id';
 
     beforeEach(() => {
         mockElement = document.createElement('div');
@@ -33,6 +34,7 @@ describe('pageBreakPlugin', () => {
             mockElement.setAttribute(pageBreakAttributeName, 'true');
 
             pageBreakPlugin.onVisitElement!(
+                id,
                 mockDomState,
                 mockPageManager,
                 mockContext
@@ -48,6 +50,7 @@ describe('pageBreakPlugin', () => {
                 mockElement.setAttribute(pageBreakAttributeName, value);
 
                 pageBreakPlugin.onVisitElement!(
+                    id,
                     mockDomState,
                     mockPageManager,
                     mockContext
@@ -61,6 +64,7 @@ describe('pageBreakPlugin', () => {
         it('should not mark page as full when page break attribute is not set', () => {
             mockElement.removeAttribute(pageBreakAttributeName);
             pageBreakPlugin.onVisitElement!(
+                id,
                 mockDomState,
                 mockPageManager,
                 mockContext
@@ -75,6 +79,7 @@ describe('pageBreakPlugin', () => {
             mockElement.setAttribute(pageBreakAttributeName, 'false');
 
             pageBreakPlugin.onVisitElement!(
+                id,
                 mockDomState,
                 mockPageManager,
                 mockContext
@@ -88,6 +93,7 @@ describe('pageBreakPlugin', () => {
             mockElement.setAttribute(pageBreakAttributeName, 'true');
 
             pageBreakPlugin.onVisitElement!(
+                id,
                 mockDomState,
                 mockPageManager,
                 mockContext

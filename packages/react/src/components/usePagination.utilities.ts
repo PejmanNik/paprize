@@ -29,6 +29,7 @@ export function createSectionPageHeightPlugin(
 ): PaginationPlugin {
     return {
         name: 'sectionPageHeight',
+        order: 1,
         afterVisitNode: (_, domState, pageManager) => {
             const lastPage = domState.completed;
             if (!lastPage || sectionFooterHeight <= 0) return;
