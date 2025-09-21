@@ -6,6 +6,8 @@ sidebar_position: 5
 
 This component applies styling to sections and pages to resemble Chrome’s Print Preview screen.
 
+Since you don’t have control over the client’s browser, user extensions may inject extra elements into the page and cause issues when printing. The Report Preview component ensures a clean output by hiding all non-Paprize elements during print.
+
 ![Sample Report](/img/sample-report-1.png)
 
 You can customize it by changing the CSS variables or by creating your own styling component.

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useStyle } from './useStyle';
 
+const className = 'paprize-preview';
 const globalStyles = `
     :root {
         --paprize-page-background-color: #ffffff;
@@ -16,7 +17,7 @@ const globalStyles = `
     }
 
     @media screen {
-        .paprize-preview {
+        .${className} {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -35,6 +36,12 @@ const globalStyles = `
             margin-bottom: var(--paprize-section-margin-bottom);
         }
     }
+
+    @media print {
+        html *:not(.${className}):not(.${className} *):not(:has(.${className})) {
+            display: none !important;
+        }
+    }  
 `;
 
 /**
@@ -43,5 +50,5 @@ const globalStyles = `
  */
 export function ReportPreview({ children }: { children: ReactNode }) {
     useStyle(globalStyles);
-    return <div className="paprize-preview">{children}</div>;
+    return <div className={className}>{children}</div>;
 }
