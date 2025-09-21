@@ -1,17 +1,9 @@
 ---
-title: Quick Start
+sidebar_position: 2
 ---
 
 import ComponentCatalog from '@site/src/components/ComponentCatalog';
 import PageComponents from './\_page-components.md';
-
-# React Quick Start
-
-Get started by adding the `@paprize/react` library to your React project.
-
-```bash
-npm install @paprize/react
-```
 
 # Components
 
@@ -42,7 +34,7 @@ This component must be used as the parent component for the report, and all othe
 
 ## ReportPreview
 
-This component is intended for use in Client-Side Pagination only. It applies default CSS styles to make the output resemble the Chrome Print Preview screen. [More info](/02-React/04-report-preview.md)
+This component is intended for use in [front-end report generation](/report-generation.md). It applies default CSS styles to make the output resemble the Chrome Print Preview screen. [More info](/react/report-preview.md)
 
 ```
 <ReportRoot>
@@ -81,12 +73,12 @@ Every report must contain at least one Section, and each Section must contain on
 
 ### Props
 
-| Name        | Type                                 | Is Required | Description                          |
-| :---------- | :----------------------------------- | :---------: | :----------------------------------- |
-| dimension   | PageDimension                        |     ✅      | Use `pageSize` for standard values   |
-| margin      | PageMargin                           |     ❌      | Use `pageMargin` for standard values |
-| orientation | PageOrientation                      |     ❌      | Default: `portrait`                  |
-| config      | [PaginationConfig](../configuration) |     ❌      |                                      |
+| Name        | Type                                  | Is Required | Description                          |
+| :---------- | :------------------------------------ | :---------: | :----------------------------------- |
+| dimension   | PageDimension                         |     ✅      | Use `pageSize` for standard values   |
+| margin      | PageMargin                            |     ❌      | Use `pageMargin` for standard values |
+| orientation | PageOrientation                       |     ❌      | Default: `portrait`                  |
+| config      | [PaginationConfig](/configuration.md) |     ❌      |                                      |
 
 **pageMargin**: It will provide the Microsoft Word default margins  
 **pageSize**: It will provide most of the ISO 216 (e.g. A4, B5) + North American Sizes pages sizes
@@ -189,5 +181,5 @@ The PageContent component is the main container for your report content. Paginat
 </ComponentCatalog.Container>
 
 :::info
-All children of `PageContent` are subject to [ComponentSnapshot](/02-React/05-component-snapshot.md).
+All children of `PageContent` are subject to [ComponentSnapshot](/react/component-snapshot.md).
 :::

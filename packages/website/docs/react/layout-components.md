@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 import ComponentCatalog from '@site/src/components/ComponentCatalog';
 
 # Layout Components
@@ -15,7 +19,7 @@ The PageBreak component forces a new page break and pushes any subsequent conten
 ```
 
 <ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[PageContent](./quick-start/#pagecontent)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[PageContent](/react/components.md#pagecontent)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 ## Layout
@@ -25,9 +29,9 @@ All props are optional and follow this order of precedence:
 
 1. Props defined on this `Layout` component (highest priority)
 1. Props inherited from the nearest parent `Layout` component
-1. Global configuration provided to [Section](./quick-start/#section)
+1. Global configuration provided to [Section](/react/components.md#section)
 
-The available values are described in [Configuration](../configuration).
+The available values are described in [Configuration](/configuration.md).
 
 ```jsx
 <Layout
@@ -40,5 +44,5 @@ The available values are described in [Configuration](../configuration).
 ```
 
 <ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[PageContent](./quick-start/#pagecontent)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[PageContent](/react/components.md#pagecontent)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>

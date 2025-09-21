@@ -50,7 +50,15 @@ const config: Config = {
             } satisfies Preset.Options,
         ],
     ],
-
+    themes: [
+        [
+            require.resolve('@easyops-cn/docusaurus-search-local'),
+            /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+            {
+                hashed: true,
+            },
+        ],
+    ],
     themeConfig: {
         colorMode: {
             respectPrefersColorScheme: true,

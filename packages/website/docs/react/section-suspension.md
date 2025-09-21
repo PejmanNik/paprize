@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 import ComponentCatalog from "@site/src/components/ComponentCatalog";
 
 # Section Suspension
@@ -37,5 +41,5 @@ function SectionList() {
 ```
 
 <ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[Section](./quick-start/#section)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>

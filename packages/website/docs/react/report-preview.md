@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Report Preview
 
 This component applies styling to sections and pages to resemble Chrome’s Print Preview screen.

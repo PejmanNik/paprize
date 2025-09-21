@@ -1,6 +1,0 @@
-1. [SectionHeader](/02-React/01-quick-start.md#sectionheader)
-1. [SectionFooter](/02-React/01-quick-start.md#sectionfooter)
-1. [PageContent](/02-React/01-quick-start.md#pagecontent)
-1. [PageHeader](/02-React/01-quick-start.md#pageheader)
-1. [PageFooter](/02-React/01-quick-start.md#pagefooter)
-1. [PageOverlay](/02-React/01-quick-start.md#pageoverlay)
