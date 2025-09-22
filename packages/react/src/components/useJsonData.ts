@@ -1,5 +1,5 @@
 import { useSuspenseForPromise } from './useSuspenseForPromise';
-import { paprize_readJsonDataFile } from '@paprize/puppeteer/src';
+import { paprize_readJsonDataFile } from '@paprize/core/src';
 
 function lazy<T>(factory: () => Promise<T>): () => Promise<T> {
     let promise: Promise<T> | null = null;

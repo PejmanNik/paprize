@@ -1,7 +1,7 @@
 import http from 'http';
 import type { AddressInfo } from 'node:net';
 import handler from 'serve-handler';
-import { readdir } from 'fs/promises';
+import { promises as fs } from 'fs';
 
 export interface ReportServer {
     server: http.Server;
@@ -24,7 +24,7 @@ export async function serveReport(
     dir: string,
     port?: number
 ): Promise<ReportServer> {
-    const staticDirectories = (await readdir(dir, { withFileTypes: true }))
+    const staticDirectories = (await fs.readdir(dir, { withFileTypes: true }))
         .filter((x) => x.isDirectory())
         .map((x) => ({ source: x.name, destination: `/${x.name}` }));
 

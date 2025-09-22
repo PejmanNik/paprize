@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Paprize <sub>(Paper + Size)</sub> is framework agnostic report generation tool, Design your report using the full power of JavaScript and CSS, mark the report section by Paprize components and then Paprize pagination engine will transforming it into a beautiful, professional, print-ready pages.
 
-Paprize support two mode for creating reports. Back-end and Front-end report generation. Each on come with a own benefit and limitation. You can read about each version in [Report Generation](/report-generation.md).
+Paprize supports two modes for creating reports: back-end and front-end generation. Each comes with its own benefits and limitations. You can read more about them in [Report Generation](/report-generation.md).
 
 The core functionality is provided by the `@paprize/core` package. This package is low level, and several wrapper libraries are available to make it faster and easier to use.
 

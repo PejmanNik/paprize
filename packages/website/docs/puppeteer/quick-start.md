@@ -35,25 +35,35 @@ The final step requires an instance of [Puppeteer](https://pptr.dev). After inst
 ```ts
 import { promises as fs } from 'fs';
 import { serveReport, reportToPdf } from '@paprize/puppeteer';
-import puppeteer from 'puppeteer';
+import puppeteer, { type Browser } from 'puppeteer';
 
-function createPDF(){
-    const browser = await puppeteer.launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+let browser!: Browser;
+let server!: Awaited<ReturnType<typeof serveReport>>;
+
+try {
+    browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--disable-web-security',
+        ],
     });
 
-    try {
-        const { close, getHost } = await serveReport.browser("reports/dist");
-        await const page = browser.newPage();
+    server = await serveReport('dist');
 
-        const pdf = await reportToPdf(page, getHost());
-        await fs.writeFile('myReport.pdf', pdf);
+    const page = await browser.newPage();
 
-        close();
-    }
-    finally
-    {
-        await browser.close();
-    }
+    const pdf = await reportToPdf(
+        page,
+        new URL('mewo-company', server.getHost())
+    );
+
+    await fs.writeFile('mewo-company.pdf', pdf);
+} finally {
+    await browser.close();
+    server.close();
 }
 ```

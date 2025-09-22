@@ -1,6 +1,6 @@
 {
     "name": "@paprize/core",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Paginate DOM elements for professional, print-ready reports",
     "type": "module",
     "files": [
@@ -9,6 +9,7 @@
     ],
     "main": "./dist/paprize-core.umd.cjs",
     "module": "./dist/paprize-core.js",
+    "source": "./src/index.ts",
     "exports": {
         ".": {
             "types": "./dist/paprize-core.d.ts",

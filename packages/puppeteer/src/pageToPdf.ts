@@ -13,6 +13,7 @@ export function pageToPdf(
     pdfOptions?: PDFOptions
 ): Promise<Uint8Array> {
     return page.pdf({
+        waitForFonts: true,
         printBackground: true,
         displayHeaderFooter: false,
         preferCSSPageSize: true,

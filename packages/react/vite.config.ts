@@ -5,15 +5,20 @@ import dts from 'unplugin-dts/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+    resolve: {
+        alias: { '@paprize/core/src': '@paprize/core' },
+    },
     build: {
+        sourcemap: true,
         lib: {
             entry: 'src/index.ts',
-            name: 'paprize_react',
+            name: 'paprize-react',
             fileName: 'paprize-react',
             formats: ['es', 'umd'],
         },
         rollupOptions: {
             external: [
+                '@paprize/core',
                 'react',
                 'react-dom',
                 'react-is',
@@ -22,6 +27,7 @@ export default defineConfig({
             ],
             output: {
                 globals: {
+                    '@paprize/core': 'PaprizeCore',
                     react: 'React',
                     'react-is': 'ReactIs',
                     'react-dom': 'ReactDOM',

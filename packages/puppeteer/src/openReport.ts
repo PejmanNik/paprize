@@ -1,5 +1,5 @@
 import type { Page } from 'puppeteer-core';
-import { paprize_isReady, paprize_readJsonDataFile } from './window';
+import { paprize_isReady, paprize_readJsonDataFile } from '@paprize/core/src';
 
 /**
  * Opens a report in the given Puppeteer page, injects a JSON data file if provided,
@@ -22,7 +22,10 @@ export async function openReport(
         return jsonData;
     });
 
-    page.goto(reportUrl.toString());
+    await page.goto(reportUrl.toString(), {
+        waitUntil: 'networkidle0',
+        timeout,
+    });
     await page.waitForFunction(`window.${paprize_isReady} === true`, {
         timeout,
     });

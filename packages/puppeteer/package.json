@@ -1,19 +1,19 @@
 {
   "name": "@paprize/puppeteer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Convert HTML reports to print-ready PDFs",
   "type": "module",
   "files": [
     "dist",
     "CHANGELOG.md"
   ],
-  "main": "./dist/paprize_puppeteer.umd.cjs",
-  "module": "./dist/paprize_puppeteer.js",
+  "main": "./dist/paprize-puppeteer.umd.cjs",
+  "module": "./dist/paprize-puppeteer.js",
   "exports": {
     ".": {
-      "types": "./dist/paprize_puppeteer.d.ts",
-      "import": "./dist/paprize_puppeteer.js",
-      "require": "./dist/paprize_puppeteer.umd.cjs"
+      "types": "./dist/paprize-puppeteer.d.ts",
+      "import": "./dist/paprize-puppeteer.js",
+      "require": "./dist/paprize-puppeteer.umd.cjs"
     },
     "./src": {
       "types": "./src/window.ts",
@@ -45,6 +45,7 @@
     "@types/serve-handler": "^6.1.4",
     "esbuild": "0.25.10",
     "puppeteer-core": "^24.19.0",
+    "@paprize/core": "*",
     "typescript": "~5.8.3"
   },
   "peerDependencies": {

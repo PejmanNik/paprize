@@ -4,9 +4,10 @@ import dts from 'unplugin-dts/vite';
 
 export default defineConfig(({ mode }) => ({
     build: {
+        sourcemap: true,
         lib: {
             entry: 'src/index.ts',
-            name: 'paprize_core',
+            name: 'paprize-core',
             fileName: 'paprize-core',
             formats: ['es', 'umd'],
         },

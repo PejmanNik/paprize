@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { paprize_isReady } from '@paprize/puppeteer/src';
+import { paprize_isReady } from '@paprize/core/src';
 import { reportAtom, sectionsAtom } from './store';
 
 export function ReportStatus() {
