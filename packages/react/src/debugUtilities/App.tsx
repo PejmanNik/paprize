@@ -56,7 +56,11 @@ export default function App() {
                         left: '10px',
                     }}
                     config={{
-                        plugins: [Paprize.debugPlugin, tocPlugin],
+                        plugins: [
+                            Paprize.debugPlugin,
+                            new Paprize.TablePlugin({ cloneHeader: true }),
+                            tocPlugin,
+                        ],
                     }}
                 >
                     <SectionHeader>
@@ -87,6 +91,7 @@ export default function App() {
                         <h4>Part 1</h4>
                         <p>1- {Paprize.createLoremIpsumParagraph(20, 0.2)}</p>
                         <p>2- {Paprize.createLoremIpsumParagraph(80, 0.3)}</p>
+                        <MyTable />
                         <p>3- {Paprize.createLoremIpsumParagraph(80, 0.4)}</p>
                         <h4>Part 2</h4>
                         <p>1- end</p>
@@ -175,5 +180,28 @@ function MyTOC({ contentList }: { contentList: SectionTocState[] }) {
                 ))}
             </ul>
         </nav>
+    );
+}
+
+function MyTable() {
+    return (
+        <table>
+            <thead>
+                <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                    <th>Header 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                {Array.from({ length: 20 }).map((_, rowIndex) => (
+                    <tr key={rowIndex}>
+                        <td>Row {rowIndex + 1} - Cell 1</td>
+                        <td>Row {rowIndex + 1} - Cell 2</td>
+                        <td>Row {rowIndex + 1} - Cell 3 ddvd dvdv dvdvd</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     );
 }

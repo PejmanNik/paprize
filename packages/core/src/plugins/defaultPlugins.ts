@@ -1,3 +1,4 @@
-import { pageBreakPlugin } from './pageBreakPlugin';
+import { PageBreakPlugin } from './PageBreakPlugin';
+import { TablePlugin } from './TablePlugin';
 
-export const defaultPlugins = [pageBreakPlugin];
+export const defaultPlugins = [new PageBreakPlugin(), new TablePlugin()];

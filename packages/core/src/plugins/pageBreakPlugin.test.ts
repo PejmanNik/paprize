@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
-import { pageBreakPlugin, pageBreakAttributeName } from './pageBreakPlugin';
+import { pageBreakAttributeName, PageBreakPlugin } from './PageBreakPlugin';
 import type { PageElement } from '../paginate/PageNodes';
 import type { PageManager } from '../paginate/PageManager';
 import type { VisitContext } from '../paginate/PaginationPlugin';
 import { SplitResult } from '../paginate/SplitResult';
 import type { DomState } from '../paginate/DomState';
 
-describe('pageBreakPlugin', () => {
+describe('PageBreakPlugin', () => {
     let mockDomState: Mocked<DomState & { currentNode: PageElement }>;
     let mockPageManager: Mocked<PageManager>;
     let mockContext: VisitContext;
     let mockElement: HTMLElement;
+    const plugin = new PageBreakPlugin();
     const id = 'id';
 
     beforeEach(() => {
@@ -33,7 +34,7 @@ describe('pageBreakPlugin', () => {
         it('should mark page as full when page break attribute is "true"', () => {
             mockElement.setAttribute(pageBreakAttributeName, 'true');
 
-            pageBreakPlugin.onVisitElement!(
+            plugin.onVisitElement!(
                 id,
                 mockDomState,
                 mockPageManager,
@@ -49,7 +50,7 @@ describe('pageBreakPlugin', () => {
             (value) => {
                 mockElement.setAttribute(pageBreakAttributeName, value);
 
-                pageBreakPlugin.onVisitElement!(
+                plugin.onVisitElement!(
                     id,
                     mockDomState,
                     mockPageManager,
@@ -63,7 +64,7 @@ describe('pageBreakPlugin', () => {
 
         it('should not mark page as full when page break attribute is not set', () => {
             mockElement.removeAttribute(pageBreakAttributeName);
-            pageBreakPlugin.onVisitElement!(
+            plugin.onVisitElement!(
                 id,
                 mockDomState,
                 mockPageManager,
@@ -78,7 +79,7 @@ describe('pageBreakPlugin', () => {
             mockContext.result = SplitResult.SplitChildren;
             mockElement.setAttribute(pageBreakAttributeName, 'false');
 
-            pageBreakPlugin.onVisitElement!(
+            plugin.onVisitElement!(
                 id,
                 mockDomState,
                 mockPageManager,
@@ -92,7 +93,7 @@ describe('pageBreakPlugin', () => {
             mockContext.result = SplitResult.SplitChildren;
             mockElement.setAttribute(pageBreakAttributeName, 'true');
 
-            pageBreakPlugin.onVisitElement!(
+            plugin.onVisitElement!(
                 id,
                 mockDomState,
                 mockPageManager,

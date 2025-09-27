@@ -1,4 +1,5 @@
 export * from './defaultPlugins';
-export * from './pageBreakPlugin';
 export * from './debugPlugin';
+export * from './PageBreakPlugin';
 export * from './SectionTocPlugin';
+export * from './TablePlugin';

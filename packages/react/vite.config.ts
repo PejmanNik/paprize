@@ -4,9 +4,12 @@ import checker from 'vite-plugin-checker';
 import dts from 'unplugin-dts/vite';
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
     resolve: {
-        alias: { '@paprize/core/src': '@paprize/core' },
+        alias:
+            command === 'build'
+                ? { '@paprize/core/src': '@paprize/core' }
+                : undefined,
     },
     build: {
         sourcemap: true,
@@ -48,4 +51,4 @@ export default defineConfig({
             typescript: true,
         }),
     ],
-});
+}));

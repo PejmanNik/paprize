@@ -17,24 +17,38 @@ export const PageNodeType = {
 
 export class PageElement {
     private readonly _node: Element;
-    private readonly _transaction: Transaction;
+
+    public config: PaginationConfig;
 
     public readonly type: 'element' = PageNodeType.Element;
-    public readonly config: PaginationConfig;
+    public readonly transaction: Transaction;
+    public readonly clonedFrom?: PageElement;
+    public readonly cloneCount: number;
 
     constructor(
         element: Element,
         transaction: Transaction,
-        config: PaginationConfig
+        config: PaginationConfig,
+        clonedFrom?: PageElement
     ) {
         this._node = element;
-        this._transaction = transaction;
+        this.transaction = transaction;
         this.config = config;
+        this.clonedFrom = clonedFrom;
+        this.cloneCount = clonedFrom ? clonedFrom.cloneCount + 1 : 0;
+    }
+
+    getOriginalNode(): Node {
+        let current: PageElement = this;
+        while (current.clonedFrom) {
+            current = current.clonedFrom;
+        }
+        return current._node;
     }
 
     appendChild(node: PageNode): void {
-        if (this._transaction.isActive) {
-            this._transaction.addRollbackCallback(() => {
+        if (this.transaction.isActive) {
+            this.transaction.addRollbackCallback(() => {
                 this._node.removeChild(node.getNode() as Node);
             });
         }
@@ -46,8 +60,9 @@ export class PageElement {
         const clonedElement = this._node.cloneNode(withChildren) as Element;
         const clonedPageElement = new PageElement(
             clonedElement,
-            this._transaction,
-            this.config
+            this.transaction,
+            this.config,
+            this
         );
 
         callPluginHook(
@@ -66,7 +81,7 @@ export class PageElement {
     }
 
     remove(): void {
-        this._transaction.addCommitCallback(() => {
+        this.transaction.addCommitCallback(() => {
             this._node.remove();
         });
     }
@@ -86,10 +101,11 @@ export class PageElement {
 
 export class PageText {
     private readonly _node: Text;
-    private readonly _transaction: Transaction;
 
     public readonly type: 'text' = PageNodeType.Text;
-    public readonly config: PaginationConfig;
+    public readonly transaction: Transaction;
+
+    public config: PaginationConfig;
 
     constructor(
         text: Text,
@@ -97,7 +113,7 @@ export class PageText {
         config: PaginationConfig
     ) {
         this._node = text;
-        this._transaction = transaction;
+        this.transaction = transaction;
         this.config = config;
     }
 
@@ -110,7 +126,7 @@ export class PageText {
     }
 
     remove(): void {
-        this._transaction.addCommitCallback(() => {
+        this.transaction.addCommitCallback(() => {
             this._node.remove();
         });
     }

@@ -64,6 +64,25 @@ describe('PageElement', () => {
         expect(clone.getNode()).not.toBe(pageElem.getNode());
     });
 
+    it('should keep the link to parent for a cloned PageElement', () => {
+        const pageElem = new PageElement(element, transaction, defaultConfig);
+        const clone = pageElem.clone();
+
+        expect(clone).toBeInstanceOf(PageElement);
+        expect(clone.clonedFrom).toBe(pageElem);
+        expect(clone.cloneCount).toBe(pageElem.cloneCount + 1);
+    });
+
+    it('should return the original element when getOriginalNode is called', () => {
+        const pageElem = new PageElement(element, transaction, defaultConfig);
+        const clone1 = pageElem.clone();
+        const clone2 = clone1.clone();
+
+        expect(clone2.getOriginalNode()).toBe(pageElem.getNode());
+        expect(clone1.getOriginalNode()).toBe(pageElem.getNode());
+        expect(clone2.cloneCount).toBe(pageElem.cloneCount + 2);
+    });
+
     it('should call plugins on clone', () => {
         const plugin1 = { onClone: vi.fn() } as unknown as PaginationPlugin;
         const plugin2 = { onClone: vi.fn() } as unknown as PaginationPlugin;

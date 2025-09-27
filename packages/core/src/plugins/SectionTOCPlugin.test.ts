@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SectionTocPlugin } from './SectionTocPlugin';
 import type { PageElement } from '../paginate/PageNodes';
 import type { PageManager } from '../paginate/PageManager';
@@ -6,8 +6,8 @@ import type { DomState } from '../paginate/DomState';
 
 describe('SectionTocPlugin', () => {
     let plugin: SectionTocPlugin;
-    let mockDomState: Mocked<DomState & { currentNode: PageElement }>;
-    let mockPageManager: Mocked<PageManager>;
+    let mockDomState: DomState & { currentNode: PageElement };
+    let mockPageManager: PageManager;
     let mockElement: HTMLElement;
 
     beforeEach(() => {
@@ -17,11 +17,11 @@ describe('SectionTocPlugin', () => {
         mockDomState = {
             currentNode: {
                 getNode: vi.fn().mockReturnValue(mockElement),
-            } as unknown as Mocked<PageElement>,
-        } as unknown as Mocked<DomState & { currentNode: PageElement }>;
+            } as unknown as PageElement,
+        } as unknown as DomState & { currentNode: PageElement };
         mockPageManager = {
             getPageState: vi.fn().mockReturnValue({ pageIndex: 2 }),
-        } as unknown as Mocked<PageManager>;
+        } as unknown as PageManager;
     });
 
     describe('onVisitElement', () => {

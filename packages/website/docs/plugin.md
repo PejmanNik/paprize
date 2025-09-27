@@ -21,12 +21,32 @@ const customPlugins = [myCustomPlugin, ...defaultPlugins];
 You can also selectively import the provided plugins.
 
 ```tsx
-import { pageBreakPlugin } from '@paprize/core';
+import { PageBreakPlugin } from '@paprize/core';
 
-const customPlugins = [myCustomPlugin, pageBreakPlugin];
+const customPlugins = [myCustomPlugin, new PageBreakPlugin()];
 ```
 
 The default plugin set includes:
 
-1. **pageBreakPlugin:** Provides support for the PageBreak component.
-1. **tablePlugin:** Provides consistent HTML table rendering, ensuring that rows are kept intact and not broken across pages.
+1. **PageBreakPlugin:** Provides support for the PageBreak component.
+1. **TablePlugin:** Provides consistent HTML table rendering, ensuring that rows are kept intact and not broken across pages.
+
+## PageBreak Plugin
+
+The Page Break plugin ends the current page when it encounters an HTML node with the attribute `data-pz-page-break="true"`, and immediately starts a new page.
+
+```tsx
+import { PageBreakPlugin } from '@paprize/core';
+
+const plugins = [new PageBreakPlugin()];
+```
+
+## Table Plugin
+
+You can create an instance of the Table plugin with the desired options. These options control the table’s layout. For example, setting `cloneHeader` to `true` ensures the header is repeated on every page when the table spans multiple pages.
+
+```tsx
+import { TablePlugin } from '@paprize/core';
+
+const plugins = [new TablePlugin({ cloneHeader: true })];
+```
