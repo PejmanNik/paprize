@@ -1,0 +1,60 @@
+{
+    "name": "@paprize/vanilla",
+    "version": "0.0.4",
+    "description": "Paginate DOM elements for professional, print-ready reports",
+    "type": "module",
+    "files": [
+        "dist",
+        "CHANGELOG.md"
+    ],
+    "main": "./dist/paprize-vanilla.umd.cjs",
+    "module": "./dist/paprize-vanilla.js",
+    "source": "./src/index.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/paprize-vanilla.d.ts",
+            "import": "./dist/paprize-vanilla.js",
+            "require": "./dist/paprize-vanilla.umd.cjs"
+        }
+    },
+    "keywords": [
+        "paper",
+        "print",
+        "report",
+        "html2pdf",
+        "pdf"
+    ],
+    "homepage": "https://github.com/PejmanNik/paprize#readme",
+    "bugs": {
+        "url": "https://github.com/PejmanNik/paprize/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PejmanNik/paprize.git"
+    },
+    "license": "Apache-2.0",
+    "author": "PejmanNikram",
+    "scripts": {
+        "dev": "vite",
+        "test": "vitest",
+        "coverage": "vitest run --coverage",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "prepack": "node ../../scripts/prepack.mjs"
+    },
+    "devDependencies": {
+        "@microsoft/api-extractor": "^7.53.0",
+        "@vitest/coverage-v8": "^3.2.4",
+        "happy-dom": "^19.0.2",
+        "preact": "^10.27.2",
+        "typescript": "~5.9.3",
+        "unplugin-dts": "^1.0.0-beta.6",
+        "vite": "^7.1.9",
+        "vite-plugin-checker": "^0.11.0",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@paprize/core": "*",
+        "lit": "^3.3.1"
+    }
+}
