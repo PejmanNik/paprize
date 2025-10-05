@@ -9,3 +9,5 @@ export const ignoredTextClassName = 'pz-ignored-text';
 
 export const pageClassName = 'pz-page';
 export const attributePrefix = 'data-pz-';
+
+export const globalStyleId = 'paprize-global-style';
