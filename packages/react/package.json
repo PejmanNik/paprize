@@ -42,7 +42,7 @@
     },
     "dependencies": {
         "@paprize/core": "*",
-        "jotai": "^2.13.1",
+        "jotai": "^2.15.0",
         "loglevel": "^1.9.2"
     },
     "peerDependencies": {
@@ -50,22 +50,22 @@
         "react-dom": ">=17.0.0"
     },
     "devDependencies": {
-        "@eslint/js": "^9.30.1",
-        "@types/react": "^19.1.8",
-        "@types/react-dom": "^19.1.6",
-        "@vitejs/plugin-react-swc": "^3.10.2",
-        "eslint": "^9.30.1",
-        "eslint-plugin-react-hooks": "^5.2.0",
-        "eslint-plugin-react-refresh": "^0.4.20",
-        "globals": "^16.3.0",
-        "jotai-devtools": "^0.12.0",
-        "react": "^19.1.1",
-        "react-dom": "^19.1.1",
-        "typescript": "~5.8.3",
-        "typescript-eslint": "^8.35.1",
+        "@eslint/js": "^9.37.0",
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+        "@vitejs/plugin-react-swc": "^4.1.0",
+        "eslint": "^9.37.0",
+        "eslint-plugin-react-hooks": "^6.1.1",
+        "eslint-plugin-react-refresh": "^0.4.23",
+        "globals": "^16.4.0",
+        "jotai-devtools": "^0.13.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "typescript": "~5.9.3",
+        "typescript-eslint": "^8.45.0",
         "unplugin-dts": "^1.0.0-beta.6",
-        "vite": "^7.0.4",
-        "vite-plugin-checker": "^0.10.3",
+        "vite": "^7.1.9",
+        "vite-plugin-checker": "^0.11.0",
         "vite-plugin-lib-inject-css": "^2.2.2"
     }
 }

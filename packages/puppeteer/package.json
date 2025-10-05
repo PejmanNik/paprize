@@ -44,9 +44,9 @@
   "devDependencies": {
     "@types/serve-handler": "^6.1.4",
     "esbuild": "0.25.10",
-    "puppeteer-core": "^24.19.0",
+    "puppeteer-core": "^24.23.0",
     "@paprize/core": "*",
-    "typescript": "~5.8.3"
+    "typescript": "~5.9.3"
   },
   "peerDependencies": {
     "puppeteer-core": ">=24.0.0"
