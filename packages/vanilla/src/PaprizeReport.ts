@@ -24,6 +24,12 @@ const globalStyles = `
     }
 `;
 
+export interface PaprizeReportOptions {
+    root?: HTMLElement;
+    usePreviewMode?: boolean;
+    keepInitialElementAfterPagination?: boolean;
+}
+
 interface SectionState {
     pages: DomPageContext[];
     sectionElement: HTMLElement;
@@ -36,15 +42,17 @@ export class PaprizeReport {
     private readonly _reportManager: Core.ReportBuilder;
     private readonly _monitor: Core.EventDispatcher<PaprizeReportEvents>;
     private readonly _root: HTMLElement;
+    private readonly _options: PaprizeReportOptions;
 
-    constructor(root: HTMLElement) {
+    constructor(options: PaprizeReportOptions) {
         const style = document.createElement('style');
         style.textContent = globalStyles;
         document.head.appendChild(style);
 
+        this._options = options;
         this._monitor = new Core.EventDispatcher<PaprizeReportEvents>();
         this._reportManager = new Core.ReportBuilder();
-        this._root = root;
+        this._root = this.createRootElement();
 
         this._reportManager.monitor.addEventListener(
             'sectionCreated',
@@ -83,6 +91,17 @@ export class PaprizeReport {
                 });
             }
         );
+    }
+
+    createRootElement(): HTMLElement {
+        const wrapper = document.createElement('div');
+
+        if (this._options.usePreviewMode) {
+            wrapper.classList.add(Core.previewClassName);
+        }
+
+        (this._options.root ?? document.body).appendChild(wrapper);
+        return wrapper;
     }
 
     public async schedulePaginate(): ReturnType<
@@ -147,6 +166,10 @@ export class PaprizeReport {
     private createSectionInDom(sectionId: string): HTMLDivElement {
         const section = document.createElement('div');
         section.setAttribute(sectionIdMetadataAttribute, sectionId);
+        section.classList.add(Core.sectionClassName);
+        section.id = sectionId;
+        Object.assign(section.style, Core.reportStyles.section(sectionId));
+
         this._root.appendChild(section);
         return section;
     }
@@ -183,10 +206,15 @@ export class PaprizeReport {
         pageContexts: Core.PageContext[]
     ) {
         const state = this.getSectionState(options.id);
+        if (!this._options.keepInitialElementAfterPagination) {
+            document.getElementById(options.id)?.remove();
+        }
         const pages: DomPageContext[] = [];
 
         for (let pageContext of pageContexts) {
             const page = document.createElement('div');
+            page.classList.add(Core.pageClassName);
+            page.id = Core.buildPageId(options.id, pageContext.index);
             page.setAttribute(
                 pageIndexMetadataAttribute,
                 pageContext.index.toString()

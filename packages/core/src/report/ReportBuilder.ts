@@ -45,7 +45,7 @@ export class ReportBuilder {
         this._monitor = new EventDispatcher<ReportBuilderEvents>();
 
         window[paprize_isInitialized] = true;
-        this.injectStyle();
+        this.injectStyle(reportStyles.globalStyle);
     }
 
     public get monitor(): Monitor<ReportBuilderEvents> {
@@ -75,6 +75,7 @@ export class ReportBuilder {
             onPaginationCompleted,
         });
 
+        this.injectStyle(reportStyles.sectionPageMedia(options.id, options.dimension));
         this._monitor.dispatch('sectionCreated', context);
 
         return true;
@@ -99,7 +100,7 @@ export class ReportBuilder {
 
         return {
             sections: [...this._sections.values()].map((s) => s.context),
-            suspension: Promise.all(sectionPromises).then(() => {}),
+            suspension: Promise.all(sectionPromises).then(() => { }),
         };
     }
 
@@ -122,11 +123,17 @@ export class ReportBuilder {
         });
     }
 
-    private injectStyle() {
-        const style = document.createElement('style');
-        style.id = globalStyleId;
-        style.textContent = reportStyles.globalStyle;
-        document.head.appendChild(style);
+    private injectStyle(styleContent: string) {
+        let style = document.getElementById(globalStyleId) as HTMLStyleElement | null;
+        if (!style) {
+            style = document.createElement('style');
+            style.id = globalStyleId;
+            style.textContent = '';
+            document.head.appendChild(style);
+        }
+
+        style.textContent = (style.textContent + styleContent).replace(/\s+/g, ' ').replace(/\s*([:;{}])\s*/g, '$1')
+            .trim();
     }
 
     private paginateSection(state: SectionState): void {
@@ -187,6 +194,7 @@ export class ReportBuilder {
             }
         );
 
+        temporarilyContainer.remove();
         const pageContexts = paginatorResult.map((content, index) => ({
             index,
             totalPages: paginatorResult.length,

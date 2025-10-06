@@ -136,7 +136,7 @@ const myPromise = new Promise((res) => {
     resolve = res;
 });
 
-const r = new PaprizeReport(document.body);
+const r = new PaprizeReport({ usePreviewMode: true });
 r.addSection({
     id: '1',
     dimension: { height: '350px', width: '400px' },

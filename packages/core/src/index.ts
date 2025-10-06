@@ -24,3 +24,4 @@ export { enableDebugMode, isDebugMode } from './debugUtilities/debugMode';
 export * from './debugUtilities/loremIpsum';
 export * from './plugins';
 export * from './window';
+export * from './utils';

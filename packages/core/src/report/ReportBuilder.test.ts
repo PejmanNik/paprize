@@ -65,7 +65,7 @@ describe('ReportBuilder', () => {
                 suspense: withsuspense ? [Promise.resolve()] : [],
             };
 
-            const added = rb.tryAddSection(testOptions, components, () => {});
+            const added = rb.tryAddSection(testOptions, components, () => { });
             expect(added).toBe(true);
 
             expect(sectionCreated).toHaveBeenCalled();
@@ -86,8 +86,8 @@ describe('ReportBuilder', () => {
             pageFooter: null,
             pageContent,
         };
-        rb.tryAddSection(options, components, () => {});
-        const result = rb.tryAddSection(options, components, () => {});
+        rb.tryAddSection(options, components, () => { });
+        const result = rb.tryAddSection(options, components, () => { });
         expect(result).toBe(false);
     });
 
@@ -211,36 +211,6 @@ describe('ReportBuilder', () => {
         );
     });
 
-    it('paginateSection should append all section/page headers and footers if present', async () => {
-        const sectionHeader = document.createElement('div');
-        sectionHeader.id = 'sectionHeader';
-        const sectionFooter = document.createElement('div');
-        sectionFooter.id = 'sectionFooter';
-        const pageHeader = document.createElement('div');
-        pageHeader.id = 'pageHeader';
-        const pageFooter = document.createElement('div');
-        pageFooter.id = 'pageFooter';
-        const pageContent = document.createElement('div');
-        pageContent.id = 'pageContentAll';
-
-        const components: SectionComponents = {
-            sectionHeader,
-            sectionFooter,
-            pageHeader,
-            pageFooter,
-            pageContent,
-        };
-
-        const onPaginationCompleted = vi.fn();
-        rb.tryAddSection(options, components, onPaginationCompleted);
-        await rb.schedulePaginate();
-
-        expect(document.body.innerHTML).toContain('sectionHeader');
-        expect(document.body.innerHTML).toContain('sectionFooter');
-        expect(document.body.innerHTML).toContain('pageHeader');
-        expect(document.body.innerHTML).toContain('pageFooter');
-        expect(document.body.innerHTML).toContain('pageContentAll');
-    });
 });
 
 describe('ReportBuilder constructor', () => {
