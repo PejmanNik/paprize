@@ -13,9 +13,9 @@ export * from './components/usePageInfo';
 export * from './components/useSectionInfo';
 export * from './components/useReportInfo';
 export * from './components/useSectionSuspension';
-export * from './components/useSuspenseForPromise';
 export * from './components/useJsonData';
-export * from './pageConst';
-export type * from './components/pageTypes';
+
+export type * from './internal/eventHelper';
+export type * from './internal/SectionControllerContext';
 
 export type { PaginationPlugin, PaginationConfig } from '@paprize/core/src';

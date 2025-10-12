@@ -1,36 +1,22 @@
-import { type ReactNode } from 'react';
-import { Provider } from 'jotai';
-import { ReportStatus } from './ReportStatus';
-import { store } from './store';
-import { useStyle } from './useStyle';
+import { useEffect, useMemo, type ReactNode } from 'react';
+import { ReportBuilder } from '@paprize/core/src';
+import { ReportBuilderContext } from '../internal/useReportBuilder';
 
 export interface ReportRootProps {
     children: ReactNode;
 }
 
-const globalStyles = `
-    html {
-        box-sizing: border-box;
-    }
-
-    *,
-    *:before,
-    *:after {
-        box-sizing: inherit;
-    }
-
-    .paprize-page-component {
-        display: flex;
-        flex-direction: column;
-    }
-`;
 
 export function ReportRoot({ children }: ReportRootProps) {
-    useStyle(globalStyles);
+    const reportBuilder = useMemo(() => new ReportBuilder(), []);
+
+    useEffect(() => {
+        reportBuilder.schedulePaginate();
+    }, []);
+
     return (
-        <Provider store={store}>
+        <ReportBuilderContext value={reportBuilder}>
             {children}
-            <ReportStatus />
-        </Provider>
+        </ReportBuilderContext>
     );
 }

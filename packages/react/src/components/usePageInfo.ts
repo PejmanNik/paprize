@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { PageContext } from './PageContext';
+import { PageInfoContext } from '../internal/PageInfoContext';
 
 export const usePageInfo = () => {
-    const pageContext = useContext(PageContext);
+    const pageContext = useContext(PageInfoContext);
 
     return {
-        pageNumber: pageContext.pageNumber,
+        pageIndex: pageContext.pageIndex,
         totalPages: pageContext.totalPages,
     };
 };

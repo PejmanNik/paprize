@@ -1,67 +1,20 @@
-import { useAtomValue } from 'jotai';
-import { reportAtom, sectionsAtom } from './store';
-import { useMemo } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
+import { useReportBuilder } from '../internal/useReportBuilder';
+import type { PaginationCycleCompleted } from '@paprize/core/src';
+import { paginationCycleToReportInfo, type ReportInfo } from '../internal/eventHelper';
 
-/**
- * Represents information about a report, including its sections and pagination details.
- */
-export interface ReportInfo {
-    /**
-     * The total number of sections in the report.
-     * When isFirstPaginationCompleted is false, this value is 0.
-     * When isPaginated is false, this value is not guaranteed to be accurate.
-     */
-    totalSections: number;
+export function useReportInfo(): ReportInfo {
+    const reportBuilder = useReportBuilder();
+    const stateRef = useRef<PaginationCycleCompleted>({
+        sections: []
+    });
 
-    /**
-     * Indicates whether the report is ready and all sections are paginated.
-     */
-    isPaginated: boolean;
+    const state = useSyncExternalStore((callback) => {
+        return reportBuilder.monitor.addEventListener('paginationCycleCompleted', (pg) => {
+            stateRef.current = pg;
+            callback();
+        });
+    }, () => stateRef.current);
 
-    /**
-     * Indicates whether the first pagination process has been completed.
-     * This becomes true once at least one section has been paginated.
-     */
-    isFirstPaginationCompleted: boolean;
-
-    /**
-     * An array of sections in the report, each containing details about the section.
-     */
-    sections: {
-        /**
-         * The id of the section.
-         */
-        sectionId: string;
-
-        /**
-         * The total number of pages in the section.
-         */
-        totalPages: number;
-
-        /**
-         * Indicates whether the section is paginated.
-         */
-        isPaginated: boolean;
-    }[];
-}
-
-export function useReportInfo() {
-    const sections = useAtomValue(sectionsAtom);
-    const report = useAtomValue(reportAtom);
-
-    return useMemo(
-        (): ReportInfo => ({
-            totalSections: report.totalSections,
-            isPaginated: report.isPaginated,
-            isFirstPaginationCompleted: report.totalSections > 0,
-            sections: Array.from(sections.entries()).map(
-                ([key, { totalPages, isPaginated }]) => ({
-                    sectionId: key,
-                    totalPages,
-                    isPaginated,
-                })
-            ),
-        }),
-        [report.isPaginated, report.totalSections, sections]
-    );
+    return paginationCycleToReportInfo(state);
 }

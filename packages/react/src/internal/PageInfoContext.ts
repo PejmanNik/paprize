@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-export const PageContext = createContext<{
-    pageNumber: number;
+export const PageInfoContext = createContext<{
+    pageIndex: number;
     totalPages: number;
 }>({
-    pageNumber: 0,
+    pageIndex: 0,
     totalPages: 0,
 });

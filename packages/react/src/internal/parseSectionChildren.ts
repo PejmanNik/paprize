@@ -5,12 +5,12 @@ import {
     type ReactElement,
     type ReactNode,
 } from 'react';
-import { PageContent } from './PageContent';
-import { PageFooter } from './PageFooter';
-import { PageHeader } from './PageHeader';
-import { SectionFooter } from './SectionFooter';
-import { SectionHeader } from './SectionHeader';
-import { PageOverlay } from './PageOverlay';
+import { PageContent } from '../components/PageContent';
+import { PageFooter } from '../components/PageFooter';
+import { PageHeader } from '../components/PageHeader';
+import { SectionFooter } from '../components/SectionFooter';
+import { SectionHeader } from '../components/SectionHeader';
+import { PageOverlay } from '../components/PageOverlay';
 import logger from 'loglevel';
 
 const validChildren: FC<{ children: ReactNode }>[] = [

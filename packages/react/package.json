@@ -42,7 +42,6 @@
     },
     "dependencies": {
         "@paprize/core": "*",
-        "jotai": "^2.15.0",
         "loglevel": "^1.9.2"
     },
     "peerDependencies": {
@@ -58,7 +57,6 @@
         "eslint-plugin-react-hooks": "^6.1.1",
         "eslint-plugin-react-refresh": "^0.4.23",
         "globals": "^16.4.0",
-        "jotai-devtools": "^0.13.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
         "typescript": "~5.9.3",

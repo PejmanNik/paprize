@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Paprize from '@paprize/core/src';
 import '@paprize/core/src/debug-styles.css';
 
@@ -18,19 +18,27 @@ import {
     useSectionInfo,
     useReportInfo,
 } from '../index';
-import { SectionTocPlugin, type SectionTocState } from '@paprize/core/src';
+import { SectionTocPlugin } from '@paprize/core/src';
 import 'jotai-devtools/styles.css';
+import { useReportBuilder } from '../internal/useReportBuilder';
 
 export default function App() {
+    const [name, setName] = useState('');
     //Paprize.enableDebugMode();
     Paprize.logger.setLevel('debug', false);
 
-    const tocPlugin = new SectionTocPlugin();
+    const tocPlugin = useRef(new SectionTocPlugin());
     return (
         <ReportRoot>
+            <input
+                type='string'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
             {/* <DevTools /> */}
             <ReportPreview>
                 <Section
+                    id='section-1'
                     dimension={{ height: '300px', width: '400px' }}
                     margin={{
                         top: '10px',
@@ -39,16 +47,15 @@ export default function App() {
                         left: '10px',
                     }}
                     config={{
-                        id: 'section-1',
                         plugins: [Paprize.debugPlugin],
                     }}
                 >
                     <PageContent>
-                        <MyTOC contentList={tocPlugin.state} />
+                        <MyTOC tocProvider={tocPlugin.current} />
                     </PageContent>
                 </Section>
                 <Section
-                    dimension={{ height: '300px', width: '400px' }}
+                    dimension={{ height: '400px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
@@ -59,7 +66,7 @@ export default function App() {
                         plugins: [
                             Paprize.debugPlugin,
                             new Paprize.TablePlugin({ cloneHeader: true }),
-                            tocPlugin,
+                            tocPlugin.current,
                         ],
                     }}
                 >
@@ -88,12 +95,13 @@ export default function App() {
                         </div>
                     </PageOverlay> */}
                     <PageContent>
-                        <h4>Part 1</h4>
+                        <h4>H4 |1| Title 1</h4>
+                        <h5>H5 |1| Title 1.1 {name}</h5>
                         <p>1- {Paprize.createLoremIpsumParagraph(20, 0.2)}</p>
                         <p>2- {Paprize.createLoremIpsumParagraph(80, 0.3)}</p>
                         <MyTable />
                         <p>3- {Paprize.createLoremIpsumParagraph(80, 0.4)}</p>
-                        <h4>Part 2</h4>
+                        <h4>H4 |1| Title 2</h4>
                         <p>1- end</p>
                     </PageContent>
                 </Section>
@@ -107,7 +115,7 @@ export default function App() {
                         left: '10px',
                     }}
                     config={{
-                        plugins: [Paprize.debugPlugin, tocPlugin],
+                        plugins: [Paprize.debugPlugin, tocPlugin.current],
                     }}
                 >
                     <SectionHeader>
@@ -119,12 +127,12 @@ export default function App() {
                     <PageFooter>This is a footer 2</PageFooter>
                     <SectionFooter>Section 2 Footer</SectionFooter>
                     <PageContent>
-                        <h4>Part 1 | 2</h4>
+                        <h4>H4 |2| Title 1</h4>
                         <p>1- {Paprize.createLoremIpsumParagraph(10, 0.5)}</p>
                         <PageBreak />
-                        <h4>Part 2 | 2</h4>
+                        <h4>H4 |2| Title 2</h4>
                         <p>2- {Paprize.createLoremIpsumParagraph(100, 0.6)}</p>
-                        <h5>Part 3 | 2</h5>
+                        <h5>H5 |2| Title 2.1</h5>
                         <Layout keepOnSamePage={false}>
                             <p style={{ border: '1px solid black' }}>
                                 3- {Paprize.createLoremIpsumParagraph(100, 0.8)}
@@ -140,41 +148,63 @@ export default function App() {
 }
 
 function MyPageHeader() {
-    const { pageNumber } = usePageInfo();
-    const { totalPages } = useSectionInfo();
+    const { pageIndex, totalPages } = usePageInfo();
+
     return (
         <PageHeader>
             <h3>
-                Page Header {pageNumber} of {totalPages}
+                Page Header {pageIndex + 1} of {totalPages}
             </h3>
         </PageHeader>
     );
 }
 
-function MyTOC({ contentList }: { contentList: SectionTocState[] }) {
-    const { isFirstPaginationCompleted, sections } = useReportInfo();
+function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
+    const reportBuilder = useReportBuilder();
+    const { sections } = useReportInfo();
     const { sectionId } = useSectionInfo();
-    const { release } = useSectionSuspension(sectionId, true);
+    const { release, reset } = useSectionSuspension();
+
+    const allOtherArePaginated = sections
+        .every((s) => (s.sectionId === sectionId && !s.isPaginated) || (s.sectionId !== sectionId && s.isPaginated));
+    const tocIsReady = allOtherArePaginated && sections.length > 0;
+    const tocIsPaginated = sections.some((s) => s.sectionId === sectionId && s.isPaginated);
 
     useEffect(() => {
-        const r = sections
-            .filter((s) => s.sectionId !== sectionId && s.sectionId)
-            .every((s) => s.isPaginated);
-
-        if (r && isFirstPaginationCompleted) {
+        if (tocIsReady) {
             release();
         }
-    }, [release, isFirstPaginationCompleted, sections, sectionId]);
+    }, [release, tocIsReady]);
+
+
+    useEffect(() => {
+        const unsubscribe = reportBuilder.monitor.addEventListener("paginationCycleCompleted", () => {
+            if (tocIsPaginated) {
+                reset();
+            }
+        })
+
+        return () => unsubscribe();
+    }, [tocIsPaginated, reset]);
+
+    const sectionIndexMap = new Map(
+        sections.map((s) => [s.sectionId, s.sectionIndex])
+    );
+    const pages = tocProvider.getContentList().sort((a, b) => {
+        const aIndex = sectionIndexMap.get(a.sectionId) ?? 0 * 1000 + a.pageIndex;
+        const bIndex = sectionIndexMap.get(b.sectionId) ?? 0 * 1000 + b.pageIndex;
+        return aIndex - bIndex;
+    });
 
     return (
         <nav>
             <ul>
-                {contentList.map((content) => (
-                    <li key={content.sectionId + content.title}>
-                        <a href={`#${content.sectionId}-${content.pageNumber}`}>
+                {pages.map((content, i) => (
+                    <li key={i}>
+                        <a href={`#${content.sectionId}-${content.pageIndex}`}>
                             {content.sectionId}/{content.title}/{content.level}{' '}
                             --
-                            {content.pageNumber}
+                            {content.pageIndex + 1}
                         </a>
                     </li>
                 ))}

@@ -1,114 +1,99 @@
 import { useContext, useMemo, type Ref } from 'react';
-import { type PageElements } from './parseSectionChildren';
-import type { PageDimension, PageMargin } from './pageTypes';
-import { PageContext } from './PageContext';
-import { shorthand } from './Page.utilities';
-import { SectionContext } from './SectionContext';
+import { type PageElements } from '../internal/parseSectionChildren';
+import { PageInfoContext } from '../internal/PageInfoContext';
+import { SectionIdContext } from '../internal/SectionIdContext';
+import {
+    pageClassName,
+    pageMargin,
+    reportStyles,
+    type PageDimension,
+    type PageMargin,
+} from '@paprize/core/src';
 
 export interface PageProps {
     elements: PageElements;
-    dimensions: PageDimension;
+    dimension: PageDimension;
     margin?: PageMargin;
-    pageNumber: number;
+    pageIndex: number;
     totalPages: number;
     ref?: Ref<HTMLDivElement>;
     sectionHeaderRef?: Ref<HTMLDivElement>;
     sectionFooterRef?: Ref<HTMLDivElement>;
+    pageHeaderRef?: Ref<HTMLDivElement>;
+    pageFooterRef?: Ref<HTMLDivElement>;
     contentRef?: Ref<HTMLDivElement>;
 }
 
 export function Page({
     elements,
-    dimensions,
+    dimension,
     margin,
-    pageNumber,
+    pageIndex,
     totalPages,
     ref,
     sectionHeaderRef,
     sectionFooterRef,
+    pageHeaderRef,
+    pageFooterRef,
     contentRef,
 }: PageProps) {
-    const sectionId = useContext(SectionContext);
+    const sectionId = useContext(SectionIdContext);
     const contextValue = useMemo(
-        () => ({ pageNumber, totalPages }),
-        [pageNumber, totalPages]
+        () => ({ pageIndex, totalPages }),
+        [pageIndex, totalPages]
     );
 
     return (
-        <PageContext value={contextValue}>
+        <PageInfoContext value={contextValue}>
             <div
-                id={`${sectionId}-${pageNumber}`}
-                className="paprize-page paprize-page-component"
+                id={`${sectionId}-${pageIndex}`}
+                className={pageClassName}
                 ref={ref}
-                style={{
-                    width: dimensions.width,
-                    height: dimensions.height,
-                    maxHeight: dimensions.height,
-                    position: 'relative',
-                    padding: shorthand(margin),
-                    zIndex: 1,
-                }}
+                style={reportStyles.page(dimension, margin ?? pageMargin.None)}
             >
-                {elements.sectionHeader && pageNumber == 1 && (
-                    <div
-                        className="paprize-page-component"
-                        ref={sectionHeaderRef}
-                    >
+                {elements.sectionHeader && pageIndex === 0 && (
+                    <div style={reportStyles.component} ref={sectionHeaderRef}>
                         {elements.sectionHeader}
                     </div>
                 )}
                 {elements.header && (
-                    <div className="paprize-page-component">
+                    <div style={reportStyles.component} ref={pageHeaderRef}>
                         {elements.header}
                     </div>
                 )}
 
-                <div
-                    style={{
-                        overflow: 'hidden',
-                        width: '100%',
-                        height: `100%`,
-                    }}
-                    ref={contentRef}
-                >
+                <div style={reportStyles.pageContent} ref={contentRef}>
                     {elements.content}
                 </div>
 
                 {elements.overlay && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            width: '100%',
-                            height: '100%',
-                            left: 0,
-                            top: 0,
-                        }}
-                    >
-                        {elements.overlay}
-                    </div>
+                    <div style={reportStyles.overlay}>{elements.overlay}</div>
                 )}
 
                 {(elements.footer || elements.sectionFooter) && (
                     <div
-                        className="paprize-page-component"
-                        style={{ marginTop: 'auto' }}
+                        style={{ ...reportStyles.component, marginTop: 'auto' }}
                     >
                         {elements.footer && (
-                            <div className="paprize-page-component">
+                            <div
+                                style={reportStyles.component}
+                                ref={pageFooterRef}
+                            >
                                 {elements.footer}
                             </div>
                         )}
-                        {elements.sectionFooter && pageNumber == totalPages && (
-                            <div
-                                className="paprize-page-component"
-                                ref={sectionFooterRef}
-                            >
-                                {elements.sectionFooter}
-                            </div>
-                        )}
+                        {elements.sectionFooter &&
+                            pageIndex === totalPages - 1 && (
+                                <div
+                                    style={reportStyles.component}
+                                    ref={sectionFooterRef}
+                                >
+                                    {elements.sectionFooter}
+                                </div>
+                            )}
                     </div>
                 )}
             </div>
-        </PageContext>
+        </PageInfoContext>
     );
 }
