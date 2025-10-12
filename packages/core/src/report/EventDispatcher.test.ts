@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EventDispatcher } from './EventDispatcher';
-import type { EventReference } from './EventDispatcher';
 
-interface TestEvents extends EventReference {
+interface TestEvents {
     foo: (a: number, b: string) => void;
     bar: () => void;
 }

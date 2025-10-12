@@ -16,10 +16,11 @@ import { cloneComponents, type SectionComponents } from './sectionComponents';
 import {
     calculatePageDimensions,
     createSectionPageHeightPlugin,
-    isAllResolved,
 } from './utils';
 import { paprize_isInitialized } from '../window';
 import { globalStyleId } from '../constants';
+import { PromiseTracker } from './PromiseTracker';
+import logger from '../logger';
 
 export interface SectionOptions {
     readonly id: string;
@@ -35,6 +36,8 @@ export interface SectionState {
     components: SectionComponents;
     onPaginationCompleted: (pages: PageContext[]) => void;
 }
+
+const logPrefix = '\x1b[43mREPORT\x1b[0m';
 
 export class ReportBuilder {
     private readonly _sections: Map<string, SectionState>;
@@ -75,7 +78,9 @@ export class ReportBuilder {
             onPaginationCompleted,
         });
 
-        this.injectStyle(reportStyles.sectionPageMedia(options.id, options.dimension));
+        this.injectStyle(
+            reportStyles.sectionPageMedia(options.id, options.dimension)
+        );
         this._monitor.dispatch('sectionCreated', context);
 
         return true;
@@ -87,44 +92,50 @@ export class ReportBuilder {
     }> {
         await document.fonts.ready;
 
-        const sectionPromises: Promise<void>[] = [];
+        const trackers: PromiseTracker[] = [];
         for (const state of this._sections.values()) {
-            sectionPromises.push(
-                Promise.all(state.options.suspense ?? []).then(() =>
-                    this.paginateSection(state)
-                )
-            );
+            state.context.isPaginated = false;
+
+            const tracker = new PromiseTracker();
+            await tracker.add(state.options.suspense);
+            tracker.monitor.addEventListener('onChange', (pendingCount) => {
+                logger.debug(
+                    logPrefix,
+                    `${pendingCount} pending promises in section '${state.options.id}'.`
+                );
+            });
+
+            tracker.promise.then(() => {
+                logger.debug(
+                    logPrefix,
+                    `Start paginating section '${state.options.id}'.`
+                );
+                state.context.isSuspended = false;
+                this.paginateSection(state);
+            });
+
+            trackers.push(tracker);
         }
 
-        await this.paginationCycle(sectionPromises);
+        const reportTracker = new PromiseTracker();
+        reportTracker.monitor.addEventListener('onComplete', () => {
+            logger.debug(logPrefix, 'Report pagination completed.');
+            this._monitor.dispatch('paginationCycleCompleted', {
+                sections: [...this._sections.values()].map((s) => s.context),
+            });
+        });
 
+        await reportTracker.add(trackers.map((t) => t.promise));
         return {
             sections: [...this._sections.values()].map((s) => s.context),
-            suspension: Promise.all(sectionPromises).then(() => { }),
+            suspension: reportTracker.promise,
         };
     }
 
-    private async paginationCycle(sectionPromises: Promise<void>[]) {
-        const isCompleted = await isAllResolved(sectionPromises);
-        if (!isCompleted) {
-            sectionPromises.map((promise) => {
-                promise.then(() => {
-                    this._monitor.dispatch('paginationCycleCompleted', {
-                        sections: [...this._sections.values()].map(
-                            (s) => s.context
-                        ),
-                    });
-                });
-            });
-        }
-
-        this._monitor.dispatch('paginationCycleCompleted', {
-            sections: [...this._sections.values()].map((s) => s.context),
-        });
-    }
-
     private injectStyle(styleContent: string) {
-        let style = document.getElementById(globalStyleId) as HTMLStyleElement | null;
+        let style = document.getElementById(
+            globalStyleId
+        ) as HTMLStyleElement | null;
         if (!style) {
             style = document.createElement('style');
             style.id = globalStyleId;
@@ -132,7 +143,9 @@ export class ReportBuilder {
             document.head.appendChild(style);
         }
 
-        style.textContent = (style.textContent + styleContent).replace(/\s+/g, ' ').replace(/\s*([:;{}])\s*/g, '$1')
+        style.textContent = (style.textContent + styleContent)
+            .replace(/\s+/g, ' ')
+            .replace(/\s*([:;{}])\s*/g, '$1')
             .trim();
     }
 
@@ -154,9 +167,14 @@ export class ReportBuilder {
         const components = cloneComponents(state.components);
 
         if (components.sectionHeader) {
+            Object.assign(
+                components.sectionHeader.style,
+                reportStyles.component
+            );
             temporarilyContainer.appendChild(components.sectionHeader);
         }
         if (components.pageHeader) {
+            Object.assign(components.pageHeader.style, reportStyles.component);
             temporarilyContainer.appendChild(components.pageHeader);
         }
 
@@ -164,9 +182,14 @@ export class ReportBuilder {
         temporarilyContainer.appendChild(components.pageContent);
 
         if (components.pageFooter) {
+            Object.assign(components.pageFooter.style, reportStyles.component);
             temporarilyContainer.appendChild(components.pageFooter);
         }
         if (components.sectionFooter) {
+            Object.assign(
+                components.sectionFooter.style,
+                reportStyles.component
+            );
             temporarilyContainer.appendChild(components.sectionFooter);
         }
 
@@ -183,6 +206,7 @@ export class ReportBuilder {
             components.pageContent,
             { height, width },
             {
+                id: state.options.id,
                 plugins: [
                     ...(state.options.plugins ?? defaultPlugins),
                     createSectionPageHeightPlugin(

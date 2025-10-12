@@ -65,7 +65,7 @@ describe('ReportBuilder', () => {
                 suspense: withsuspense ? [Promise.resolve()] : [],
             };
 
-            const added = rb.tryAddSection(testOptions, components, () => { });
+            const added = rb.tryAddSection(testOptions, components, () => {});
             expect(added).toBe(true);
 
             expect(sectionCreated).toHaveBeenCalled();
@@ -86,8 +86,8 @@ describe('ReportBuilder', () => {
             pageFooter: null,
             pageContent,
         };
-        rb.tryAddSection(options, components, () => { });
-        const result = rb.tryAddSection(options, components, () => { });
+        rb.tryAddSection(options, components, () => {});
+        const result = rb.tryAddSection(options, components, () => {});
         expect(result).toBe(false);
     });
 
@@ -210,7 +210,6 @@ describe('ReportBuilder', () => {
             expect.objectContaining({ sectionId: section1 })
         );
     });
-
 });
 
 describe('ReportBuilder constructor', () => {

@@ -1,5 +1,3 @@
-import type { EventReference } from './EventDispatcher';
-
 export interface PageContext {
     sectionId: string;
     index: number;
@@ -19,7 +17,7 @@ export interface PaginationCycleCompleted {
     sections: SectionContext[];
 }
 
-export interface ReportBuilderEvents extends EventReference {
+export interface ReportBuilderEvents {
     pageCompleted: (event: PageContext) => void;
     sectionCompleted: (event: SectionContext) => void;
     sectionCreated: (event: SectionContext) => void;

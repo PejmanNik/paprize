@@ -18,7 +18,7 @@ export interface DomPaginationCycleCompleted {
     sections: DomSectionContext[];
 }
 
-export interface PaprizeReportEvents extends Core.EventReference {
+export interface PaprizeReportEvents {
     pageCompleted: (event: DomPageContext) => void;
     sectionCompleted: (event: DomSectionContext) => void;
     sectionCreated: (event: DomSectionContext) => void;

@@ -1,26 +1,15 @@
-export interface EventReference {
-    [key: string]: (...args: any[]) => void;
-}
+type EventHandler<TKey extends keyof TEvents, TEvents> = TEvents[TKey] extends (
+    ...args: any[]
+) => void
+    ? TEvents[TKey]
+    : never;
 
-export interface Monitor<TEvents extends EventReference> {
-    addEventListener<T extends keyof TEvents>(
-        name: T,
-        handler: TEvents[T]
-    ): () => void;
-    removeEventListener(
-        name: keyof TEvents,
-        handler: TEvents[keyof TEvents]
-    ): void;
-}
-
-export class EventDispatcher<TEvents extends EventReference>
-    implements Monitor<TEvents>
-{
+export class EventDispatcher<TEvents> {
     private registry = new Map<keyof TEvents, Set<Function>>();
 
     public addEventListener<T extends keyof TEvents>(
         name: T,
-        handler: TEvents[T]
+        handler: EventHandler<T, TEvents>
     ) {
         const { registry } = this;
         const listeners = new Set(registry.get(name));
@@ -31,9 +20,9 @@ export class EventDispatcher<TEvents extends EventReference>
         return () => this.removeEventListener(name, handler);
     }
 
-    public removeEventListener(
-        name: keyof TEvents,
-        handler: TEvents[keyof TEvents]
+    public removeEventListener<T extends keyof TEvents>(
+        name: T,
+        handler: EventHandler<T, TEvents>
     ) {
         const { registry } = this;
         const listeners = new Set(registry.get(name));
@@ -44,7 +33,7 @@ export class EventDispatcher<TEvents extends EventReference>
 
     public dispatch<T extends keyof TEvents>(
         name: T,
-        ...args: Parameters<TEvents[T]>
+        ...args: Parameters<EventHandler<T, TEvents>>
     ) {
         const { registry } = this;
         const listeners = registry.get(name);
@@ -58,3 +47,5 @@ export class EventDispatcher<TEvents extends EventReference>
         }
     }
 }
+
+export type Monitor<TEvents> = Omit<EventDispatcher<TEvents>, 'dispatch'>;

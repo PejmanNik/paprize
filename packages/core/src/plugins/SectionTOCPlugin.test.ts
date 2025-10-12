@@ -20,17 +20,17 @@ describe('SectionTocPlugin', () => {
             } as unknown as PageElement,
         } as unknown as DomState & { currentNode: PageElement };
         mockPageManager = {
-            getPageState: vi.fn().mockReturnValue({ pageIndex: 2 }),
+            getPageState: vi.fn().mockReturnValue({ pageIndex: 0 }),
         } as unknown as PageManager;
     });
 
     describe('onVisitElement', () => {
         it('should add section info for heading element', () => {
             plugin.onVisitElement('section-1', mockDomState, mockPageManager);
-            expect(plugin.state).toHaveLength(1);
-            expect(plugin.state[0]).toEqual({
+            expect(plugin.getContentList()).toHaveLength(1);
+            expect(plugin.getContentList()[0]).toEqual({
                 sectionId: 'section-1',
-                pageNumber: 3,
+                pageIndex: 0,
                 title: 'Section Title',
                 level: 2,
             });
@@ -43,7 +43,7 @@ describe('SectionTocPlugin', () => {
                 mockElement
             );
             plugin.onVisitElement('section-2', mockDomState, mockPageManager);
-            expect(plugin.state).toHaveLength(0);
+            expect(plugin.getContentList()).toHaveLength(0);
         });
 
         it('should not add section if heading has no text', () => {
@@ -53,7 +53,7 @@ describe('SectionTocPlugin', () => {
                 mockElement
             );
             plugin.onVisitElement('section-3', mockDomState, mockPageManager);
-            expect(plugin.state).toHaveLength(0);
+            expect(plugin.getContentList()).toHaveLength(0);
         });
     });
 

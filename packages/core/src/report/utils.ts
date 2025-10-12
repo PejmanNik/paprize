@@ -70,14 +70,3 @@ export function shorthand(margin?: PageMargin) {
         ? `${margin.top} ${margin.right} ${margin.bottom} ${margin.left}`
         : '0';
 }
-
-export async function isAllResolved(promises: Promise<void>[]) {
-    const all = Promise.all(promises).then(() => true);
-
-    // let all microtask queue flush by queuing a macrotask
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    const raceResult = await Promise.race([all, Promise.resolve(false)]);
-
-    return raceResult;
-}

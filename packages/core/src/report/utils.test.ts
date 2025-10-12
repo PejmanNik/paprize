@@ -4,7 +4,6 @@ import {
     calculatePageDimensions,
     createSectionPageHeightPlugin,
     shorthand,
-    isAllResolved,
 } from './utils';
 import * as DomUtilities from '../paginate/domUtilities';
 import type { PageManager, PageState } from '../paginate/PageManager';
@@ -196,31 +195,5 @@ describe('shorthand', () => {
     });
     it('returns 0 if margin is undefined', () => {
         expect(shorthand()).toBe('0');
-    });
-});
-
-describe('isAllResolved', () => {
-    it('returns true if all promises are resolved', async () => {
-        const p1 = Promise.resolve();
-        const p2 = Promise.resolve();
-        const result = await isAllResolved([p1, p2]);
-        expect(result).toBe(true);
-    });
-
-    it('returns false if at least one promise is pending', async () => {
-        let resolveFn: () => void;
-        const pending = new Promise<void>((resolve) => {
-            resolveFn = resolve;
-        });
-        const resolved = Promise.resolve();
-        const result = await isAllResolved([pending, resolved]);
-        expect(result).toBe(false);
-
-        resolveFn!();
-    });
-
-    it('returns true for empty array', async () => {
-        const result = await isAllResolved([]);
-        expect(result).toBe(true);
     });
 });

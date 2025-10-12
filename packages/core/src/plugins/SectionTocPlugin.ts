@@ -7,15 +7,20 @@ export const sectionTocName = 'sectionToc';
 
 export type SectionTocState = {
     sectionId: string;
-    pageNumber: number;
+    pageIndex: number;
     title: string;
     level: number;
 };
 
 export class SectionTocPlugin implements PaginationPlugin {
-    public readonly state: SectionTocState[] = [];
     public readonly name = sectionTocName;
     public readonly order = 1;
+
+    private _state: Map<string, SectionTocState[]> = new Map();
+
+    public getContentList = (): SectionTocState[] => {
+        return Array.from(this._state.values()).flat();
+    }
 
     public onVisitElement = (
         id: string,
@@ -28,9 +33,17 @@ export class SectionTocPlugin implements PaginationPlugin {
 
             if (!headingLevel || !node.textContent) return;
 
-            this.state.push({
+            const pageIndex = pageManager.getPageState().pageIndex;
+
+
+            // cleanup state for first page of section
+            if (pageIndex === 0) {
+                this._state.set(id, []);
+            }
+
+            this._state.get(id)?.push({
                 sectionId: id,
-                pageNumber: pageManager.getPageState().pageIndex + 1,
+                pageIndex: pageIndex,
                 title: node.textContent,
                 level: headingLevel,
             });

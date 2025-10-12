@@ -1,3 +1,4 @@
+import type * as CSS from 'csstype';
 import {
     pageClassName,
     previewClassName,
@@ -29,7 +30,7 @@ export const globalStyle = `
     body {
         margin: 0;
     }
-
+    
     @media screen {
         .${previewClassName} {
             min-height: 100vh;
@@ -58,12 +59,14 @@ export const globalStyle = `
     }   
  `;
 
-const component: Partial<CSSStyleDeclaration> = {
-    display: 'block',
+export type CSSProperties = CSS.Properties<string | number>;
+
+const component: CSSProperties = {
+    display: 'flex',
     flexDirection: 'column',
 };
 
-const outOfScreen: Partial<CSSStyleDeclaration> = {
+const outOfScreen: CSSProperties = {
     position: 'absolute',
     left: '-9999px',
     top: '-9999px',
@@ -73,7 +76,7 @@ const outOfScreen: Partial<CSSStyleDeclaration> = {
 const page = (
     pageDimension: PageDimension,
     pageMargin: PageMargin
-): Partial<CSSStyleDeclaration> => ({
+): CSSProperties => ({
     display: 'flex',
     flexDirection: 'column',
     width: pageDimension.width,
@@ -84,13 +87,21 @@ const page = (
     zIndex: '1',
 });
 
-const pageContent: Partial<CSSStyleDeclaration> = {
+const pageContent: CSSProperties = {
     overflow: 'hidden',
     width: '100%',
     height: '100%',
 };
 
-const section = (sectionId: string): Partial<CSSStyleDeclaration> => ({
+const overlay: CSSProperties = {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    left: 0,
+    top: 0,
+};
+
+const section = (sectionId: string): CSSProperties => ({
     page: `section-${sectionId}`,
 });
 
@@ -108,6 +119,7 @@ export const reportStyles = {
     component,
     outOfScreen,
     page,
+    overlay,
     pageContent,
     sectionPageMedia,
     section,
