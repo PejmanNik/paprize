@@ -27,6 +27,13 @@ vi.mock('./utils', async () => {
 
 describe('ReportBuilder', () => {
     let rb: ReportBuilder;
+    const components: SectionComponents = {
+        sectionHeader: null,
+        sectionFooter: null,
+        pageHeader: null,
+        pageFooter: null,
+        pageContent: document.createElement('div'),
+    };
     const options = {
         id: 'sec1',
         dimension: { width: 100, height: 200 },
@@ -49,17 +56,6 @@ describe('ReportBuilder', () => {
             const sectionCreated = vi.fn();
             rb.monitor.addEventListener('sectionCreated', sectionCreated);
 
-            const pageContent = document.createElement('div');
-            pageContent.id = 'pageContent';
-
-            const components: SectionComponents = {
-                sectionHeader: null,
-                sectionFooter: null,
-                pageHeader: null,
-                pageFooter: null,
-                pageContent,
-            };
-
             const testOptions = {
                 ...options,
                 suspense: withsuspense ? [Promise.resolve()] : [],
@@ -78,20 +74,17 @@ describe('ReportBuilder', () => {
     );
 
     it('tryAddSection should return false if section id already exists', () => {
-        const pageContent = document.createElement('div');
-        const components = {
-            sectionHeader: null,
-            sectionFooter: null,
-            pageHeader: null,
-            pageFooter: null,
-            pageContent,
-        };
         rb.tryAddSection(options, components, () => {});
         const result = rb.tryAddSection(options, components, () => {});
         expect(result).toBe(false);
     });
 
-    it('paginate should call Paginator.paginate and dispatch lifecycle events', async () => {
+    it('schedulePaginate without sections should return empty result', async () => {
+        const result = await rb.schedulePaginate();
+        expect(result.sections).toEqual([]);
+    });
+
+    it('schedulePaginate should call Paginator.paginate and dispatch lifecycle events', async () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>', '<div>page2</div>']);
 
@@ -106,22 +99,20 @@ describe('ReportBuilder', () => {
             paginationCycleCompleted
         );
 
-        const pageContent = document.createElement('div');
-        pageContent.id = 'pageContent2';
-
-        const components: SectionComponents = {
-            sectionHeader: null,
-            sectionFooter: null,
-            pageHeader: null,
-            pageFooter: null,
-            pageContent,
+        const component = document.createElement('div');
+        const testComponents: SectionComponents = {
+            sectionHeader: component,
+            sectionFooter: component,
+            pageHeader: component,
+            pageFooter: component,
+            pageContent: component,
         };
 
         const onPaginationCompleted = vi.fn();
 
         const added = rb.tryAddSection(
             options,
-            components,
+            testComponents,
             onPaginationCompleted
         );
         expect(added).toBe(true);
@@ -144,18 +135,9 @@ describe('ReportBuilder', () => {
         expect(paginationCycleCompleted).toHaveBeenCalled();
     });
 
-    it('paginate should call Paginator.paginate after suspense resolved', async () => {
+    it('schedulePaginate should call Paginator.paginate after suspense resolved', async () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>']);
-
-        const pageContent = document.createElement('div');
-        const components: SectionComponents = {
-            sectionHeader: null,
-            sectionFooter: null,
-            pageHeader: null,
-            pageFooter: null,
-            pageContent,
-        };
 
         const onPaginationCompleted = vi.fn();
 
@@ -209,6 +191,43 @@ describe('ReportBuilder', () => {
         expect(sectionCompleted).toHaveBeenCalledWith(
             expect.objectContaining({ sectionId: section1 })
         );
+    });
+
+    it('should queue multiple pagination requests', async () => {
+        const paginateMock = vi.mocked(Paginator.paginate);
+        paginateMock.mockReturnValue(['<div>page1</div>']);
+
+        rb.tryAddSection(options, components, vi.fn());
+
+        const section1Promise = rb.schedulePaginate();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        const section2Promise = rb.schedulePaginate();
+
+        const [section1Result, section2Result] = await Promise.all([
+            section1Promise,
+            section2Promise,
+        ]);
+
+        expect(paginateMock).toHaveBeenCalledTimes(1);
+        expect(section1Result).toBe(section2Result);
+    });
+
+    it('should queue multiple parallel pagination requests', async () => {
+        const paginateMock = vi.mocked(Paginator.paginate);
+        paginateMock.mockReturnValue(['<div>page1</div>']);
+
+        rb.tryAddSection(options, components, vi.fn());
+
+        const section1Promise = rb.schedulePaginate();
+        const section2Promise = rb.schedulePaginate();
+
+        const [section1Result, section2Result] = await Promise.all([
+            section1Promise,
+            section2Promise,
+        ]);
+
+        expect(paginateMock).toHaveBeenCalledTimes(1);
+        expect(section1Result).toBe(section2Result);
     });
 });
 

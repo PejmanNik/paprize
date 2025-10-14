@@ -15,9 +15,7 @@ describe('PromiseTracker', () => {
         const tracker = new PromiseTracker();
 
         const onChange = vi.fn();
-        const onComplete = vi.fn();
         tracker.monitor.addEventListener('onChange', onChange);
-        tracker.monitor.addEventListener('onComplete', onComplete);
 
         await tracker.add([p1, p2]);
 
@@ -27,13 +25,11 @@ describe('PromiseTracker', () => {
         await Promise.resolve();
 
         expect(onChange).toHaveBeenCalledWith(1);
-        expect(onComplete).not.toHaveBeenCalled();
 
         resolve2!();
         await Promise.resolve();
 
         expect(onChange).toHaveBeenLastCalledWith(0);
-        expect(onComplete).toHaveBeenCalledTimes(1);
         expect(tracker.getPending()).toHaveLength(0);
     });
 
@@ -76,9 +72,7 @@ describe('PromiseTracker', () => {
         const tracker = new PromiseTracker();
 
         const onChange = vi.fn();
-        const onComplete = vi.fn();
         tracker.monitor.addEventListener('onChange', onChange);
-        tracker.monitor.addEventListener('onComplete', onComplete);
 
         await tracker.add([p1, p2, p3]);
 
@@ -88,44 +82,22 @@ describe('PromiseTracker', () => {
         await Promise.resolve();
 
         await tracker.promise;
-        expect(onChange).toHaveBeenCalledTimes(2);
-        expect(onChange).toHaveBeenNthCalledWith(1, 1);
-        expect(onChange).toHaveBeenNthCalledWith(2, 0);
-        expect(onComplete).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledTimes(3);
+        expect(onChange).toHaveBeenNthCalledWith(1, 2);
+        expect(onChange).toHaveBeenNthCalledWith(2, 1);
+        expect(onChange).toHaveBeenNthCalledWith(3, 0);
         expect(tracker.getPending()).toHaveLength(0);
     });
 
-    it('does not trigger events for empty array', async () => {
+    it.for([[], undefined])('trigger events for empty array', async (input) => {
         const tracker = new PromiseTracker();
 
         const onChange = vi.fn();
-        const onComplete = vi.fn();
         tracker.monitor.addEventListener('onChange', onChange);
-        tracker.monitor.addEventListener('onComplete', onComplete);
 
-        await tracker.add([]);
+        await tracker.add(input);
         await tracker.promise;
 
-        expect(onChange).not.toHaveBeenCalled();
-        expect(onComplete).not.toHaveBeenCalled();
-        expect(tracker.getPending()).toHaveLength(0);
-    });
-
-    it('does not trigger on change for already resolved promises but triggers on complete', async () => {
-        const p1 = Promise.resolve(1);
-        const p2 = Promise.resolve(2);
-        const tracker = new PromiseTracker();
-
-        const onChange = vi.fn();
-        const onComplete = vi.fn();
-        tracker.monitor.addEventListener('onChange', onChange);
-        tracker.monitor.addEventListener('onComplete', onComplete);
-
-        await tracker.add([p1, p2]);
-        await tracker.promise;
-
-        expect(onChange).not.toHaveBeenCalled();
-        expect(onComplete).toHaveBeenCalled();
-        expect(tracker.getPending()).toHaveLength(0);
+        expect(onChange).toHaveBeenCalledOnce();
     });
 });

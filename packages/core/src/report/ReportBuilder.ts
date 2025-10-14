@@ -1,5 +1,4 @@
 import { isDebugMode } from '../debugUtilities/debugMode';
-import type { PaginationPlugin } from '../paginate/PaginationPlugin';
 import { Paginator } from '../paginate/Paginator';
 import { defaultPlugins } from '../plugins';
 import { pageMargin } from './pageConst';
@@ -21,12 +20,12 @@ import { paprize_isInitialized } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
 import logger from '../logger';
+import type { PaginationConfig } from '../paginate/PaginationConfig';
 
-export interface SectionOptions {
+export interface SectionOptions extends Partial<PaginationConfig> {
     readonly id: string;
     readonly dimension: PageDimension;
     readonly margin?: PageMargin;
-    readonly plugins?: PaginationPlugin[];
     readonly suspense?: Promise<unknown>[];
 }
 
@@ -39,16 +38,30 @@ export interface SectionState {
 
 const logPrefix = '\x1b[43mREPORT\x1b[0m';
 
+export interface ScheduleResult {
+    sections: SectionContext[];
+    suspension: Promise<void>;
+}
+
 export class ReportBuilder {
     private readonly _sections: Map<string, SectionState>;
     private readonly _monitor: EventDispatcher<ReportBuilderEvents>;
+    private _paginationInProgress: boolean;
+    private _pendingPaginateResolvers: {
+        resolve: (value: ScheduleResult) => void;
+        reject: (reason?: any) => void;
+    }[];
+    private _currentAbortController: AbortController | null;
 
     public constructor() {
         this._sections = new Map();
         this._monitor = new EventDispatcher<ReportBuilderEvents>();
+        this._paginationInProgress = false;
+        this._pendingPaginateResolvers = [];
+        this._currentAbortController = null;
 
         window[paprize_isInitialized] = true;
-        this.injectStyle(reportStyles.globalStyle);
+        this._injectStyle(reportStyles.globalStyle);
     }
 
     public get monitor(): Monitor<ReportBuilderEvents> {
@@ -78,7 +91,7 @@ export class ReportBuilder {
             onPaginationCompleted,
         });
 
-        this.injectStyle(
+        this._injectStyle(
             reportStyles.sectionPageMedia(options.id, options.dimension)
         );
         this._monitor.dispatch('sectionCreated', context);
@@ -86,53 +99,127 @@ export class ReportBuilder {
         return true;
     }
 
-    public async schedulePaginate(): Promise<{
-        sections: SectionContext[];
-        suspension: Promise<void>;
-    }> {
-        await document.fonts.ready;
-
-        const trackers: PromiseTracker[] = [];
-        for (const state of this._sections.values()) {
-            state.context.isPaginated = false;
-
-            const tracker = new PromiseTracker();
-            await tracker.add(state.options.suspense);
-            tracker.monitor.addEventListener('onChange', (pendingCount) => {
-                logger.debug(
-                    logPrefix,
-                    `${pendingCount} pending promises in section '${state.options.id}'.`
-                );
-            });
-
-            tracker.promise.then(() => {
-                logger.debug(
-                    logPrefix,
-                    `Start paginating section '${state.options.id}'.`
-                );
-                state.context.isSuspended = false;
-                this.paginateSection(state);
-            });
-
-            trackers.push(tracker);
+    public async schedulePaginate(): Promise<ScheduleResult> {
+        if (this._sections.size === 0) {
+            return {
+                sections: [],
+                suspension: Promise.resolve(),
+            };
         }
 
-        const reportTracker = new PromiseTracker();
-        reportTracker.monitor.addEventListener('onComplete', () => {
-            logger.debug(logPrefix, 'Report pagination completed.');
-            this._monitor.dispatch('paginationCycleCompleted', {
-                sections: [...this._sections.values()].map((s) => s.context),
-            });
-        });
+        if (this._paginationInProgress && this._currentAbortController) {
+            logger.debug(
+                logPrefix,
+                `Cancelling previous pagination operation.`
+            );
+            this._currentAbortController.abort(
+                'Cancelled by new paginate call'
+            );
+        }
 
-        await reportTracker.add(trackers.map((t) => t.promise));
-        return {
-            sections: [...this._sections.values()].map((s) => s.context),
-            suspension: reportTracker.promise,
-        };
+        // If pagination is still in progress, queue this request
+        if (this._paginationInProgress) {
+            return new Promise<ScheduleResult>((resolve, reject) => {
+                this._pendingPaginateResolvers.push({ resolve, reject });
+            });
+        }
+
+        return this._executePagination();
     }
 
-    private injectStyle(styleContent: string) {
+    private async _executePagination(): Promise<ScheduleResult> {
+        this._paginationInProgress = true;
+        this._currentAbortController = new AbortController();
+        const abortSignal = this._currentAbortController.signal;
+
+        try {
+            logger.debug(logPrefix, `Schedule paginate.`);
+
+            await document.fonts.ready;
+            if (abortSignal.aborted) {
+                return new Promise<ScheduleResult>((resolve, reject) => {
+                    this._pendingPaginateResolvers.push({ resolve, reject });
+                });
+            }
+
+            const trackers: PromiseTracker[] = [];
+            for (const state of this._sections.values()) {
+                state.context.isPaginated = false;
+
+                const tracker = new PromiseTracker();
+                await tracker.add(state.options.suspense);
+                tracker.monitor.addEventListener('onChange', (pendingCount) => {
+                    logger.debug(
+                        logPrefix,
+                        `${pendingCount} pending promises in section '${state.options.id}'.`
+                    );
+                });
+
+                tracker.promise.then(async () => {
+                    if (abortSignal.aborted) {
+                        return;
+                    }
+
+                    logger.debug(
+                        logPrefix,
+                        `Start paginating section '${state.options.id}'.`
+                    );
+                    state.context.isSuspended = false;
+                    this._paginateSection(state);
+                });
+
+                trackers.push(tracker);
+            }
+
+            const reportTracker = new PromiseTracker();
+            reportTracker.monitor.addEventListener('onChange', () => {
+                logger.debug(logPrefix, 'Report pagination completed.');
+                this._monitor.dispatch('paginationCycleCompleted', {
+                    sections: [...this._sections.values()].map(
+                        (s) => s.context
+                    ),
+                });
+            });
+
+            if (abortSignal.aborted) {
+                return new Promise<ScheduleResult>((resolve, reject) => {
+                    this._pendingPaginateResolvers.push({ resolve, reject });
+                });
+            }
+
+            await reportTracker.add(trackers.map((t) => t.promise));
+
+            return {
+                sections: [...this._sections.values()].map((s) => s.context),
+                suspension: reportTracker.promise,
+            };
+        } finally {
+            this._processPendingPagination();
+            this._paginationInProgress = false;
+            this._currentAbortController = null;
+        }
+    }
+
+    private async _processPendingPagination() {
+        if (this._pendingPaginateResolvers.length === 0) {
+            return;
+        }
+
+        logger.debug(
+            logPrefix,
+            `Processing ${this._pendingPaginateResolvers.length} pending paginate calls.`
+        );
+
+        const pendingResolvers = [...this._pendingPaginateResolvers];
+        this._pendingPaginateResolvers = [];
+
+        const nextResult = await this._executePagination();
+        for (const resolver of pendingResolvers) {
+            resolver.resolve(nextResult);
+        }
+    }
+
+    private _injectStyle(styleContent: string) {
         let style = document.getElementById(
             globalStyleId
         ) as HTMLStyleElement | null;
@@ -149,7 +236,7 @@ export class ReportBuilder {
             .trim();
     }
 
-    private paginateSection(state: SectionState): void {
+    private async _paginateSection(state: SectionState): Promise<void> {
         const temporarilyContainer = document.createElement('div');
 
         Object.assign(

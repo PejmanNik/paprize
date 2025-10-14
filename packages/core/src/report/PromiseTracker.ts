@@ -9,7 +9,6 @@ interface TrackedPromise {
 
 export interface PromiseTrackerEvents {
     onChange: (pendingCount: number) => void;
-    onComplete: () => void;
 }
 
 export class PromiseTracker {
@@ -31,13 +30,13 @@ export class PromiseTracker {
     }
 
     public async add(promises: Promise<unknown>[] = []) {
-        this._promises.push(...(promises?.map(PromiseTracker.toTracked) ?? []));
+        this._promises.push(...promises.map(PromiseTracker.toTracked));
 
         // let all microtask queue flush by queuing a macrotask
         await new Promise((resolve) => setTimeout(resolve, 0));
 
-        if (this._promises.length > 0 && this.getPending().length === 0) {
-            this.monitor.dispatch('onComplete');
+        if (this.getPending().length === 0) {
+            this.monitor.dispatch('onChange', 0);
             return;
         }
 
@@ -58,18 +57,10 @@ export class PromiseTracker {
     }
 
     private async injectEvents(tracked: TrackedPromise) {
-        // check if still pending (might have resolved already)
-        if (tracked.status === 'pending') {
-            tracked.promise.finally(() => {
-                const pending = this.getPending();
-
-                this.monitor.dispatch('onChange', pending.length);
-
-                if (pending.length === 0) {
-                    this.monitor.dispatch('onComplete');
-                }
-            });
-        }
+        tracked.promise.finally(() => {
+            const pending = this.getPending();
+            this.monitor.dispatch('onChange', pending.length);
+        });
     }
 
     public getPending(): TrackedPromise[] {
