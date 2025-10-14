@@ -31,8 +31,7 @@ export function Section({
     margin,
     config,
 }: SectionProps) {
-    const sectionId = id ?? `section@000${sectionIdCounter++}`;
-
+    const sectionId = useMemo(() =>  id ?? `__000${sectionIdCounter++}`, [id]);
     const elements = useMemo(() => parseSectionChildren(children), [children]);
 
     const adjustedDimension = useMemo(

@@ -19,7 +19,6 @@ import {
     useReportInfo,
 } from '../index';
 import { SectionTocPlugin } from '@paprize/core/src';
-import 'jotai-devtools/styles.css';
 import { useReportBuilder } from '../internal/useReportBuilder';
 
 export default function App() {
@@ -166,9 +165,8 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
     const { release, reset } = useSectionSuspension();
 
     const allOtherArePaginated = sections
-        .every((s) => (s.sectionId === sectionId && !s.isPaginated) || (s.sectionId !== sectionId && s.isPaginated));
+        .every((s) => s.sectionId === sectionId ? !s.isPaginated : s.isPaginated);
     const tocIsReady = allOtherArePaginated && sections.length > 0;
-    const tocIsPaginated = sections.some((s) => s.sectionId === sectionId && s.isPaginated);
 
     useEffect(() => {
         if (tocIsReady) {
@@ -178,14 +176,15 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
 
 
     useEffect(() => {
-        const unsubscribe = reportBuilder.monitor.addEventListener("paginationCycleCompleted", () => {
+        const unsubscribe = reportBuilder.monitor.addEventListener("paginationCycleCompleted", (cc) => {
+             const tocIsPaginated = cc.sections.some((s) => s.sectionId === sectionId && s.isPaginated);
             if (tocIsPaginated) {
                 reset();
             }
         })
 
         return () => unsubscribe();
-    }, [tocIsPaginated, reset]);
+    }, [sectionId, reset]);
 
     const sectionIndexMap = new Map(
         sections.map((s) => [s.sectionId, s.sectionIndex])

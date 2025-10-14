@@ -37,8 +37,12 @@ function parseSectionChildren(children: ReactNode): PageElements {
 
     Children.forEach(children, (child) => {
         if (!isValidElement(child)) {
-            logger.error('Invalid React element found in children', { child });
-            throw new Error('Invalid React element found in children');
+            throw new Error(
+                `Invalid React element found in children: ${child}`,
+                {
+                    cause: { child },
+                }
+            );
         }
 
         const component = validChildren.find((x) => x === child.type);
