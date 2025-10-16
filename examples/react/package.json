@@ -1,5 +1,5 @@
 {
-  "name": "examples",
+  "name": "examples-react",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "ssg": "node ssg.ts"
   },
   "dependencies": {
-    "@paprize/puppeteer": "^0.0.3",
+    "@paprize/puppeteer": "*",
     "@tanstack/react-router": "^1.132.37",
     "puppeteer": "^24.23.0",
     "react": "^19.2.0",

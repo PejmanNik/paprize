@@ -52,7 +52,7 @@ export class PaprizeReport {
         this._options = options;
         this._monitor = new Core.EventDispatcher<PaprizeReportEvents>();
         this._reportManager = new Core.ReportBuilder();
-        this._root = this.createRootElement();
+        this._root = this._createRootElement();
 
         this._reportManager.monitor.addEventListener(
             'sectionCreated',
@@ -66,7 +66,7 @@ export class PaprizeReport {
         this._reportManager.monitor.addEventListener(
             'sectionCompleted',
             (event) => {
-                const pages = this.getSectionState(event.sectionId).pages;
+                const pages = this._getSectionState(event.sectionId).pages;
                 this._monitor.dispatch('sectionCompleted', {
                     ...event,
                     pages: pages ?? [],
@@ -76,7 +76,7 @@ export class PaprizeReport {
         this._reportManager.monitor.addEventListener(
             'pageCompleted',
             (event) => {
-                const pages = this.getSectionState(event.sectionId).pages;
+                const pages = this._getSectionState(event.sectionId).pages;
                 this._monitor.dispatch('pageCompleted', pages[event.index]);
             }
         );
@@ -93,7 +93,7 @@ export class PaprizeReport {
         );
     }
 
-    createRootElement(): HTMLElement {
+    _createRootElement(): HTMLElement {
         const wrapper = document.createElement('div');
 
         if (this._options.usePreviewMode) {
@@ -114,9 +114,9 @@ export class PaprizeReport {
         return this._monitor;
     }
 
-    public addSection(options: Core.SectionOptions) {
+    public addSection(options: Core.SectionOptions): PaprizeReport {
         if (this._sections.has(options.id)) {
-            return;
+            return this;
         }
 
         const section = document.getElementById(options.id);
@@ -126,15 +126,15 @@ export class PaprizeReport {
             );
         }
 
-        const components = this.getSectionComponents(section);
+        const components = this._getSectionComponents(section);
 
         // to maintain the order of sections
-        const sectionElement = this.createSectionInDom(options.id);
+        const sectionElement = this._createSectionInDom(options.id);
         const result = this._reportManager.tryAddSection(
             options,
             components,
             (pageContexts) => {
-                this.renderSection(options, pageContexts);
+                this._renderSection(options, pageContexts);
             }
         );
 
@@ -143,7 +143,7 @@ export class PaprizeReport {
             Core.logger.error(
                 `Section with id ${options.id} already exists in the report manager.`
             );
-            return;
+            return this;
         }
 
         this._sections.set(options.id, {
@@ -152,9 +152,11 @@ export class PaprizeReport {
             components,
             options: options,
         });
+
+        return this;
     }
 
-    private getSectionState(id: string): SectionState {
+    private _getSectionState(id: string): SectionState {
         const state = this._sections.get(id);
         if (!state) {
             throw new Error(`Section with id ${id} not found in the report.`);
@@ -163,7 +165,7 @@ export class PaprizeReport {
         return state;
     }
 
-    private createSectionInDom(sectionId: string): HTMLDivElement {
+    private _createSectionInDom(sectionId: string): HTMLDivElement {
         const section = document.createElement('div');
         section.setAttribute(sectionIdMetadataAttribute, sectionId);
         section.classList.add(Core.sectionClassName);
@@ -174,7 +176,9 @@ export class PaprizeReport {
         return section;
     }
 
-    private getSectionComponents(section: HTMLElement): Core.SectionComponents {
+    private _getSectionComponents(
+        section: HTMLElement
+    ): Core.SectionComponents {
         const pageContent = section.querySelector(
             `[${pageContentAttribute}]`
         ) as HTMLElement | undefined;
@@ -201,11 +205,11 @@ export class PaprizeReport {
         };
     }
 
-    private async renderSection(
+    private async _renderSection(
         options: Core.SectionOptions,
         pageContexts: Core.PageContext[]
     ) {
-        const state = this.getSectionState(options.id);
+        const state = this._getSectionState(options.id);
         if (!this._options.keepInitialElementAfterPagination) {
             document.getElementById(options.id)?.remove();
         }
@@ -259,7 +263,7 @@ export class PaprizeReport {
                 page.appendChild(pageFooterContainer);
             }
 
-            this.replaceContentInfoValues(
+            this._replaceContentInfoValues(
                 { ...components, pageContent },
                 pageContext
             );
@@ -282,7 +286,7 @@ export class PaprizeReport {
         });
     }
 
-    private replaceContentInfoValues(
+    private _replaceContentInfoValues(
         components: Record<string, HTMLElement | null>,
         pageContext: Core.PageContext
     ) {

@@ -2,7 +2,13 @@ import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 import dts from 'unplugin-dts/vite';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ command, mode }) => ({
+    resolve: {
+        alias:
+            command === 'build'
+                ? { '@paprize/core/src': '@paprize/core' }
+                : undefined,
+    },
     build: {
         sourcemap: true,
         lib: {
@@ -11,9 +17,17 @@ export default defineConfig(({ mode }) => ({
             fileName: 'paprize-vanilla',
             formats: ['es', 'umd'],
         },
+        rollupOptions: {
+            external: ['@paprize/core'],
+            output: {
+                globals: {
+                    '@paprize/core': 'PaprizeCore',
+                },
+            },
+        },
     },
     esbuild: {
-        dropLabels: mode === 'production' ? ['DEV'] : []
+        dropLabels: mode === 'production' ? ['DEV'] : [],
     },
     plugins: [
         dts({
