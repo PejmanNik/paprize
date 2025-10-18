@@ -36,10 +36,10 @@ export interface PaginationPlugin {
 
 type PluginKeys = {
     [K in keyof PaginationPlugin]: PaginationPlugin[K] extends
-    | ((...args: any[]) => any)
-    | undefined
-    ? K
-    : never;
+        | ((...args: any[]) => any)
+        | undefined
+        ? K
+        : never;
 }[keyof PaginationPlugin];
 
 type PluginHookNames = NonNullable<PluginKeys>;

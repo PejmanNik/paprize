@@ -20,7 +20,7 @@ export class SectionTocPlugin implements PaginationPlugin {
 
     public getContentList = (): SectionTocState[] => {
         return Array.from(this._state.values()).flat();
-    }
+    };
 
     public onVisitElement = (
         id: string,
@@ -34,7 +34,6 @@ export class SectionTocPlugin implements PaginationPlugin {
             if (!headingLevel || !node.textContent) return;
 
             const pageIndex = pageManager.getPageState().pageIndex;
-
 
             // cleanup state for first page of section
             if (pageIndex === 0) {

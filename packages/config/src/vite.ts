@@ -4,17 +4,21 @@ import dts from 'unplugin-dts/vite';
 import fs from 'fs/promises';
 
 export function paprizeConfig(
-    config: UserConfig,
+    config: UserConfig
 ): (env: ConfigEnv) => Promise<UserConfig> {
     return async (env: ConfigEnv) => {
         return deepMerge(config, await createGlobalConfig(env));
     };
 }
 
-async function createGlobalConfig({ command, mode }: ConfigEnv): Promise<UserConfig> {
-    const tsconfigPath = await fs.access('./tsconfig.app.json')
-    .then(() => 'tsconfig.app.json')
-    .catch(() => 'tsconfig.json');
+async function createGlobalConfig({
+    command,
+    mode,
+}: ConfigEnv): Promise<UserConfig> {
+    const tsconfigPath = await fs
+        .access('./tsconfig.app.json')
+        .then(() => 'tsconfig.app.json')
+        .catch(() => 'tsconfig.json');
 
     return {
         resolve: {

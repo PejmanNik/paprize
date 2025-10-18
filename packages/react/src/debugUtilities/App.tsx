@@ -30,14 +30,14 @@ export default function App() {
     return (
         <ReportRoot>
             <input
-                type='string'
+                type="string"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
             {/* <DevTools /> */}
             <ReportPreview>
                 <Section
-                    id='section-1'
+                    id="section-1"
                     dimension={{ height: '300px', width: '400px' }}
                     margin={{
                         top: '10px',
@@ -164,8 +164,9 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
     const { sectionId } = useSectionInfo();
     const { release, reset } = useSectionSuspension();
 
-    const allOtherArePaginated = sections
-        .every((s) => s.sectionId === sectionId ? !s.isPaginated : s.isPaginated);
+    const allOtherArePaginated = sections.every((s) =>
+        s.sectionId === sectionId ? !s.isPaginated : s.isPaginated
+    );
     const tocIsReady = allOtherArePaginated && sections.length > 0;
 
     useEffect(() => {
@@ -174,14 +175,18 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
         }
     }, [release, tocIsReady]);
 
-
     useEffect(() => {
-        const unsubscribe = reportBuilder.monitor.addEventListener("paginationCycleCompleted", (cc) => {
-             const tocIsPaginated = cc.sections.some((s) => s.sectionId === sectionId && s.isPaginated);
-            if (tocIsPaginated) {
-                reset();
+        const unsubscribe = reportBuilder.monitor.addEventListener(
+            'paginationCycleCompleted',
+            (cc) => {
+                const tocIsPaginated = cc.sections.some(
+                    (s) => s.sectionId === sectionId && s.isPaginated
+                );
+                if (tocIsPaginated) {
+                    reset();
+                }
             }
-        })
+        );
 
         return () => unsubscribe();
     }, [sectionId, reset]);
@@ -190,8 +195,10 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
         sections.map((s) => [s.sectionId, s.sectionIndex])
     );
     const pages = tocProvider.getContentList().sort((a, b) => {
-        const aIndex = sectionIndexMap.get(a.sectionId) ?? 0 * 1000 + a.pageIndex;
-        const bIndex = sectionIndexMap.get(b.sectionId) ?? 0 * 1000 + b.pageIndex;
+        const aIndex =
+            sectionIndexMap.get(a.sectionId) ?? 0 * 1000 + a.pageIndex;
+        const bIndex =
+            sectionIndexMap.get(b.sectionId) ?? 0 * 1000 + b.pageIndex;
         return aIndex - bIndex;
     });
 

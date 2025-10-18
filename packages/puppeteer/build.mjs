@@ -8,7 +8,7 @@ await esbuild.build({
     platform: 'node',
     format: 'esm',
     target: ['node22'],
-    external: ["serve-handler", "@paprize/core"],
+    external: ['serve-handler', '@paprize/core'],
     alias: {
         '@paprize/core/src': '@paprize/core',
     },

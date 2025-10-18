@@ -16,7 +16,9 @@ function lazy<T>(factory: () => Promise<T>): () => Promise<T> {
 // still need to delay the call
 export const jsonData = lazy(async () => {
     if (!(paprize_readJsonDataFile in window)) {
-        throw new Error('The function paprize_readJsonDataFile is not available in the current environment.');
+        throw new Error(
+            'The function paprize_readJsonDataFile is not available in the current environment.'
+        );
     }
 
     const strData = await window[paprize_readJsonDataFile]?.();

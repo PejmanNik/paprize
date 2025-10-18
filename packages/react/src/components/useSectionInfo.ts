@@ -15,13 +15,19 @@ export const useSectionInfo = (): SectionInfo => {
         sectionId: sectionId,
     });
 
-    const state = useSyncExternalStore((callback) => {
-        return reportBuilder.monitor.addEventListener('sectionCompleted', (sc) => {
-            if (sc.sectionId !== sectionId) return;
-            stateRef.current = sc;
-            callback();
-        });
-    }, () => stateRef.current);
+    const state = useSyncExternalStore(
+        (callback) => {
+            return reportBuilder.monitor.addEventListener(
+                'sectionCompleted',
+                (sc) => {
+                    if (sc.sectionId !== sectionId) return;
+                    stateRef.current = sc;
+                    callback();
+                }
+            );
+        },
+        () => stateRef.current
+    );
 
     return {
         sectionId: sectionId,

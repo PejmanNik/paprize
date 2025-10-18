@@ -6,7 +6,6 @@ export interface ReportRootProps {
     children: ReactNode;
 }
 
-
 export function ReportRoot({ children }: ReportRootProps) {
     const reportBuilder = useMemo(() => new ReportBuilder(), []);
 

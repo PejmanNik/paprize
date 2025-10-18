@@ -1,9 +1,15 @@
 import { useContext, useEffect, useMemo, useRef } from 'react';
 import { SectionControllerContext } from '../internal/SectionControllerContext';
 
-export function useSectionSuspension(promise: Promise<void> | Promise<unknown>): void;
-export function useSectionSuspension(): { release: () => void, reset: () => void };
-export function useSectionSuspension(promise?: Promise<void> | Promise<unknown>
+export function useSectionSuspension(
+    promise: Promise<void> | Promise<unknown>
+): void;
+export function useSectionSuspension(): {
+    release: () => void;
+    reset: () => void;
+};
+export function useSectionSuspension(
+    promise?: Promise<void> | Promise<unknown>
 ) {
     const resolveFn = useRef<() => void | null>(null);
     const { addSuspense } = useContext(SectionControllerContext);
@@ -13,26 +19,32 @@ export function useSectionSuspension(promise?: Promise<void> | Promise<unknown>
             return;
         }
 
-        const pr = promise ?? new Promise<void>((resolve) => {
-            resolveFn.current = resolve;
-        });
-        resolveFn.current ||= () => { };
+        const pr =
+            promise ??
+            new Promise<void>((resolve) => {
+                resolveFn.current = resolve;
+            });
+        resolveFn.current ||= () => {};
 
         addSuspense(pr as Promise<void>);
-
     }, [promise]);
 
-    return useMemo(() => ({
-        reset: () => {
-            if (resolveFn.current) return;
+    return useMemo(
+        () => ({
+            reset: () => {
+                if (resolveFn.current) return;
 
-            addSuspense(new Promise<void>((resolve) => {
-                resolveFn.current = resolve;
-            }));
-        },
-        release: () => {
-            resolveFn.current?.();
-            resolveFn.current = null;
-        },
-    }), []);
+                addSuspense(
+                    new Promise<void>((resolve) => {
+                        resolveFn.current = resolve;
+                    })
+                );
+            },
+            release: () => {
+                resolveFn.current?.();
+                resolveFn.current = null;
+            },
+        }),
+        []
+    );
 }

@@ -1,4 +1,4 @@
-import type { PageDimension, PageOrientation } from "./report/pageTypes";
+import type { PageDimension, PageOrientation } from './report/pageTypes';
 
 export function buildPageId(sectionId: string, pageIndex: number): string {
     return `${sectionId}-${pageIndex + 1}`;

@@ -1,5 +1,5 @@
-import type { PaginationPlugin } from "@paprize/core/src";
-import { createContext } from "react";
+import type { PaginationPlugin } from '@paprize/core/src';
+import { createContext } from 'react';
 
 export interface SectionController {
     addPlugin: (plugin: PaginationPlugin) => void;

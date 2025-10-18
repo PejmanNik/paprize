@@ -1,11 +1,14 @@
-import type { PaginationCycleCompleted, SectionContext } from "@paprize/core/src";
+import type {
+    PaginationCycleCompleted,
+    SectionContext,
+} from '@paprize/core/src';
 
 export interface SectionInfo {
     sectionId: string;
     sectionIndex: number;
     isPaginated: boolean;
     isSuspended: boolean;
-    pages: PageInfo[]
+    pages: PageInfo[];
 }
 
 export interface PageInfo {
@@ -17,7 +20,10 @@ export interface ReportInfo {
     sections: SectionInfo[];
 }
 
-export function pageContextToPageInfo(pc: { index: number; totalPages: number; }): PageInfo {
+export function pageContextToPageInfo(pc: {
+    index: number;
+    totalPages: number;
+}): PageInfo {
     return {
         pageIndex: pc.index,
         totalPages: pc.totalPages,
@@ -34,8 +40,10 @@ export function sectionContextToSectionInfo(sc: SectionContext): SectionInfo {
     };
 }
 
-export function paginationCycleToReportInfo(rc: PaginationCycleCompleted): ReportInfo {
+export function paginationCycleToReportInfo(
+    rc: PaginationCycleCompleted
+): ReportInfo {
     return {
-        sections: rc.sections.map(sectionContextToSectionInfo)
+        sections: rc.sections.map(sectionContextToSectionInfo),
     };
 }

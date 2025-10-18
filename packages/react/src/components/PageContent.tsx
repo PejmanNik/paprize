@@ -6,9 +6,12 @@ export function PageContent({ children }: { children: ReactNode }) {
     const isFirstCycleCompleted = useRef(false);
 
     useEffect(() => {
-        const unsubscribe = reportBuilder.monitor.addEventListener("paginationCycleCompleted", () => {
-            isFirstCycleCompleted.current = true;
-        })
+        const unsubscribe = reportBuilder.monitor.addEventListener(
+            'paginationCycleCompleted',
+            () => {
+                isFirstCycleCompleted.current = true;
+            }
+        );
 
         return () => unsubscribe();
     }, []);

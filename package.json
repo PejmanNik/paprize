@@ -1,5 +1,6 @@
 {
     "name": "paprize",
+    "type": "module",
     "workspaces": [
         "packages/*",
         "examples/*"
@@ -12,6 +13,12 @@
         "test": "npm test -ws --if-present -- --run"
     },
     "devDependencies": {
-        "prettier": "3.6.2"
+        "@eslint/js": "^9.37.0",
+        "eslint": "^9.37.0",
+        "eslint-plugin-react-hooks": "^6.1.1",
+        "eslint-plugin-react-refresh": "^0.4.23",
+        "globals": "^16.4.0",
+        "prettier": "3.6.2",
+        "typescript-eslint": "^8.46.1"
     }
 }

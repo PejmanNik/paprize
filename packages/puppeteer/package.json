@@ -1,57 +1,58 @@
 {
-  "name": "@paprize/puppeteer",
-  "version": "0.0.4",
-  "description": "Convert HTML reports to print-ready PDFs",
-  "type": "module",
-  "files": [
-    "dist",
-    "CHANGELOG.md"
-  ],
-  "main": "./dist/paprize-puppeteer.umd.cjs",
-  "module": "./dist/paprize-puppeteer.js",
-  "exports": {
-    ".": {
-      "types": "./dist/paprize-puppeteer.d.ts",
-      "import": "./dist/paprize-puppeteer.js",
-      "require": "./dist/paprize-puppeteer.umd.cjs"
+    "name": "@paprize/puppeteer",
+    "version": "0.0.4",
+    "description": "Convert HTML reports to print-ready PDFs",
+    "type": "module",
+    "files": [
+        "dist",
+        "CHANGELOG.md"
+    ],
+    "main": "./dist/paprize-puppeteer.umd.cjs",
+    "module": "./dist/paprize-puppeteer.js",
+    "exports": {
+        ".": {
+            "types": "./dist/paprize-puppeteer.d.ts",
+            "import": "./dist/paprize-puppeteer.js",
+            "require": "./dist/paprize-puppeteer.umd.cjs"
+        },
+        "./src": {
+            "types": "./src/window.ts",
+            "import": "./src/window.ts"
+        }
     },
-    "./src": {
-      "types": "./src/window.ts",
-      "import": "./src/window.ts"
+    "keywords": [
+        "paper",
+        "print",
+        "report",
+        "html2pdf",
+        "pdf"
+    ],
+    "homepage": "https://github.com/PejmanNik/paprize#readme",
+    "bugs": {
+        "url": "https://github.com/PejmanNik/paprize/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PejmanNik/paprize.git"
+    },
+    "license": "Apache-2.0",
+    "author": "PejmanNikram",
+    "scripts": {
+        "build": "tsc && node ./build.mjs",
+        "prepack": "node ../../scripts/prepack.mjs"
+    },
+    "devDependencies": {
+        "@paprize/core": "*",
+        "@types/serve-handler": "^6.1.4",
+        "esbuild": "0.25.10",
+        "puppeteer-core": "^24.23.0",
+        "typescript": "~5.9.3",
+        "unplugin-dts": "^1.0.0-beta.6"
+    },
+    "peerDependencies": {
+        "puppeteer-core": ">=24.0.0"
+    },
+    "dependencies": {
+        "serve-handler": "^6.1.6"
     }
-  },
-  "keywords": [
-    "paper",
-    "print",
-    "report",
-    "html2pdf",
-    "pdf"
-  ],
-  "homepage": "https://github.com/PejmanNik/paprize#readme",
-  "bugs": {
-    "url": "https://github.com/PejmanNik/paprize/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PejmanNik/paprize.git"
-  },
-  "license": "Apache-2.0",
-  "author": "PejmanNikram",
-  "scripts": {
-    "build": "tsc && node ./build.mjs",
-    "prepack": "node ../../scripts/prepack.mjs"
-  },
-  "devDependencies": {
-    "@types/serve-handler": "^6.1.4",
-    "esbuild": "0.25.10",
-    "puppeteer-core": "^24.23.0",
-    "@paprize/core": "*",
-    "typescript": "~5.9.3"
-  },
-  "peerDependencies": {
-    "puppeteer-core": ">=24.0.0"
-  },
-  "dependencies": {
-    "serve-handler": "^6.1.6"
-  }
 }
