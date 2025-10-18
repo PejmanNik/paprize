@@ -11,7 +11,6 @@ import { PageHeader } from '../components/PageHeader';
 import { SectionFooter } from '../components/SectionFooter';
 import { SectionHeader } from '../components/SectionHeader';
 import { PageOverlay } from '../components/PageOverlay';
-import logger from 'loglevel';
 
 const validChildren: FC<{ children: ReactNode }>[] = [
     PageContent,
