@@ -39,7 +39,7 @@ describe('SectionTocPlugin', () => {
         it('should not add section if not a heading', () => {
             mockElement = document.createElement('div');
             mockElement.textContent = 'Not a heading';
-            (mockDomState.currentNode.getNode as any).mockReturnValue(
+            vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
                 mockElement
             );
             plugin.onVisitElement('section-2', mockDomState, mockPageManager);
@@ -49,7 +49,7 @@ describe('SectionTocPlugin', () => {
         it('should not add section if heading has no text', () => {
             mockElement = document.createElement('h3');
             mockElement.textContent = '';
-            (mockDomState.currentNode.getNode as any).mockReturnValue(
+            vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
                 mockElement
             );
             plugin.onVisitElement('section-3', mockDomState, mockPageManager);
@@ -61,12 +61,12 @@ describe('SectionTocPlugin', () => {
         it('should return correct level for heading tags', () => {
             for (let i = 1; i <= 6; i++) {
                 const el = document.createElement('h' + i);
-                expect(plugin.getHeadingLevel(el as any)).toBe(i);
+                expect(plugin.getHeadingLevel(el)).toBe(i);
             }
         });
         it('should return null for non-heading tags', () => {
             const el = document.createElement('div');
-            expect(plugin.getHeadingLevel(el as any)).toBeNull();
+            expect(plugin.getHeadingLevel(el)).toBeNull();
         });
     });
 });

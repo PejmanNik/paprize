@@ -1,11 +1,14 @@
 type EventHandler<TKey extends keyof TEvents, TEvents> = TEvents[TKey] extends (
-    ...args: any[]
-) => void
-    ? TEvents[TKey]
+    ...args: infer TArgs
+) => infer TReturn
+    ? (...args: TArgs) => TReturn
     : never;
 
 export class EventDispatcher<TEvents> {
-    private registry = new Map<keyof TEvents, Set<Function>>();
+    private registry = new Map<
+        keyof TEvents,
+        Set<(...args: unknown[]) => void>
+    >();
 
     public addEventListener<T extends keyof TEvents>(
         name: T,

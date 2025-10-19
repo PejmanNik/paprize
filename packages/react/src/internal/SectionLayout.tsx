@@ -67,7 +67,11 @@ export function SectionLayout({
                 setPageContexts(pages);
             }
         );
-    }, []);
+
+        return () => {
+            reportBuilder.removeSection(sectionId);
+        };
+    }, [config, controllerState, dimension, margin, reportBuilder, sectionId]);
 
     return (
         <SectionControllerContext value={controllerValue}>

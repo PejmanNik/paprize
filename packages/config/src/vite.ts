@@ -63,8 +63,8 @@ async function createGlobalConfig({
 }
 
 function deepMerge<T extends object>(...objects: T[]): T {
-    const isObject = (obj: any): obj is object =>
-        obj && typeof obj === 'object';
+    const isObject = (obj: unknown): obj is object =>
+        !!obj && typeof obj === 'object';
 
     return objects.reduce((prev, obj) => {
         Object.keys(obj).forEach((key) => {

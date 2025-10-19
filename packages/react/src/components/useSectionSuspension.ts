@@ -27,7 +27,7 @@ export function useSectionSuspension(
         resolveFn.current ||= () => {};
 
         addSuspense(pr as Promise<void>);
-    }, [promise]);
+    }, [addSuspense, promise]);
 
     return useMemo(
         () => ({
@@ -45,6 +45,6 @@ export function useSectionSuspension(
                 resolveFn.current = null;
             },
         }),
-        []
+        [addSuspense]
     );
 }

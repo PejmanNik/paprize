@@ -11,7 +11,7 @@ export function ReportRoot({ children }: ReportRootProps) {
 
     useEffect(() => {
         reportBuilder.schedulePaginate();
-    }, []);
+    }, [reportBuilder]);
 
     return (
         <ReportBuilderContext value={reportBuilder}>

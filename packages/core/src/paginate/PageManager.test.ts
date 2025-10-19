@@ -267,7 +267,7 @@ describe('PageManager', () => {
         });
         test('should remove page from tempContainer on transaction rollback', () => {
             transaction.isActive = true;
-            const callbacks: Function[] = [];
+            const callbacks: (() => void)[] = [];
             transaction.addRollbackCallback.mockImplementation((cb) =>
                 callbacks.push(cb)
             );
@@ -288,7 +288,7 @@ describe('PageManager', () => {
 
         test('should restore previous pageState on transaction rollback', () => {
             transaction.isActive = true;
-            const callbacks: Function[] = [];
+            const callbacks: (() => void)[] = [];
             transaction.addRollbackCallback.mockImplementation((cb) =>
                 callbacks.push(cb)
             );

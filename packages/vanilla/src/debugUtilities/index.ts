@@ -131,8 +131,8 @@ const App = () => {
 
 render(App(), document.body);
 
-let resolve: Function;
-const myPromise = new Promise((res) => {
+let resolve: () => void;
+const myPromise = new Promise<void>((res) => {
     resolve = res;
 });
 
@@ -156,8 +156,10 @@ r.monitor.addEventListener('pageCompleted', (pageContext) => {
     }
 });
 
-await r.schedulePaginate();
+(async () => {
+    await r.schedulePaginate();
 
-setTimeout(() => {
-    resolve(true);
-}, 2000);
+    setTimeout(() => {
+        resolve();
+    }, 2000);
+})();

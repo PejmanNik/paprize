@@ -36,7 +36,7 @@ export interface PaginationPlugin {
 
 type PluginKeys = {
     [K in keyof PaginationPlugin]: PaginationPlugin[K] extends
-        | ((...args: any[]) => any)
+        | ((...args: never[]) => unknown)
         | undefined
         ? K
         : never;
@@ -64,7 +64,7 @@ export function callPluginHook<T extends PluginHookNames>(
             );
 
             try {
-                (hook as Function)(...args);
+                (hook as (...args: unknown[]) => void)(...args);
                 logger.debug(
                     logPrefix,
                     `plugin ${plugin.name}:${String(hookName)} executed`,

@@ -7,6 +7,7 @@ import {
 } from './utils';
 import * as DomUtilities from '../paginate/domUtilities';
 import type { PageManager, PageState } from '../paginate/PageManager';
+import type { DomState } from '../paginate/DomState';
 
 vi.mock('../paginate/domUtilities');
 vi.mock('../debugUtilities/debugMode');
@@ -143,9 +144,10 @@ describe('createSectionPageHeightPlugin', () => {
             hasEmptySpace: vi.fn(),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
+        const domState1 = { completed: null } as unknown as DomState;
 
         // no last page -> should return early and not call pageManager
-        plugin.afterVisitNode!('id', { completed: null } as any, pageManager);
+        plugin.afterVisitNode!('id', domState1, pageManager);
         expect(pageManager.hasEmptySpace).not.toHaveBeenCalled();
         expect(pageManager.nextPage).not.toHaveBeenCalled();
 
@@ -155,7 +157,9 @@ describe('createSectionPageHeightPlugin', () => {
             hasEmptySpace: vi.fn(),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
-        pluginNoFooter.afterVisitNode!('id', { completed: {} } as any, pm2);
+        const domState2 = { completed: {} } as unknown as DomState;
+
+        pluginNoFooter.afterVisitNode!('id', domState2, pm2);
         expect(pm2.hasEmptySpace).not.toHaveBeenCalled();
         expect(pm2.nextPage).not.toHaveBeenCalled();
     });
@@ -166,8 +170,9 @@ describe('createSectionPageHeightPlugin', () => {
             hasEmptySpace: vi.fn().mockReturnValue(false),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
+        const domState = { completed: {} } as unknown as DomState;
 
-        plugin.afterVisitNode!('id', { completed: {} } as any, pageManager);
+        plugin.afterVisitNode!('id', domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).toHaveBeenCalled();
@@ -179,8 +184,8 @@ describe('createSectionPageHeightPlugin', () => {
             hasEmptySpace: vi.fn().mockReturnValue(true),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
-
-        plugin.afterVisitNode!('id', { completed: {} } as any, pageManager);
+        const domState = { completed: {} } as unknown as DomState;
+        plugin.afterVisitNode!('id', domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).not.toHaveBeenCalled();

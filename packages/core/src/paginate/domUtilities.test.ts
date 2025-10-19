@@ -4,7 +4,7 @@ import { getVisibleHeight } from './domUtilities';
 function defineGlobalGetComputedStyle() {
     // Patch global getComputedStyle to return element.style values
     globalThis.getComputedStyle = (el: Element) => {
-        const style = (el as HTMLElement).style as any;
+        const style = (el as HTMLElement).style;
         return {
             marginTop: style.marginTop || '0px',
             marginBottom: style.marginBottom || '0px',

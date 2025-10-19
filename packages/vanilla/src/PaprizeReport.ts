@@ -104,8 +104,8 @@ export class PaprizeReport {
         return wrapper;
     }
 
-    public async schedulePaginate(): ReturnType<
-        Core.ReportBuilder['schedulePaginate']
+    public async schedulePaginate(): Promise<
+        Awaited<ReturnType<Core.ReportBuilder['schedulePaginate']>>
     > {
         return this._reportManager.schedulePaginate();
     }
@@ -215,7 +215,7 @@ export class PaprizeReport {
         }
         const pages: DomPageContext[] = [];
 
-        for (let pageContext of pageContexts) {
+        for (const pageContext of pageContexts) {
             const page = document.createElement('div');
             page.classList.add(Core.pageClassName);
             page.id = Core.buildPageId(options.id, pageContext.index);

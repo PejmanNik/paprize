@@ -38,12 +38,12 @@ export class PageElement {
         this.cloneCount = clonedFrom ? clonedFrom.cloneCount + 1 : 0;
     }
 
-    getOriginalNode(): Node {
-        let current: PageElement = this;
-        while (current.clonedFrom) {
+    getOriginalNode(): Node | undefined {
+        let current: PageElement | undefined = this.clonedFrom;
+        while (current?.clonedFrom) {
             current = current.clonedFrom;
         }
-        return current._node;
+        return current?._node;
     }
 
     appendChild(node: PageNode): void {

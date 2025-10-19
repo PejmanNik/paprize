@@ -58,7 +58,7 @@ function processToken(
     if (!pageManager.hasEmptySpace()) {
         pageManager.nextPage();
     }
-    let textNode = pageManager.addTextNode('');
+    const textNode = pageManager.addTextNode('');
 
     // tentatively append
     const originalContent = textNode.textContent;

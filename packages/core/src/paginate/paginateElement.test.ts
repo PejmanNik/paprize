@@ -26,11 +26,12 @@ function createMockPageManager({
     overflow = false,
     hasTransaction = true,
 } = {}) {
-    let appendedNodes: {
+    const appendedNodes: {
         node: PageElement;
         withChildren: boolean;
         clonedNode: { remove: ReturnType<typeof vi.fn> };
     }[] = [];
+
     return {
         appendedNodes: appendedNodes,
         hasEmptySpace: vi.fn((h) => h <= emptySpace),
@@ -62,7 +63,7 @@ describe('paginateElementAcrossPages', () => {
             overflow: false,
         });
 
-        const result = paginateElementAcrossPages(element, pageManager as any);
+        const result = paginateElementAcrossPages(element, pageManager);
         expect(result).toBe(SplitResult.FullNodePlaced);
         expect(pageManager.appendChild).toHaveBeenCalledWith(element, true);
     });

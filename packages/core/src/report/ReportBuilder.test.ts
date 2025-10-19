@@ -239,12 +239,12 @@ describe('ReportBuilder constructor', () => {
     });
 
     it('constructor should set window initialization flag', () => {
-        delete (window as any)[paprize_isInitialized];
-        expect((window as any)[paprize_isInitialized]).toBeUndefined();
+        delete window[paprize_isInitialized];
+        expect(window[paprize_isInitialized]).toBeUndefined();
 
         new ReportBuilder();
 
-        expect((window as any)[paprize_isInitialized]).toBe(true);
+        expect(window[paprize_isInitialized]).toBe(true);
     });
 
     it('constructor should set window initialization flag', () => {

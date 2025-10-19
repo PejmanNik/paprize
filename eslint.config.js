@@ -19,6 +19,9 @@ export default defineConfig([
                 tsconfigRootDir: import.meta.dirname,
             },
         },
+        rules: {
+            'no-unused-labels': 'off',
+        },
     },
     {
         files: ['packages/react/**/*.{ts,tsx}'],

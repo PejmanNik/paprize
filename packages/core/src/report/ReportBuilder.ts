@@ -49,7 +49,7 @@ export class ReportBuilder {
     private _paginationInProgress: boolean;
     private _pendingPaginateResolvers: {
         resolve: (value: ScheduleResult) => void;
-        reject: (reason?: any) => void;
+        reject: (reason?: unknown) => void;
     }[];
     private _currentAbortController: AbortController | null;
 
@@ -66,6 +66,10 @@ export class ReportBuilder {
 
     public get monitor(): Monitor<ReportBuilderEvents> {
         return this._monitor;
+    }
+
+    public removeSection(sectionId: string): void {
+        this._sections.delete(sectionId);
     }
 
     public tryAddSection(

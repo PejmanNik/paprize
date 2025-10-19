@@ -14,7 +14,7 @@ export function PageContent({ children }: { children: ReactNode }) {
         );
 
         return () => unsubscribe();
-    }, []);
+    }, [reportBuilder.monitor]);
 
     // If the children change after the first pagination cycle, we need to re-paginate
     // this can happen if the content is dynamic or loaded asynchronously
@@ -23,7 +23,7 @@ export function PageContent({ children }: { children: ReactNode }) {
         if (isFirstCycleCompleted.current) {
             reportBuilder.schedulePaginate();
         }
-    }, [children]);
+    }, [children, reportBuilder]);
 
     return <>{children}</>;
 }

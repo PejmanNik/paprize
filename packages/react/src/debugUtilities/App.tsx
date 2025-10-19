@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as Paprize from '@paprize/core/src';
 import '@paprize/core/src/debug-styles.css';
 
@@ -26,7 +26,7 @@ export default function App() {
     //Paprize.enableDebugMode();
     Paprize.logger.setLevel('debug', false);
 
-    const tocPlugin = useRef(new SectionTocPlugin());
+    const tocPlugin = useMemo(() => new SectionTocPlugin(), []);
     return (
         <ReportRoot>
             <input
@@ -50,7 +50,7 @@ export default function App() {
                     }}
                 >
                     <PageContent>
-                        <MyTOC tocProvider={tocPlugin.current} />
+                        <MyTOC tocProvider={tocPlugin} />
                     </PageContent>
                 </Section>
                 <Section
@@ -65,7 +65,7 @@ export default function App() {
                         plugins: [
                             Paprize.debugPlugin,
                             new Paprize.TablePlugin({ cloneHeader: true }),
-                            tocPlugin.current,
+                            tocPlugin,
                         ],
                     }}
                 >
@@ -114,7 +114,7 @@ export default function App() {
                         left: '10px',
                     }}
                     config={{
-                        plugins: [Paprize.debugPlugin, tocPlugin.current],
+                        plugins: [Paprize.debugPlugin, tocPlugin],
                     }}
                 >
                     <SectionHeader>
@@ -189,7 +189,7 @@ function MyTOC({ tocProvider }: { tocProvider: SectionTocPlugin }) {
         );
 
         return () => unsubscribe();
-    }, [sectionId, reset]);
+    }, [sectionId, reset, reportBuilder.monitor]);
 
     const sectionIndexMap = new Map(
         sections.map((s) => [s.sectionId, s.sectionIndex])
