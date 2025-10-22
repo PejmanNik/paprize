@@ -229,6 +229,25 @@ describe('ReportBuilder', () => {
         expect(paginateMock).toHaveBeenCalledTimes(1);
         expect(section1Result).toBe(section2Result);
     });
+
+    it('removeSection should remove a section by id', async () => {
+        const sectionId = 'test-section';
+        const onPaginationCompleted = vi.fn();
+
+        rb.tryAddSection(
+            {
+                id: sectionId,
+                dimension: { width: '100px', height: '200px' },
+            } as SectionOptions,
+            components,
+            onPaginationCompleted
+        );
+
+        rb.removeSection(sectionId);
+        const result = await rb.schedulePaginate();
+
+        expect(result.sections.length).toBe(0);
+    });
 });
 
 describe('ReportBuilder constructor', () => {

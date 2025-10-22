@@ -77,7 +77,7 @@ export class Paginator {
     }
 
     private processAllNodes(): void {
-        this._domState.nextNode();
+        this._domState.goToNextNode();
 
         do {
             logger.debug(
@@ -86,6 +86,15 @@ export class Paginator {
                 this._domState.currentNode
             );
             const result = this.processCurrentNode();
+
+            callPluginHook(
+                this._config.plugins,
+                'afterVisitNode',
+                this._config.id,
+                result,
+                this._domState,
+                this._pageManager
+            );
 
             switch (result) {
                 case SplitResult.None:
@@ -100,14 +109,6 @@ export class Paginator {
                     this.handleChildrenSplit();
                     break;
             }
-
-            callPluginHook(
-                this._config.plugins,
-                'afterVisitNode',
-                this._config.id,
-                this._domState,
-                this._pageManager
-            );
         } while (this._domState.completed === false);
 
         logger.debug(logPrefix, 'pagination completed');
@@ -117,14 +118,14 @@ export class Paginator {
         logger.debug(logPrefix, "node skipped - couldn't paginate");
 
         DEV: markIgnoredNode(this._domState.currentNode);
-        this._domState.nextNode();
+        this._domState.goToNextNode();
     }
 
     private handleFullNodePlaced(): void {
         logger.debug(logPrefix, 'node fully paginated');
 
         const { parentsTraversed } =
-            this._domState.nextSiblingOrParentSibling();
+            this._domState.goToNextSiblingOrParentSibling();
         for (let i = 0; i < parentsTraversed; i++) {
             this._pageManager.leaveElement();
         }
@@ -137,7 +138,7 @@ export class Paginator {
         );
 
         if (
-            this._domState.firstChildOrNextNode().parentsTraversed === 1 &&
+            this._domState.goToFirstChildOrNextNode().parentsTraversed === 1 &&
             this._domState.previousNode?.type === PageNodeType.Element
         ) {
             this._pageManager.enterElement();

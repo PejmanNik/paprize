@@ -1,11 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TablePlugin } from './TablePlugin';
 import type { PageElement } from '../paginate/PageNodes';
+import type { PageManager, PageState } from '../paginate/PageManager';
 
 describe('TablePlugin', () => {
     const id = 'id';
     let mockElement: Element;
     let mockPageElement: PageElement;
+    let mockPageManager: PageManager;
     let mockOriginalTable: HTMLTableElement;
     let plugin: TablePlugin;
 
@@ -29,6 +31,10 @@ describe('TablePlugin', () => {
                 cloneNode: vi.fn().mockReturnValue({} as HTMLElement),
             } as unknown as HTMLTableSectionElement | null,
         } as HTMLTableElement;
+
+        mockPageManager = {
+            getPageState: vi.fn(),
+        } as unknown as PageManager;
     });
 
     it('should set keepOnSamePage to true for TR elements', () => {
@@ -187,5 +193,159 @@ describe('TablePlugin', () => {
                 transaction: mockPageElement.transaction,
             })
         );
+    });
+
+    it('should return early if includeHeaderOnlyTables option is true', () => {
+        const plugin = new TablePlugin({ includeHeaderOnlyTables: true });
+
+        plugin.onNewPage('id', mockPageManager);
+    });
+
+    it('should return early if no table element is found in parentStack', () => {
+        const plugin = new TablePlugin();
+        vi.mocked(mockPageManager.getPageState).mockReturnValue({
+            parentStack: [],
+        } as unknown as PageState);
+
+        plugin.onNewPage('id', mockPageManager);
+    });
+
+    it('should return early if tableElement has no clonedFrom', () => {
+        const plugin = new TablePlugin();
+
+        vi.mocked(mockPageManager.getPageState).mockReturnValue({
+            parentStack: [
+                {
+                    getNode: vi.fn().mockReturnValue({
+                        tagName: 'TABLE',
+                    }),
+                    clonedFrom: undefined,
+                },
+            ],
+        } as unknown as PageState);
+
+        plugin.onNewPage('id', mockPageManager);
+    });
+
+    it('should return early if table on previous page has no header', () => {
+        const plugin = new TablePlugin();
+        const clonedTable = {
+            getNode: vi.fn().mockReturnValue({
+                tagName: 'TABLE',
+                tHead: null,
+            }),
+            remove: vi.fn(),
+        } as unknown as PageElement;
+
+        vi.mocked(mockPageManager.getPageState).mockReturnValue({
+            parentStack: [
+                {
+                    getNode: vi.fn().mockReturnValue({
+                        tagName: 'TABLE',
+                    }),
+                    clonedFrom: clonedTable,
+                },
+            ],
+        } as unknown as PageState);
+
+        plugin.onNewPage('id', mockPageManager);
+
+        expect(clonedTable.remove).not.toHaveBeenCalled();
+    });
+
+    it.for([
+        { rows: [{ cells: [{ textContent: 'Test' }] }] },
+        { rows: [{ cells: [{}, {}] }] },
+        { rows: [{}, {}] },
+    ])(
+        'should return early if table on previous page has valid body',
+        (body) => {
+            const plugin = new TablePlugin();
+            const clonedTable = {
+                getNode: vi.fn().mockReturnValue({
+                    tagName: 'TABLE',
+                    tHead: vi.fn(),
+                    tBodies: [body],
+                }),
+                remove: vi.fn(),
+            } as unknown as PageElement;
+
+            vi.mocked(mockPageManager.getPageState).mockReturnValue({
+                parentStack: [
+                    {
+                        getNode: vi.fn().mockReturnValue({
+                            tagName: 'TABLE',
+                        }),
+                        clonedFrom: clonedTable,
+                    },
+                ],
+            } as unknown as PageState);
+
+            plugin.onNewPage('id', mockPageManager);
+
+            expect(clonedTable.remove).not.toHaveBeenCalled();
+        }
+    );
+
+    it('should remove cloned table if it has no header and empty body', () => {
+        const plugin = new TablePlugin();
+        const clonedTable = {
+            getNode: vi.fn().mockReturnValue({
+                tagName: 'TABLE',
+                tHead: vi.fn(),
+                tBodies: [],
+            }),
+            remove: vi.fn(),
+        } as unknown as PageElement;
+
+        vi.mocked(mockPageManager.getPageState).mockReturnValue({
+            parentStack: [
+                {
+                    getNode: vi.fn().mockReturnValue({
+                        tagName: 'TABLE',
+                    }),
+                    clonedFrom: clonedTable,
+                },
+            ],
+        } as unknown as PageState);
+
+        plugin.onNewPage('id', mockPageManager);
+        expect(clonedTable.remove).toHaveBeenCalled();
+    });
+
+    it('should clone the header to the new table when new table does not have a header', () => {
+        const plugin = new TablePlugin();
+
+        const clonedNodeOfHeader = vi.fn().mockReturnValue({
+            nodeType: Node.ELEMENT_NODE,
+        });
+        const clonedTable = {
+            getNode: vi.fn().mockReturnValue({
+                tagName: 'TABLE',
+                tHead: {
+                    cloneNode: clonedNodeOfHeader,
+                },
+                tBodies: [],
+            }),
+            remove: vi.fn(),
+        } as unknown as PageElement;
+
+        const newTable = {
+            getNode: vi.fn().mockReturnValue({
+                tagName: 'TABLE',
+                tHead: null,
+            }),
+            clonedFrom: clonedTable,
+            appendChild: vi.fn(),
+        } as unknown as PageElement;
+
+        vi.mocked(mockPageManager.getPageState).mockReturnValue({
+            parentStack: [newTable],
+        } as unknown as PageState);
+
+        plugin.onNewPage('id', mockPageManager);
+
+        expect(clonedNodeOfHeader).toHaveBeenCalled();
+        expect(newTable.appendChild).toHaveBeenCalled();
     });
 });

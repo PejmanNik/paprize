@@ -8,6 +8,7 @@ import {
 import * as DomUtilities from '../paginate/domUtilities';
 import type { PageManager, PageState } from '../paginate/PageManager';
 import type { DomState } from '../paginate/DomState';
+import { SplitResult } from '../paginate/SplitResult';
 
 vi.mock('../paginate/domUtilities');
 vi.mock('../debugUtilities/debugMode');
@@ -147,7 +148,7 @@ describe('createSectionPageHeightPlugin', () => {
         const domState1 = { completed: null } as unknown as DomState;
 
         // no last page -> should return early and not call pageManager
-        plugin.afterVisitNode!('id', domState1, pageManager);
+        plugin.afterVisitNode!('id', SplitResult.None, domState1, pageManager);
         expect(pageManager.hasEmptySpace).not.toHaveBeenCalled();
         expect(pageManager.nextPage).not.toHaveBeenCalled();
 
@@ -159,7 +160,7 @@ describe('createSectionPageHeightPlugin', () => {
         } as unknown as Mocked<PageManager>;
         const domState2 = { completed: {} } as unknown as DomState;
 
-        pluginNoFooter.afterVisitNode!('id', domState2, pm2);
+        pluginNoFooter.afterVisitNode!('id', SplitResult.None, domState2, pm2);
         expect(pm2.hasEmptySpace).not.toHaveBeenCalled();
         expect(pm2.nextPage).not.toHaveBeenCalled();
     });
@@ -172,7 +173,7 @@ describe('createSectionPageHeightPlugin', () => {
         } as unknown as Mocked<PageManager>;
         const domState = { completed: {} } as unknown as DomState;
 
-        plugin.afterVisitNode!('id', domState, pageManager);
+        plugin.afterVisitNode!('id', SplitResult.None, domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).toHaveBeenCalled();
@@ -185,7 +186,7 @@ describe('createSectionPageHeightPlugin', () => {
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
         const domState = { completed: {} } as unknown as DomState;
-        plugin.afterVisitNode!('id', domState, pageManager);
+        plugin.afterVisitNode!('id', SplitResult.None, domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).not.toHaveBeenCalled();

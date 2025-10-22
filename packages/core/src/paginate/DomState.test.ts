@@ -86,7 +86,7 @@ describe('DomState', () => {
     });
 
     it('nextNode moves to next node', () => {
-        domState.nextNode();
+        domState.goToNextNode();
         expect(domState.completed).toBe(false);
         expect(PageNodes.createPageNode).toHaveBeenCalled();
 
@@ -96,43 +96,43 @@ describe('DomState', () => {
 
     it('nextNode sets completed to true at the end', () => {
         // traverse all nodes in the new tree
-        for (let i = 0; i < 10; i++) domState.nextNode();
+        for (let i = 0; i < 10; i++) domState.goToNextNode();
         expect(domState.completed).toBe(true);
     });
 
     it('firstChildOrNextNode prefers first child', () => {
-        domState.firstChildOrNextNode();
+        domState.goToFirstChildOrNextNode();
         expect(PageNodes.createPageNode).toHaveBeenCalled();
         // root.firstChild is #text "a"
         expect(domState.currentNode?.getNode()).toBe(root.firstChild);
     });
 
     it('firstChildOrNextNode falls back to nextNode if no children', () => {
-        domState.nextNode(); // move to #text "a"
-        domState.firstChildOrNextNode();
+        domState.goToNextNode(); // move to #text "a"
+        domState.goToFirstChildOrNextNode();
         expect(domState.completed).toBe(false);
         // nextNode should move to div#1
         expect(domState.currentNode?.getNode()).toBe(root.querySelector('#e1'));
     });
 
     it('nextSiblingOrParentSibling goes to next sibling', () => {
-        domState.nextNode(); // #text "a"
-        domState.nextNode(); // div#1
-        domState.nextNode(); // div#2
-        domState.nextNode(); // p#3
-        const result = domState.nextSiblingOrParentSibling(); // should go up to p#4
+        domState.goToNextNode(); // #text "a"
+        domState.goToNextNode(); // div#1
+        domState.goToNextNode(); // div#2
+        domState.goToNextNode(); // p#3
+        const result = domState.goToNextSiblingOrParentSibling(); // should go up to p#4
         expect(result.parentsTraversed).toBe(0);
         expect(domState.currentNode?.getNode()).toBe(root.querySelector('#e4'));
     });
 
     it('nextSiblingOrParentSibling goes to parent next sibling when no sibling', () => {
-        domState.nextNode(); // #text "a"
-        domState.nextNode(); // div#1
-        domState.nextNode(); // div#2
-        domState.nextNode(); // p#3
-        domState.nextNode(); // #text "b"
-        domState.nextNode(); // p#4
-        const result = domState.nextSiblingOrParentSibling();
+        domState.goToNextNode(); // #text "a"
+        domState.goToNextNode(); // div#1
+        domState.goToNextNode(); // div#2
+        domState.goToNextNode(); // p#3
+        domState.goToNextNode(); // #text "b"
+        domState.goToNextNode(); // p#4
+        const result = domState.goToNextSiblingOrParentSibling();
 
         expect(result.parentsTraversed).toBe(2); // traversed up 2 parents - div#2 and div#1
         expect(domState.currentNode?.getNode()).toBe(root.querySelector('#e5'));
@@ -140,15 +140,15 @@ describe('DomState', () => {
 
     it('nextSiblingOrParentSibling sets completed if at end', () => {
         // traverse to the last node (#text "d")
-        for (let i = 0; i < 9; i++) domState.nextNode();
-        domState.nextSiblingOrParentSibling();
+        for (let i = 0; i < 9; i++) domState.goToNextNode();
+        domState.goToNextSiblingOrParentSibling();
         expect(domState.completed).toBe(true);
     });
 
     it('updates previousNode and currentNode', () => {
-        domState.nextNode();
+        domState.goToNextNode();
         const prev = domState.currentNode;
-        domState.nextNode();
+        domState.goToNextNode();
         expect(domState.previousNode).toBe(prev);
         expect(domState.currentNode?.getNode()).toBe(root.querySelector('#e1'));
     });
@@ -156,7 +156,7 @@ describe('DomState', () => {
     it('handles empty tree gracefully', () => {
         const emptyRoot = document.createElement('div');
         const emptyDomState = new DomState(emptyRoot, transaction, config);
-        emptyDomState.nextNode();
+        emptyDomState.goToNextNode();
         expect(emptyDomState.completed).toBe(true);
     });
 });

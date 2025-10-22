@@ -33,11 +33,11 @@ describe('Paginator', () => {
     let config: PaginationConfig;
 
     let mockDomState: {
-        nextNode: Mock;
+        goToNextNode: Mock;
         currentNode: PageElement | PageText | null;
         completed: boolean;
-        nextSiblingOrParentSibling: MockInstance;
-        firstChildOrNextNode: MockInstance;
+        goToNextSiblingOrParentSibling: MockInstance;
+        goToFirstChildOrNextNode: MockInstance;
         previousNode: PageElement | null;
     };
     let mockPageManager: {
@@ -52,13 +52,13 @@ describe('Paginator', () => {
         config = { id: 'X' } as PaginationConfig;
 
         mockDomState = {
-            nextNode: vi.fn(),
+            goToNextNode: vi.fn(),
             currentNode: null,
             completed: true,
-            nextSiblingOrParentSibling: vi
+            goToNextSiblingOrParentSibling: vi
                 .fn()
                 .mockReturnValue({ parentsTraversed: 0 }),
-            firstChildOrNextNode: vi
+            goToFirstChildOrNextNode: vi
                 .fn()
                 .mockReturnValue({ parentsTraversed: 0 }),
             previousNode: null,
@@ -92,13 +92,13 @@ describe('Paginator', () => {
         mockDomState.currentNode = elementNode;
         mockDomState.completed = false;
 
-        mockDomState.nextNode.mockImplementation(() => {
+        mockDomState.goToNextNode.mockImplementation(() => {
             mockDomState.completed = true;
         });
 
         Paginator.paginate(root, pageSize, config);
 
-        expect(mockDomState.nextNode).toBeCalledTimes(1);
+        expect(mockDomState.goToNextNode).toBeCalledTimes(1);
         // The plugin result should have been used, so paginateElementAcrossPages should not be called
         expect(paginateElementAcrossPages).not.toHaveBeenCalled();
     });
@@ -118,12 +118,12 @@ describe('Paginator', () => {
         mockDomState.currentNode = textNode;
         mockDomState.completed = false;
 
-        mockDomState.nextNode.mockImplementation(() => {
+        mockDomState.goToNextNode.mockImplementation(() => {
             mockDomState.completed = true;
         });
 
         Paginator.paginate(root, pageSize, config);
-        expect(mockDomState.nextNode).toBeCalledTimes(1);
+        expect(mockDomState.goToNextNode).toBeCalledTimes(1);
         // The plugin result should have been used, so paginateTextByWord should not be called
         expect(paginateTextByWord).not.toHaveBeenCalled();
     });
@@ -181,7 +181,7 @@ describe('Paginator', () => {
             textNode,
             mockPageManager
         );
-        expect(mockDomState.nextNode).toHaveBeenCalledOnce();
+        expect(mockDomState.goToNextNode).toHaveBeenCalledOnce();
     });
 
     it('should handle element node pagination', () => {
@@ -199,7 +199,7 @@ describe('Paginator', () => {
             elementNode,
             mockPageManager
         );
-        expect(mockDomState.nextNode).toHaveBeenCalledOnce();
+        expect(mockDomState.goToNextNode).toHaveBeenCalledOnce();
     });
 
     it('should handle node skipping when pagination returns None', () => {
@@ -211,7 +211,7 @@ describe('Paginator', () => {
 
         Paginator.paginate(root, pageSize, config);
 
-        expect(mockDomState.nextNode).toHaveBeenCalledTimes(2);
+        expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(2);
     });
 
     it('should handle split children scenario', () => {
@@ -226,7 +226,7 @@ describe('Paginator', () => {
         vi.mocked(paginateElementAcrossPages).mockReturnValue(
             SplitResult.SplitChildren
         );
-        mockDomState.firstChildOrNextNode.mockReturnValue({
+        mockDomState.goToFirstChildOrNextNode.mockReturnValue({
             parentsTraversed: 1,
         });
 
@@ -243,7 +243,7 @@ describe('Paginator', () => {
         vi.mocked(paginateElementAcrossPages).mockReturnValue(
             SplitResult.FullNodePlaced
         );
-        mockDomState.nextSiblingOrParentSibling.mockReturnValue({
+        mockDomState.goToNextSiblingOrParentSibling.mockReturnValue({
             parentsTraversed: 2,
         });
 
@@ -266,7 +266,7 @@ describe('Paginator', () => {
         const node = { type: PageNodeType.Element } as PageElement;
         mockDomState.currentNode = node;
         mockDomState.completed = false;
-        mockDomState.nextNode.mockImplementation(() => {
+        mockDomState.goToNextNode.mockImplementation(() => {
             mockDomState.completed = true;
         });
         vi.mocked(paginateElementAcrossPages).mockReturnValue(
@@ -277,6 +277,7 @@ describe('Paginator', () => {
 
         expect(afterVisitNode).toHaveBeenCalledWith(
             config.id,
+            SplitResult.FullNodePlaced,
             mockDomState,
             mockPageManager
         );

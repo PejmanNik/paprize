@@ -44,7 +44,7 @@ export class DomState {
         return this._previousNode;
     }
 
-    public nextNode() {
+    public goToNextNode() {
         const result = this._treeWalker.nextNode();
         if (!result) {
             this._completed = true;
@@ -55,7 +55,7 @@ export class DomState {
         this.setState();
     }
 
-    public nextSiblingOrParentSibling(): { parentsTraversed: number } {
+    public goToNextSiblingOrParentSibling(): { parentsTraversed: number } {
         let parentsTraversed = 0;
 
         if (this._treeWalker.nextSibling()) {
@@ -85,14 +85,14 @@ export class DomState {
         return { parentsTraversed };
     }
 
-    public firstChildOrNextNode(): { parentsTraversed: number } {
+    public goToFirstChildOrNextNode(): { parentsTraversed: number } {
         if (this._treeWalker.firstChild()) {
             logger.debug(logPrefix, 'moving to first child node');
             this.setState();
             return { parentsTraversed: 1 };
         }
 
-        this.nextNode();
+        this.goToNextNode();
         return { parentsTraversed: 0 };
     }
 
@@ -104,12 +104,12 @@ export class DomState {
             getConfigFromAttributes(this._treeWalker.currentNode, this._config)
         );
 
-        DEV: markCurrentNode(this.currentNode);
-        DEV: unmarkCurrentNode(this.previousNode);
+        DEV: markCurrentNode(this._currentNode);
+        DEV: unmarkCurrentNode(this._previousNode);
 
         logger.debug(logPrefix, 'moved to node', {
-            currentNode: this.currentNode,
-            previousNode: this.previousNode,
+            currentNode: this._currentNode,
+            previousNode: this._previousNode,
         });
     }
 }

@@ -27,6 +27,7 @@ export interface PaginationPlugin {
     ) => void;
     afterVisitNode?: (
         id: string,
+        result: SplitResult,
         domState: DomState,
         pageManager: PageManager
     ) => void;

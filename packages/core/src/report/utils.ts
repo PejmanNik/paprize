@@ -44,7 +44,7 @@ export function createSectionPageHeightPlugin(
     return {
         name: 'sectionPageHeight',
         order: 1,
-        afterVisitNode: (_, domState, pageManager) => {
+        afterVisitNode: (_id, _result, domState, pageManager) => {
             const lastPage = domState.completed;
             if (!lastPage || sectionFooterHeight <= 0) return;
 
