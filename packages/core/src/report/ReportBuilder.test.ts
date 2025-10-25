@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ReportBuilder, type SectionOptions } from './ReportBuilder';
 import { Paginator } from '../paginate/Paginator';
-import { paprize_isInitialized } from '../window';
+import { paprize_isInitialized, paprize_isReady } from '../window';
 import type { SectionComponents } from './sectionComponents';
 import { globalStyleId } from '../constants';
 
@@ -48,6 +48,7 @@ describe('ReportBuilder', () => {
         });
 
         document.body.innerHTML = '';
+        window[paprize_isReady] = false;
     });
 
     it.for([true, false])(
@@ -81,7 +82,11 @@ describe('ReportBuilder', () => {
 
     it('schedulePaginate without sections should return empty result', async () => {
         const result = await rb.schedulePaginate();
+
         expect(result.sections).toEqual([]);
+
+        await Promise.resolve();
+        expect(window[paprize_isReady]).toBe(true);
     });
 
     it('schedulePaginate should call Paginator.paginate and dispatch lifecycle events', async () => {
@@ -133,6 +138,9 @@ describe('ReportBuilder', () => {
         expect(pageCompleted).toHaveBeenCalledTimes(2);
         expect(sectionCompleted).toHaveBeenCalled();
         expect(paginationCycleCompleted).toHaveBeenCalled();
+
+        await Promise.resolve();
+        expect(window[paprize_isReady]).toBe(true);
     });
 
     it('schedulePaginate should call Paginator.paginate after suspense resolved', async () => {
@@ -185,12 +193,16 @@ describe('ReportBuilder', () => {
             expect.objectContaining({ sectionId: section1 })
         );
 
+        await Promise.resolve();
+        expect(window[paprize_isReady]).toBe(false);
+
         resolve!();
         await result.suspension;
 
         expect(sectionCompleted).toHaveBeenCalledWith(
             expect.objectContaining({ sectionId: section1 })
         );
+        expect(window[paprize_isReady]).toBe(true);
     });
 
     it('should queue multiple pagination requests', async () => {

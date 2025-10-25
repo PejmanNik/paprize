@@ -16,7 +16,7 @@ import {
     calculatePageDimensions,
     createSectionPageHeightPlugin,
 } from './utils';
-import { paprize_isInitialized } from '../window';
+import { paprize_isInitialized, paprize_isReady } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
 import logger from '../logger';
@@ -105,6 +105,7 @@ export class ReportBuilder {
 
     public async schedulePaginate(): Promise<ScheduleResult> {
         if (this._sections.size === 0) {
+            window[paprize_isReady] = true;
             return {
                 sections: [],
                 suspension: Promise.resolve(),
@@ -195,7 +196,9 @@ export class ReportBuilder {
 
             return {
                 sections: [...this._sections.values()].map((s) => s.context),
-                suspension: reportTracker.promise,
+                suspension: reportTracker.promise.then(() => {
+                    window[paprize_isReady] = true;
+                }),
             };
         } finally {
             this._processPendingPagination();
