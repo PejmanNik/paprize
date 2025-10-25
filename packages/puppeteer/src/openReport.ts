@@ -1,5 +1,11 @@
 import type { Page } from 'puppeteer-core';
-import { paprize_isReady, paprize_readJsonDataFile } from '@paprize/core/src';
+import {
+    logger,
+    paprize_isInitialized,
+    paprize_isReady,
+    paprize_readJsonDataFile,
+} from '@paprize/core/src';
+import { setupLogger } from './setupLogger';
 
 /**
  * Opens a report in the given Puppeteer page, injects a JSON data file if provided,
@@ -18,6 +24,7 @@ export async function openReport(
     jsonData: string | undefined,
     timeout: number = 30000
 ): Promise<void> {
+    setupLogger(page);
     await page.exposeFunction(paprize_readJsonDataFile, () => {
         return jsonData;
     });
@@ -26,7 +33,29 @@ export async function openReport(
         waitUntil: 'networkidle0',
         timeout,
     });
-    await page.waitForFunction(`window.${paprize_isReady} === true`, {
-        timeout,
-    });
+
+    await page
+        .waitForFunction(`window.${paprize_isInitialized} === true`, {
+            timeout: 100,
+        })
+        .catch(() => {
+            logger.warn(
+                'The page is not a valid paprize report. Using paprize fallback zero report.'
+            );
+
+            return page.addScriptTag({
+                type: 'module',
+                path: `${import.meta.dirname}/paprize-zero.js`,
+            });
+        });
+
+    await page
+        .waitForFunction(`window.${paprize_isReady} === true`, {
+            timeout,
+        })
+        .catch(() => {
+            throw new Error(
+                'The report did not become ready within the specified timeout.'
+            );
+        });
 }
