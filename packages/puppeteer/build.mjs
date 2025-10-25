@@ -2,7 +2,7 @@ import * as esbuild from 'esbuild';
 import fs from 'fs/promises';
 import dts from 'unplugin-dts/esbuild';
 
-await fs.rm('./dist', { recursive: true });
+await fs.rm('./dist', { recursive: true, force: true });
 
 await esbuild.build({
     entryPoints: ['src/index.ts'],
