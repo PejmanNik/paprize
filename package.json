@@ -5,12 +5,15 @@
         "packages/*",
         "examples/*"
     ],
+    "config": {
+        "ws_packages": "-w packages/core -w packages/react -w packages/puppeteer -w packages/vanilla"
+    },
     "scripts": {
-        "core:dev": "npm run dev -w packages/core",
         "website:build": "npm run build -w packages/website",
-        "build": "npm run build -w packages/core -w packages/react -w packages/puppeteer",
-        "release": "npm publish --workspace packages/core --workspace packages/react --workspace packages/puppeteer --access public",
-        "test": "npm test -ws --if-present -- --run"
+        "build": "npm run build $npm_package_config_ws_packages",
+        "release": "npm publish $npm_package_config_ws_packages --access public",
+        "test": "npm test -ws --if-present -- --run",
+        "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
     "devDependencies": {
         "@eslint/js": "^9.37.0",
