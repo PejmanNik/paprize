@@ -1,0 +1,27 @@
+{
+    "name": "paprize",
+    "type": "module",
+    "workspaces": [
+        "packages/*",
+        "examples/*"
+    ],
+    "config": {
+        "ws_packages": "-w packages/core -w packages/react -w packages/puppeteer -w packages/vanilla"
+    },
+    "scripts": {
+        "website:build": "npm run build -w packages/website",
+        "build": "npm run build $npm_package_config_ws_packages",
+        "release": "npm publish $npm_package_config_ws_packages --access public",
+        "test": "npm test -ws --if-present -- --run",
+        "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.37.0",
+        "eslint": "^9.37.0",
+        "eslint-plugin-react-hooks": "^6.1.1",
+        "eslint-plugin-react-refresh": "^0.4.23",
+        "globals": "^16.4.0",
+        "prettier": "3.6.2",
+        "typescript-eslint": "^8.46.1"
+    }
+}

@@ -1,0 +1,26 @@
+    :root {
+        --paprize-current-element-color: #3c00ff;
+        --paprize-current-text-color: #14c5e7;
+        --paprize-ignored-element-color: #ff1e00d1;
+        --paprize-ignored-text-color: #e77314;
+    }
+
+    .pz-current-element {
+        box-shadow: 0 0 0 2px var(--paprize-current-element-color);
+    }
+
+    .pz-current-text {
+        box-shadow: 0 0 0 2px var(--paprize-current-text-color);
+    }
+
+    .pz-ignored-element {
+        box-shadow: 0 0 0 2px var(--paprize-ignored-element-color);
+    }
+
+    .pz-ignored-text {
+        box-shadow: 0 0 0 2px var(--paprize-ignored-text-color);
+    }
+
+    .pz-page {
+        box-shadow: 0 0 0 1px black;
+    }
