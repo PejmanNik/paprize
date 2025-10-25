@@ -44,12 +44,12 @@ export class PaprizeReport {
     private readonly _root: HTMLElement;
     private readonly _options: PaprizeReportOptions;
 
-    constructor(options: PaprizeReportOptions) {
+    constructor(options?: PaprizeReportOptions) {
         const style = document.createElement('style');
         style.textContent = globalStyles;
         document.head.appendChild(style);
 
-        this._options = options;
+        this._options = options ?? {};
         this._monitor = new Core.EventDispatcher<PaprizeReportEvents>();
         this._reportManager = new Core.ReportBuilder();
         this._root = this._createRootElement();

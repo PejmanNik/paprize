@@ -13,8 +13,6 @@ export default defineConfig(({ command }) => ({
             exclude: [
                 'src/index.ts',
                 'src/debugUtilities/**',
-                'src/plugins/index.ts',
-                'src/plugins/defaultPlugins.ts',
                 ...coverageConfigDefaults.exclude,
             ],
             reporter: ['text'],
