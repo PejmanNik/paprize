@@ -48,7 +48,7 @@ function MyComponent() {
 ```
 
 <ComponentCatalog.Container noChildren>
-<ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[Section](/components/report-components.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 </TabItem>

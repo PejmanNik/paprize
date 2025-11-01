@@ -43,7 +43,9 @@ const plugins = [new PageBreakPlugin()];
 
 ## Table Plugin
 
-You can create an instance of the Table plugin with the desired options. These options control the table’s layout. For example, setting `cloneHeader` to `true` ensures the header is repeated on every page when the table spans multiple pages.
+You can create an instance of the Table plugin with the desired options. These [TablePluginOptions](core/api#tablepluginoptions) control how the pagination engine lays out the table.
+
+By default, the Table plugin prevents adding a table header at the end of a page without any body rows. Other options must be explicitly enabled; for example, setting `cloneHeader` to `true` ensures that the header is repeated on every page when the table spans multiple pages.
 
 ```tsx
 import { TablePlugin } from '@paprize/core';

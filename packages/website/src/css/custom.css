@@ -72,7 +72,6 @@ nav.navbar {
   border-bottom: 1px solid #e5e7eb;
 }
 
-
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-primary: #8bc4fe;
@@ -110,4 +109,10 @@ nav.navbar {
   padding-right: var(--ifm-side-bar-icon-p);
   width: var(--ifm-side-bar-icon-w);
   content: url(../../static/img/puppeteer-logo.svg);
+}
+
+.core-icon>div>a::before {
+  padding-right: var(--ifm-side-bar-icon-p);
+  width: var(--ifm-side-bar-icon-w);
+  content: url(../../static/img/fab.svg);
 }

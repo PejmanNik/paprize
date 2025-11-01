@@ -7,25 +7,22 @@ import PageComponents from '../components/\_page-components.md';
 
 # Page Info
 
+By using the `monitor` property from `PaprizeReport`, you can subscribe to pagination [events](vanilla/api.md#paprizereportevents) and update the report content with the corresponding page information.
+
+:::warning
+Be cautious when modifying element`s content within these events, as the changes are applied **after pagination**. Altering the content may affect the page height and break the page size boundaries.
+
+To prevent this, consider assigning a fixed height to such elements, reserving space for their content ahead of time.
+:::
+
 ## PageCompleted
 
-Gets the current page info within the current section, starting from 0.
+Triggered after pagination is completed for each page. This event provides the page information and is fired once per page in each pagination cycle.
 
 - Event Name: `pageCompleted`
-- Event Object: `pageContext: PageContext`
+- Event Object: [DomPageContext](vanilla/api.md#dompagecontext)
 
-### PageContext
-
-| Name       | Type              | Description                                 |
-| :--------- | :---------------- | :------------------------------------------ |
-| sectionId  | number            | Index of the section within the report.     |
-| pageIndex  | number            | Index of the page within the section.       |
-| totalPages | number            | Total number of pages in the section.       |
-| page       | HTMLElement       | pagination result DOM element               |
-| components | SectionComponents | pagination result DOM elements of component |
-
-================
-//////
+Example usage:
 
 ```tsx
 const report = new PaprizeReport();
@@ -36,33 +33,21 @@ report.monitor.addEventListener('pageCompleted', (pageContext) => {
 });
 ```
 
-## useSectionInfo
+## SectionCompleted
 
-Get information about the current section and its pages.
+Triggered when a section has been fully paginated. This event provides the section information and is fired once per report in each pagination cycle.
 
-```jsx
-const { sectionId } : SectionInfo = useSectionInfo();
-```
+- Event Name: `sectionCompleted`
+- Event Object: [DomSectionContext](vanilla/api.md#domsectioncontext)
 
-| Name         | Type       | Description                                                                       |
-| :----------- | :--------- | :-------------------------------------------------------------------------------- |
-| sectionId    | string     | Unique ID of the section.                                                         |
-| sectionIndex | number     | Index of the section within the report.                                           |
-| pages        | PageInfo[] | Array of pages in the section. When `isPaginated` is `false`, this will be empty. |
-| isPaginated  | boolean    | Indicates whether the section has been paginated.                                 |
-| isSuspended  | boolean    | Indicates whether there are pending suspensions in the section.                   |
+## PaginationCycleCompleted
 
-## useReportInfo
+Triggered when an entire pagination cycle is completed. This event provides information about all paginated sections and is fired at least once after scheduling the pagination.
 
-Retrieves information about all sections within the report.
+If a suspended section becomes unsuspend, this event will be triggered again, since the previous cycle did not include that section.
 
-```jsx
-const { sections } = useReportInfo();
-```
-
-| Name     | Type          | Description                                                                    |
-| :------- | :------------ | :----------------------------------------------------------------------------- |
-| sections | SectionInfo[] | An array of sections in the report, each containing details about the section. |
+- Event Name: `paginationCycleCompleted`
+- Event Object: [PaginationCycleCompleted](vanilla/api.md#dompaginationcyclecompleted)
 
 ## Attribute Based
 

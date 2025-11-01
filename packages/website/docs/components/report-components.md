@@ -15,9 +15,13 @@ Unlike printing a standard web page where the browser manages pagination automat
 
 <ComponentsDiagram />
 
+Paprize components **must** be placed in specific positions within the component tree. Using them outside of their expected structure will cause runtime errors.
+Each component’s documentation explicitly specifies its valid parent and child components.
+Paprize relies on this structure to correctly build the report.
+
 ### Section
 
-The fundamental building block of every report is the **Section**.
+The fundamental building block of every report is the **Section**. A report is divided into sections, and each section defines its own page formatting, including page numbers, headers, footers, orientation, size, and plugins.
 
 - Each report must contain **at least one** Section.
 - A Section can define its own page size, headers, and footers.
@@ -82,7 +86,7 @@ The fundamental building block of every report is the **Section**.
 ```
 
 <ComponentCatalog.Container isMandatory>
-<ComponentCatalog.Parent>[ReportRoot](/react/components.md#repor-troot)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[ReportRoot](/react/components.md#report-root)</ComponentCatalog.Parent>
 <ComponentCatalog.Children>
 <PageComponents />
 </ComponentCatalog.Children>

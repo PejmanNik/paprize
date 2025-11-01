@@ -69,7 +69,7 @@ The available values are described in [Configuration](/configuration.md).
 </Tabs>
 
 <ComponentCatalog.Container noChildren>
-<ComponentCatalog.Parent>[PageContent](report-components.md#pagecontent)</ComponentCatalog.Parent>
+<ComponentCatalog.Parent>[PageContent](report-components.md#page-content)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 All props/attributes are optional and follow this order of precedence:
