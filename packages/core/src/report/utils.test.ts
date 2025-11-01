@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import {
     getVisibleSize,
-    calculatePageDimensions,
+    calculatePageSizes,
     createSectionPageHeightPlugin,
     shorthand,
 } from './utils';
@@ -46,12 +46,12 @@ describe('getVisibleSize', () => {
     });
 });
 
-describe('calculatePageDimensions', () => {
+describe('calculatePageSizes', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    it('returns correct dimensions and header/footer heights', () => {
+    it('returns correct sizes and header/footer heights', () => {
         const content = document.createElement('div');
         const header = document.createElement('div');
         const footer = document.createElement('div');
@@ -75,7 +75,7 @@ describe('calculatePageDimensions', () => {
         });
         content.style.marginLeft = '0px';
         content.style.marginRight = '0px';
-        const result = calculatePageDimensions(content, header, footer);
+        const result = calculatePageSizes(content, header, footer);
 
         expect(result.height).toBe(100);
         expect(result.width).toBe(200);
@@ -101,7 +101,7 @@ describe('calculatePageDimensions', () => {
             toJSON: () => {},
         });
 
-        const result = calculatePageDimensions(content, null, null);
+        const result = calculatePageSizes(content, null, null);
 
         expect(result.height).toBe(150);
         expect(result.width).toBe(300);

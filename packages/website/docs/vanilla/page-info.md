@@ -7,28 +7,34 @@ import PageComponents from '../components/\_page-components.md';
 
 # Page Info
 
-Pagination information is provided through several hooks, as the data becomes available at different stages of React’s rendering and pagination lifecycle.
-
-Using these hooks may cause the page to re-render, which can trigger the pagination engine to run again. To avoid an infinite loop, consider using [Layout Suspension](/react/section-suspension.md) to pause the pagination engine for a specific section until all required data is available.
-
-## usePageInfo
+## PageCompleted
 
 Gets the current page info within the current section, starting from 0.
 
-```jsx
-const { pageIndex, totalPages } = usePageInfo();
+- Event Name: `pageCompleted`
+- Event Object: `pageContext: PageContext`
+
+### PageContext
+
+| Name       | Type              | Description                                 |
+| :--------- | :---------------- | :------------------------------------------ |
+| sectionId  | number            | Index of the section within the report.     |
+| pageIndex  | number            | Index of the page within the section.       |
+| totalPages | number            | Total number of pages in the section.       |
+| page       | HTMLElement       | pagination result DOM element               |
+| components | SectionComponents | pagination result DOM elements of component |
+
+================
+//////
+
+```tsx
+const report = new PaprizeReport();
+report.monitor.addEventListener('pageCompleted', (pageContext) => {
+    if (pageContext.pageHeader) {
+        pageContext.pageHeader.innerHTML = `<h4>Page Header ${pageContext.index + 1} of ${pageContext.totalPages}</h4>`;
+    }
+});
 ```
-
-| Name       | Type   | Description                           |
-| :--------- | :----- | :------------------------------------ |
-| pageIndex  | number | Index of the page within the section. |
-| totalPages | number | Total number of pages in the section. |
-
-<ComponentCatalog.Container noChildren>
-<ComponentCatalog.Parent>
-<PageComponents />
-</ComponentCatalog.Parent>
-</ComponentCatalog.Container>
 
 ## useSectionInfo
 
@@ -37,10 +43,6 @@ Get information about the current section and its pages.
 ```jsx
 const { sectionId } : SectionInfo = useSectionInfo();
 ```
-
-<ComponentCatalog.Container noChildren>
-<ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
-</ComponentCatalog.Container>
 
 | Name         | Type       | Description                                                                       |
 | :----------- | :--------- | :-------------------------------------------------------------------------------- |
@@ -58,10 +60,29 @@ Retrieves information about all sections within the report.
 const { sections } = useReportInfo();
 ```
 
-<ComponentCatalog.Container noChildren>
-<ComponentCatalog.Parent>[ReportRoot](/react/components.md#report-root)</ComponentCatalog.Parent>
-</ComponentCatalog.Container>
-
 | Name     | Type          | Description                                                                    |
 | :------- | :------------ | :----------------------------------------------------------------------------- |
 | sections | SectionInfo[] | An array of sections in the report, each containing details about the section. |
+
+## Attribute Based
+
+For simple use cases or when using [Zero Config](/puppeteer/zero-config.md), you can use attribute-based page info. The content of elements with specific attributes will be replaced with the corresponding values after pagination.
+
+- **Current Page Number:** `data-pz-v-page-number`
+- **Total Number of Pages:** `data-pz-v-total-pages`
+- **Current Section Number:** `data-pz-v-section-number`
+- **Total Number of Sections:** `data-pz-v-total-sections`
+
+<br/>
+
+For example:
+
+```html
+<span data-pz-v-total-pages></span>
+```
+
+If the current section has 10 pages, after pagination it will be converted to:
+
+```html
+<span data-pz-v-total-pages>10</span>
+```

@@ -1,6 +1,6 @@
 import { DomState } from './DomState';
 import { PageManager } from './PageManager';
-import type { PageSize } from './PageSize';
+import type { RealizedPageSize } from './RealizedPageSize';
 import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { paginateElementAcrossPages } from './paginateElement';
 import { paginateTextByWord } from './paginateText';
@@ -27,7 +27,7 @@ export class Paginator {
 
     private constructor(
         root: Element,
-        pageSize: PageSize,
+        pageSize: RealizedPageSize,
         config?: Partial<PaginationConfig>
     ) {
         this._config = { ...defaultConfig, ...config };
@@ -59,7 +59,7 @@ export class Paginator {
 
     public static paginate(
         root: Element,
-        pageSize: PageSize,
+        pageSize: RealizedPageSize,
         config?: Partial<PaginationConfig>
     ): PaginateResult {
         const paginator = new Paginator(root, pageSize, config);

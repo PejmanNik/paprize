@@ -15,7 +15,7 @@ vi.mock('./utils', async () => {
 
     return {
         ...original,
-        calculatePageDimensions: vi.fn().mockReturnValue({
+        calculatePageSizes: vi.fn().mockReturnValue({
             height: 100,
             width: 200,
             sectionHeaderHeight: 10,
@@ -36,7 +36,7 @@ describe('ReportBuilder', () => {
     };
     const options = {
         id: 'sec1',
-        dimension: { width: 100, height: 200 },
+        size: { width: 100, height: 200 },
     } as unknown as SectionOptions;
 
     beforeEach(() => {
@@ -249,7 +249,7 @@ describe('ReportBuilder', () => {
         rb.tryAddSection(
             {
                 id: sectionId,
-                dimension: { width: '100px', height: '200px' },
+                size: { width: '100px', height: '200px' },
             } as SectionOptions,
             components,
             onPaginationCompleted

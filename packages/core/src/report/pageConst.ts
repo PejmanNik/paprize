@@ -1,6 +1,10 @@
-import type { PageDimension, PageMargin } from './pageTypes';
+import type { PageSize, PageMargin } from './pageTypes';
 
-const _pageSize = {
+/**
+ * shorthand types {@link PageSize}
+ * @enum
+ */
+export const pageSize = {
     A1: { height: '841mm', width: '594mm' },
     A2: { height: '594mm', width: '420mm' },
     A3: { height: '420mm', width: '297mm' },
@@ -13,21 +17,15 @@ const _pageSize = {
     Letter: { height: '8.5in', width: '11in' },
     Legal: { height: '11in', width: '8.5in' },
     Tabloid: { height: '11in', width: '17in' },
-};
+} as const satisfies Record<string, PageSize>;
 
-const _pageMargin = {
+/**
+ * shorthand values {@link PageMargin}
+ * @enum
+ */
+export const pageMargin = {
     Normal: { top: '1in', right: '1in', bottom: '1in', left: '1in' },
     Narrow: { top: '0.4in', right: '0.6in', bottom: '0.6in', left: '0.6in' },
     Wide: { top: '0.5in', right: '2in', bottom: '0.5in', left: '2in' },
     None: { top: '0in', right: '0in', bottom: '0in', left: '0in' },
-};
-
-export const pageSize = _pageSize as Record<
-    keyof typeof _pageSize,
-    PageDimension
->;
-
-export const pageMargin = _pageMargin as Record<
-    keyof typeof _pageMargin,
-    PageMargin
->;
+} as const satisfies Record<string, PageMargin>;

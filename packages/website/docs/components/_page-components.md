@@ -1,0 +1,6 @@
+1. [SectionHeader](/components/report-components.md#section-header)
+1. [SectionFooter](/components/report-components.md#section-footer)
+1. [PageContent](/components/report-components.md#page-content)
+1. [PageHeader](/components/report-components.md#page-header)
+1. [PageFooter](/components/report-components.md#page-footer)
+1. [PageOverlay](/components/report-components.md#page-overlay)

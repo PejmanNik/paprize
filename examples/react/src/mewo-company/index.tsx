@@ -20,13 +20,13 @@ function MewoCompany() {
     return (
         <ReportRoot>
             <ReportPreview>
-                <Section dimension={pageSize.A4}>
+                <Section size={pageSize.A4}>
                     <PageContent>
                         <Cover />
                     </PageContent>
                 </Section>
 
-                <Section dimension={pageSize.A4}>
+                <Section size={pageSize.A4}>
                     <PageHeader>
                         <Header />
                     </PageHeader>

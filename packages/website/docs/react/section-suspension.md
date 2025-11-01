@@ -40,6 +40,6 @@ function SectionList() {
 }
 ```
 
-<ComponentCatalog.Container isHook>
+<ComponentCatalog.Container noChildren>
 <ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>

@@ -21,11 +21,11 @@ export interface ReportInfo {
 }
 
 export function pageContextToPageInfo(pc: {
-    index: number;
+    pageIndex: number;
     totalPages: number;
 }): PageInfo {
     return {
-        pageIndex: pc.index,
+        pageIndex: pc.pageIndex,
         totalPages: pc.totalPages,
     };
 }
@@ -33,7 +33,7 @@ export function pageContextToPageInfo(pc: {
 export function sectionContextToSectionInfo(sc: SectionContext): SectionInfo {
     return {
         sectionId: sc.sectionId,
-        sectionIndex: sc.index,
+        sectionIndex: sc.sectionIndex,
         isPaginated: sc.isPaginated,
         isSuspended: sc.isSuspended,
         pages: sc.pages.map(pageContextToPageInfo),

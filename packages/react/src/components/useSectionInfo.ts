@@ -11,7 +11,7 @@ export const useSectionInfo = (): SectionInfo => {
         pages: [],
         isPaginated: false,
         isSuspended: false,
-        index: -1,
+        sectionIndex: -1,
         sectionId: sectionId,
     });
 
@@ -31,11 +31,11 @@ export const useSectionInfo = (): SectionInfo => {
 
     return {
         sectionId: sectionId,
-        sectionIndex: state.index,
+        sectionIndex: state.sectionIndex,
         isSuspended: state.isSuspended,
         isPaginated: state.isPaginated,
         pages: state.pages.map((p) => ({
-            pageIndex: p.index,
+            pageIndex: p.pageIndex,
             totalPages: p.totalPages,
         })),
     };

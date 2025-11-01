@@ -1,7 +1,7 @@
 import {
     reportStyles,
     type PageContext,
-    type PageDimension,
+    type PageSize,
     type PageMargin,
     type PaginationConfig,
 } from '@paprize/core/src';
@@ -16,14 +16,14 @@ import { SectionControllerContext } from './SectionControllerContext';
 
 export interface SectionLayoutProps {
     elements: PageElements;
-    dimension: PageDimension;
+    size: PageSize;
     margin: PageMargin | undefined;
     config?: Partial<PaginationConfig>;
 }
 
 export function SectionLayout({
     elements,
-    dimension,
+    size,
     margin,
     config,
 }: SectionLayoutProps) {
@@ -51,7 +51,7 @@ export function SectionLayout({
             {
                 ...config,
                 id: sectionId,
-                dimension: dimension,
+                size: size,
                 margin: margin,
                 plugins: controllerState.plugins,
                 suspense: controllerState.suspense,
@@ -71,13 +71,13 @@ export function SectionLayout({
         return () => {
             reportBuilder.removeSection(sectionId);
         };
-    }, [config, controllerState, dimension, margin, reportBuilder, sectionId]);
+    }, [config, controllerState, size, margin, reportBuilder, sectionId]);
 
     return (
         <SectionControllerContext value={controllerValue}>
             {pageContexts?.map((pageContext) => (
                 <Page
-                    key={pageContext.index}
+                    key={pageContext.pageIndex}
                     elements={{
                         ...elements,
                         content: (
@@ -89,9 +89,9 @@ export function SectionLayout({
                             />
                         ),
                     }}
-                    dimension={dimension}
+                    size={size}
                     margin={margin}
-                    pageIndex={pageContext.index}
+                    pageIndex={pageContext.pageIndex}
                     totalPages={pageContext.totalPages}
                 />
             ))}
@@ -100,7 +100,7 @@ export function SectionLayout({
                 <div style={reportStyles.outOfScreen}>
                     <Page
                         elements={elements}
-                        dimension={dimension}
+                        size={size}
                         margin={margin}
                         pageIndex={0}
                         totalPages={1}

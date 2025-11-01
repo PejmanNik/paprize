@@ -4,7 +4,7 @@ import { createLoremIpsumParagraph, pageMargin } from '@paprize/core/src';
 import { PaprizeReport } from '../PaprizeReport';
 
 const App = () => {
-    return h('div', {}, [
+    return h('div', { [Paprize.previewAttribute]: true }, [
         h(
             'div',
             {
@@ -136,23 +136,23 @@ const myPromise = new Promise<void>((res) => {
     resolve = res;
 });
 
-const r = new PaprizeReport({ usePreviewMode: true });
+const r = new PaprizeReport();
 r.addSection({
     id: '1',
-    dimension: { height: '350px', width: '400px' },
+    size: { height: '350px', width: '400px' },
     margin: pageMargin.None,
 });
 
 r.addSection({
     id: '2',
-    dimension: { height: '350px', width: '400px' },
+    size: { height: '350px', width: '400px' },
     margin: pageMargin.None,
     suspense: [myPromise],
 });
 
 r.monitor.addEventListener('pageCompleted', (pageContext) => {
-    if (pageContext.pageHeader) {
-        pageContext.pageHeader.innerHTML = `<h4>Page Header ${pageContext.index + 1} of ${pageContext.totalPages}</h4>`;
+    if (pageContext.components.pageHeader) {
+        pageContext.components.pageHeader.innerHTML = `<h4>Page Header ${pageContext.pageIndex + 1} of ${pageContext.totalPages}</h4>`;
     }
 });
 

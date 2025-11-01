@@ -2,10 +2,10 @@ import { useMemo, type ReactNode } from 'react';
 import parseSectionChildren from '../internal/parseSectionChildren';
 import { SectionIdContext } from '../internal/SectionIdContext';
 import {
-    adjustDimension,
+    adjustPageSize,
     reportStyles,
     sectionClassName,
-    type PageDimension,
+    type PageSize,
     type PageMargin,
     type PageOrientation,
     type PaginationConfig,
@@ -15,7 +15,7 @@ import { SectionLayout } from '../internal/SectionLayout';
 export interface SectionProps {
     children: ReactNode;
     id?: string;
-    dimension: PageDimension;
+    size: PageSize;
     orientation?: PageOrientation;
     margin?: PageMargin;
     config?: Partial<PaginationConfig>;
@@ -26,7 +26,7 @@ let sectionIdCounter = 1;
 export function Section({
     children,
     id,
-    dimension,
+    size,
     orientation = 'portrait',
     margin,
     config,
@@ -34,9 +34,9 @@ export function Section({
     const sectionId = useMemo(() => id ?? `__000${sectionIdCounter++}`, [id]);
     const elements = useMemo(() => parseSectionChildren(children), [children]);
 
-    const adjustedDimension = useMemo(
-        () => adjustDimension(dimension, orientation),
-        [dimension, orientation]
+    const adjustedSize = useMemo(
+        () => adjustPageSize(size, orientation),
+        [size, orientation]
     );
 
     return (
@@ -48,7 +48,7 @@ export function Section({
             <SectionIdContext value={sectionId}>
                 <SectionLayout
                     elements={elements}
-                    dimension={adjustedDimension}
+                    size={adjustedSize}
                     margin={margin}
                     config={config}
                 />

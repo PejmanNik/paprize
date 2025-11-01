@@ -27,7 +27,6 @@ const config: Config = {
     projectName: 'paprize', // Usually your repo name.
 
     onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
 
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you
@@ -49,6 +48,17 @@ const config: Config = {
                 },
             } satisfies Preset.Options,
         ],
+    ],
+    markdown: {
+        hooks: {
+            onBrokenMarkdownLinks: 'warn',
+        },
+    },
+    stylesheets: [
+        {
+            href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap',
+            type: 'text/css',
+        },
     ],
     themes: [
         [

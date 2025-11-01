@@ -5,6 +5,7 @@ import {
     pageHeaderAttribute,
     pageIndexMetadataAttribute,
     pageNumberValueAttribute,
+    previewAttribute,
     sectionAttribute,
     sectionFooterAttribute,
     sectionHeaderAttribute,
@@ -26,7 +27,6 @@ const globalStyles = `
 
 export interface PaprizeReportOptions {
     root?: HTMLElement;
-    usePreviewMode?: boolean;
     keepInitialElementAfterPagination?: boolean;
 }
 
@@ -77,7 +77,7 @@ export class PaprizeReport {
             'pageCompleted',
             (event) => {
                 const pages = this._getSectionState(event.sectionId).pages;
-                this._monitor.dispatch('pageCompleted', pages[event.index]);
+                this._monitor.dispatch('pageCompleted', pages[event.pageIndex]);
             }
         );
         this._reportManager.monitor.addEventListener(
@@ -96,7 +96,7 @@ export class PaprizeReport {
     _createRootElement(): HTMLElement {
         const wrapper = document.createElement('div');
 
-        if (this._options.usePreviewMode) {
+        if (document.querySelector(`[${previewAttribute}]`)) {
             wrapper.classList.add(Core.previewClassName);
         }
 
@@ -218,23 +218,23 @@ export class PaprizeReport {
         for (const pageContext of pageContexts) {
             const page = document.createElement('div');
             page.classList.add(Core.pageClassName);
-            page.id = Core.buildPageId(options.id, pageContext.index);
+            page.id = Core.buildPageId(options.id, pageContext.pageIndex);
             page.setAttribute(
                 pageIndexMetadataAttribute,
-                pageContext.index.toString()
+                pageContext.pageIndex.toString()
             );
 
             Object.assign(
                 page.style,
                 Core.reportStyles.page(
-                    options.dimension,
+                    options.size,
                     options.margin ?? Core.pageMargin.None
                 )
             );
 
             const components = Core.cloneComponents(state.components);
 
-            if (pageContext.index === 0 && components.sectionHeader) {
+            if (pageContext.pageIndex === 0 && components.sectionHeader) {
                 page.appendChild(components.sectionHeader);
             }
             if (components.pageHeader) {
@@ -251,7 +251,7 @@ export class PaprizeReport {
                 pageFooterContainer.appendChild(components.pageFooter);
             }
             if (
-                pageContext.index === pageContexts.length - 1 &&
+                pageContext.pageIndex === pageContexts.length - 1 &&
                 components.sectionFooter
             ) {
                 pageFooterContainer.appendChild(
@@ -271,11 +271,10 @@ export class PaprizeReport {
 
             const domPageContext: DomPageContext = {
                 sectionId: options.id,
-                index: pageContext.index,
+                pageIndex: pageContext.pageIndex,
                 totalPages: pageContexts.length,
-                ...components,
                 page,
-                pageContent,
+                components: { ...components, pageContent },
             };
             pages.push(domPageContext);
         }
@@ -296,7 +295,7 @@ export class PaprizeReport {
             component
                 .querySelectorAll(`[${pageNumberValueAttribute}]`)
                 .forEach((el) => {
-                    el.textContent = (pageContext.index + 1).toString();
+                    el.textContent = (pageContext.pageIndex + 1).toString();
                 });
             component
                 .querySelectorAll(`[${totalPagesValueAttribute}]`)

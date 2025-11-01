@@ -2,7 +2,7 @@ import { isDebugMode } from '../debugUtilities/debugMode';
 import { Paginator } from '../paginate/Paginator';
 import { defaultPlugins } from '../plugins';
 import { pageMargin } from './pageConst';
-import type { PageDimension, PageMargin } from './pageTypes';
+import type { PageSize, PageMargin } from './pageTypes';
 import type { Monitor } from './EventDispatcher';
 import { EventDispatcher } from './EventDispatcher';
 import type {
@@ -12,10 +12,7 @@ import type {
 } from './ReportBuilderEvents';
 import { reportStyles } from './reportStyles';
 import { cloneComponents, type SectionComponents } from './sectionComponents';
-import {
-    calculatePageDimensions,
-    createSectionPageHeightPlugin,
-} from './utils';
+import { calculatePageSizes, createSectionPageHeightPlugin } from './utils';
 import { paprize_isInitialized, paprize_isReady } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
@@ -24,7 +21,7 @@ import type { PaginationConfig } from '../paginate/PaginationConfig';
 
 export interface SectionOptions extends Partial<PaginationConfig> {
     readonly id: string;
-    readonly dimension: PageDimension;
+    readonly size: PageSize;
     readonly margin?: PageMargin;
     readonly suspense?: Promise<unknown>[];
 }
@@ -82,7 +79,7 @@ export class ReportBuilder {
         }
 
         const context: SectionContext = {
-            index: this._sections.size,
+            sectionIndex: this._sections.size,
             sectionId: options.id,
             isPaginated: false,
             isSuspended: !!options.suspense?.length,
@@ -96,7 +93,7 @@ export class ReportBuilder {
         });
 
         this._injectStyle(
-            reportStyles.sectionPageMedia(options.id, options.dimension)
+            reportStyles.sectionPageMedia(options.id, options.size)
         );
         this._monitor.dispatch('sectionCreated', context);
 
@@ -249,7 +246,7 @@ export class ReportBuilder {
         Object.assign(
             temporarilyContainer.style,
             reportStyles.page(
-                state.options.dimension,
+                state.options.size,
                 state.options.margin ?? pageMargin.None
             )
         );
@@ -290,7 +287,7 @@ export class ReportBuilder {
         document.body.appendChild(temporarilyContainer);
 
         const { height, width, sectionHeaderHeight, sectionFooterHeight } =
-            calculatePageDimensions(
+            calculatePageSizes(
                 components.pageContent,
                 components.sectionHeader,
                 components.sectionFooter
@@ -314,7 +311,7 @@ export class ReportBuilder {
 
         temporarilyContainer.remove();
         const pageContexts = paginatorResult.map((content, index) => ({
-            index,
+            pageIndex: index,
             totalPages: paginatorResult.length,
             sectionId: state.options.id,
             pageContentHtml: content,

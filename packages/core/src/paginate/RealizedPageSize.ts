@@ -1,4 +1,4 @@
-export interface PageSize {
+export interface RealizedPageSize {
     width: number;
     height: number;
 }

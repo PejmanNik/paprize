@@ -12,7 +12,7 @@ import { PageManager } from './PageManager';
 import { DomState } from './DomState';
 import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
-import type { PageSize } from './PageSize';
+import type { RealizedPageSize } from './RealizedPageSize';
 import { defaultConfig, type PaginationConfig } from './PaginationConfig';
 import { tempContainerClassName } from '../constants';
 import { paginateTextByWord } from './paginateText';
@@ -29,7 +29,7 @@ vi.mock('../utilities/pageNodeMarker', () => ({
 
 describe('Paginator', () => {
     let root: Element;
-    let pageSize: PageSize;
+    let pageSize: RealizedPageSize;
     let config: PaginationConfig;
 
     let mockDomState: {

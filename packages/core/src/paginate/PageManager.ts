@@ -6,7 +6,7 @@ import {
     type PageText,
 } from './PageNodes';
 import { Transaction } from './Transaction';
-import type { PageSize } from './PageSize';
+import type { RealizedPageSize } from './RealizedPageSize';
 import { unmarkCurrentNode } from '../debugUtilities/pageNodeMarker';
 import logger from '../logger';
 import { type PaginationConfig } from './PaginationConfig';
@@ -80,7 +80,7 @@ export class PageManager {
 
     public constructor(
         tempContainer: Element,
-        pageSize: PageSize,
+        pageSize: RealizedPageSize,
         transaction: Transaction,
         config: PaginationConfig
     ) {

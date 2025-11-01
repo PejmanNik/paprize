@@ -1,12 +1,27 @@
+/**
+ * Context information for a paginated page.
+ */
 export interface PageContext {
+    /**
+     * Index of the section to which this page belongs
+     */
     sectionId: string;
-    index: number;
+    /**
+     * Index of this page within its section.
+     */
+    pageIndex: number;
+    /**
+     * Total number of pages in the section that contains this page.
+     */
     totalPages: number;
+    /**
+     * HTML string representing the paginated content of this page.
+     */
     pageContentHtml: string;
 }
 
 export interface SectionContext {
-    index: number;
+    sectionIndex: number;
     sectionId: string;
     isSuspended: boolean;
     isPaginated: boolean;

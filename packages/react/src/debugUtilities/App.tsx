@@ -38,7 +38,7 @@ export default function App() {
             <ReportPreview>
                 <Section
                     id="section-1"
-                    dimension={{ height: '300px', width: '400px' }}
+                    size={{ height: '300px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
@@ -54,7 +54,7 @@ export default function App() {
                     </PageContent>
                 </Section>
                 <Section
-                    dimension={{ height: '400px', width: '400px' }}
+                    size={{ height: '400px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
@@ -106,7 +106,7 @@ export default function App() {
                 </Section>
 
                 <Section
-                    dimension={{ height: '600px', width: '400px' }}
+                    size={{ height: '600px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
