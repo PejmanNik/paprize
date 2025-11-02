@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { paginateTextByWord, hyphenation } from './paginateText';
 import { SplitResult } from './SplitResult';
 import type { PageManager } from './PageManager';
-import type { PaginationConfig } from './PaginationConfig';
+import type { PaginationOptions } from './PaginationOptions';
 import type { PageText } from './PageNodes';
 
 describe('paginateText', () => {
     let mockPageManager: Mocked<PageManager>;
-    let mockConfig: PaginationConfig;
+    let mockConfig: PaginationOptions;
     let mockText: PageText;
 
     beforeEach(() => {
@@ -26,9 +26,9 @@ describe('paginateText', () => {
         } as unknown as Mocked<PageManager>;
 
         mockConfig = {
-            hyphenationEnabled: true,
+            hyphenationDisabled: false,
             hyphen: '-',
-        } as PaginationConfig;
+        } as PaginationOptions;
 
         mockText = {
             textContent: 'test text content',
@@ -63,7 +63,7 @@ describe('paginateText', () => {
         });
 
         it('should return SplitResult.None when hyphenation is disabled and token doesnt fit', () => {
-            mockText.config.hyphenationEnabled = false;
+            mockText.config.hyphenationDisabled = true;
             mockPageManager.isOverFlow.mockReturnValue(true);
 
             const result = paginateTextByWord(mockText, mockPageManager);

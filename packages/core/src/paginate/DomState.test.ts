@@ -2,7 +2,10 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { DomState } from './DomState';
 import * as PageNodes from './PageNodes';
 import { Transaction } from './Transaction';
-import { type PaginationConfig, defaultConfig } from './PaginationConfig';
+import {
+    type PaginationOptions,
+    defaultPaginationOptions,
+} from './PaginationOptions';
 
 vi.mock('../utilities/pageNodeMarker', () => ({
     markCurrentNode: vi.fn(),
@@ -62,13 +65,13 @@ function makeTree() {
 describe('DomState', () => {
     let root: HTMLDivElement;
     let transaction: Transaction;
-    let config: PaginationConfig;
+    let config: PaginationOptions;
     let domState: DomState;
 
     beforeEach(() => {
         root = makeTree();
         transaction = new Transaction();
-        config = defaultConfig;
+        config = defaultPaginationOptions;
 
         vi.spyOn(PageNodes, 'createPageNode').mockImplementation((node) => {
             return {

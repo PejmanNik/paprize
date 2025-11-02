@@ -51,4 +51,4 @@ document.querySelectorAll(`[${sectionAttribute}]`).forEach((el) => {
     });
 });
 
-report.schedulePaginate();
+report.schedulePagination();

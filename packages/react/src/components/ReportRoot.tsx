@@ -10,7 +10,7 @@ export function ReportRoot({ children }: ReportRootProps) {
     const reportBuilder = useMemo(() => new ReportBuilder(), []);
 
     useEffect(() => {
-        reportBuilder.schedulePaginate();
+        reportBuilder.schedulePagination();
     }, [reportBuilder]);
 
     return (

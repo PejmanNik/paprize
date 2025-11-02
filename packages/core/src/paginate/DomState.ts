@@ -4,9 +4,9 @@ import {
 } from '../debugUtilities/pageNodeMarker';
 import { type PageNode, createPageNode } from './PageNodes';
 import {
-    getConfigFromAttributes,
-    type PaginationConfig,
-} from './PaginationConfig';
+    resolvePaginationOptions,
+    type PaginationOptions,
+} from './PaginationOptions';
 import type { Transaction } from './Transaction';
 import logger from '../logger';
 
@@ -15,7 +15,7 @@ const logPrefix = '\x1b[106mDOM\x1b[0m';
 export class DomState {
     private readonly _transaction: Transaction;
     private readonly _treeWalker: TreeWalker;
-    private readonly _config: PaginationConfig;
+    private readonly _config: PaginationOptions;
 
     private _completed: boolean = false;
     private _currentNode: PageNode | null = null;
@@ -24,7 +24,7 @@ export class DomState {
     constructor(
         root: Element,
         transaction: Transaction,
-        config: PaginationConfig
+        config: PaginationOptions
     ) {
         this._transaction = transaction;
         this._config = config;
@@ -101,7 +101,7 @@ export class DomState {
         this._currentNode = createPageNode(
             this._treeWalker.currentNode,
             this._transaction,
-            getConfigFromAttributes(this._treeWalker.currentNode, this._config)
+            resolvePaginationOptions(this._treeWalker.currentNode, this._config)
         );
 
         DEV: markCurrentNode(this._currentNode);

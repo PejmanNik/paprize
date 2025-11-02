@@ -2,7 +2,7 @@ import logger from '../logger';
 import type { PageManager } from './PageManager';
 import type { PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
-import type { PaginationConfig } from './PaginationConfig';
+import type { PaginationOptions } from './PaginationOptions';
 
 /**
  * Splits text across pages by whole words; falls back to character splitting
@@ -50,7 +50,7 @@ export function paginateTextByWord(
 function processToken(
     token: string,
     pageManager: PageManager,
-    config: PaginationConfig
+    config: PaginationOptions
 ): {
     completed: boolean;
     pendingToken?: string;
@@ -84,7 +84,7 @@ function processToken(
 function handleTokenOverflow(
     token: string,
     pageManager: PageManager,
-    config: PaginationConfig
+    config: PaginationOptions
 ): {
     completed: boolean;
     leftovers?: string;
@@ -106,7 +106,7 @@ function handleTokenOverflow(
     // still doesn't fit - rollback to previous state split the token by character (hyphenation)
     rollback();
 
-    if (!config.hyphenationEnabled) {
+    if (config.hyphenationDisabled) {
         // If hyphenation is not enabled and the token is too long, we need to skip the token
 
         logger.warn('Hyphenation disabled, skipping oversized token:', token);

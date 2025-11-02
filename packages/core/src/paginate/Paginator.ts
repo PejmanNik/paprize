@@ -7,7 +7,10 @@ import { paginateTextByWord } from './paginateText';
 import { SplitResult } from './SplitResult';
 import { Transaction } from './Transaction';
 import logger from 'loglevel';
-import { defaultConfig, type PaginationConfig } from './PaginationConfig';
+import {
+    defaultPaginationOptions,
+    type PaginationOptions,
+} from './PaginationOptions';
 import { markIgnoredNode } from '../debugUtilities/pageNodeMarker';
 import { callPluginHook, type VisitContext } from './PaginationPlugin';
 import { attributePrefix, tempContainerClassName } from '../constants';
@@ -23,14 +26,14 @@ export class Paginator {
     private readonly _pageManager: PageManager;
     private readonly _transaction: Transaction;
     private readonly _tempContainer: Element;
-    private readonly _config: PaginationConfig;
+    private readonly _config: PaginationOptions;
 
     private constructor(
         root: Element,
         pageSize: RealizedPageSize,
-        config?: Partial<PaginationConfig>
+        config?: Partial<PaginationOptions>
     ) {
-        this._config = { ...defaultConfig, ...config };
+        this._config = { ...defaultPaginationOptions, ...config };
         this._tempContainer = Paginator.createTempContainer(this._config.id);
         this._transaction = new Transaction();
         this._domState = new DomState(root, this._transaction, this._config);
@@ -60,7 +63,7 @@ export class Paginator {
     public static paginate(
         root: Element,
         pageSize: RealizedPageSize,
-        config?: Partial<PaginationConfig>
+        config?: Partial<PaginationOptions>
     ): PaginateResult {
         const paginator = new Paginator(root, pageSize, config);
         paginator.processAllNodes();

@@ -5,11 +5,9 @@ export * from './paginate/domUtilities';
 export type * from './paginate/RealizedPageSize';
 export type * from './paginate/DomState';
 export type * from './paginate/PaginationPlugin';
-export {
-    configToAttributes as configToAttributeMap,
-    type ConfigAttribute,
-} from './paginate/attributes';
-export type { PaginationConfig } from './paginate/PaginationConfig';
+export { layoutOptionsToAttributes } from './paginate/attributes';
+export type { LayoutOptions } from './paginate/LayoutOptions';
+export type { PaginationOptions } from './paginate/PaginationOptions';
 
 export * from './report/EventDispatcher';
 export * from './report/pageConst';

@@ -16,6 +16,7 @@ import {
 } from './attributes';
 import type {
     DomPageContext,
+    DomSectionContext,
     PaprizeReportEvents,
 } from './PaprizeReportEvents';
 
@@ -25,9 +26,37 @@ const globalStyles = `
     }
 `;
 
+/**
+ * Options for configuring a `PaprizeReport` instance.
+ */
 export interface PaprizeReportOptions {
+    /**
+     * Optional root element where the final paginated report will be created.
+     * If not specified, `document.body` will be used as the default container.
+     */
     root?: HTMLElement;
+
+    /**
+     * Determines whether to keep the original DOM elements after pagination.
+     * When set to `false` (default), the original elements are removed and replaced with the paginated output.
+     * When set to `true`, the original elements remain in the DOM but are marked as invisible.
+     */
     keepInitialElementAfterPagination?: boolean;
+}
+
+/**
+ * {@inheritDoc @paprize/core!ScheduleResult}
+ */
+export interface DomScheduleResult {
+    /**
+     * {@inheritDoc @paprize/core!ScheduleResult.sections}
+     */
+    sections: DomSectionContext[];
+
+    /**
+     * {@inheritDoc @paprize/core!ScheduleResult.suspension}
+     */
+    suspension: Promise<void>;
 }
 
 interface SectionState {
@@ -37,6 +66,9 @@ interface SectionState {
     options: Core.SectionOptions;
 }
 
+/**
+ * {@inheritDoc @paprize/core!ReportBuilder}
+ */
 export class PaprizeReport {
     private readonly _sections: Map<string, SectionState> = new Map();
     private readonly _reportManager: Core.ReportBuilder;
@@ -44,6 +76,7 @@ export class PaprizeReport {
     private readonly _root: HTMLElement;
     private readonly _options: PaprizeReportOptions;
 
+    /** @public */
     constructor(options?: PaprizeReportOptions) {
         const style = document.createElement('style');
         style.textContent = globalStyles;
@@ -104,16 +137,34 @@ export class PaprizeReport {
         return wrapper;
     }
 
-    public async schedulePaginate(): Promise<
-        Awaited<ReturnType<Core.ReportBuilder['schedulePaginate']>>
-    > {
-        return this._reportManager.schedulePaginate();
+    /**
+     * {@inheritDoc @paprize/core!ReportBuilder.schedulePagination}
+     */
+    public async schedulePagination(): Promise<DomScheduleResult> {
+        const result = await this._reportManager.schedulePagination();
+
+        return {
+            suspension: result.suspension,
+            sections: result.sections.map((s) => ({
+                ...s,
+                pages: this._sections.get(s.sectionId)?.pages ?? [],
+            })),
+        };
     }
 
+    /**
+     * Monitor instance used to subscribe to pagination events.
+     * See {@link PaprizeReportEvents} for available event types.
+     */
     public get monitor(): Core.Monitor<PaprizeReportEvents> {
         return this._monitor;
     }
 
+    /**
+     * Registers a section by its id, specifying the page size, margins, and other options.
+     * If a section with the same id already exists, the operation will be ignored.
+     * @param options - Configuration options for the section.
+     */
     public addSection(options: Core.SectionOptions): PaprizeReport {
         if (this._sections.has(options.id)) {
             return this;

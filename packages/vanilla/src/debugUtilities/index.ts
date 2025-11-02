@@ -157,7 +157,7 @@ r.monitor.addEventListener('pageCompleted', (pageContext) => {
 });
 
 (async () => {
-    await r.schedulePaginate();
+    await r.schedulePagination();
 
     setTimeout(() => {
         resolve();

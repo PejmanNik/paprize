@@ -3,7 +3,7 @@ import {
     type PageContext,
     type PageSize,
     type PageMargin,
-    type PaginationConfig,
+    type PaginationOptions,
 } from '@paprize/core/src';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -18,7 +18,7 @@ export interface SectionLayoutProps {
     elements: PageElements;
     size: PageSize;
     margin: PageMargin | undefined;
-    config?: Partial<PaginationConfig>;
+    config?: Partial<PaginationOptions>;
 }
 
 export function SectionLayout({

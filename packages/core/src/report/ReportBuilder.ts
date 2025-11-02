@@ -17,12 +17,28 @@ import { paprize_isInitialized, paprize_isReady } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
 import logger from '../logger';
-import type { PaginationConfig } from '../paginate/PaginationConfig';
+import type { PaginationOptions } from '../paginate/PaginationOptions';
 
-export interface SectionOptions extends Partial<PaginationConfig> {
+/**
+ * Configuration options for a section.
+ * @inlineType PaginationConfig
+ */
+export interface SectionOptions extends Partial<Omit<PaginationOptions, 'id'>> {
+    /**
+     * Unique id of the section within the report.
+     */
     readonly id: string;
+    /**
+     * Page size used for this section.
+     */
     readonly size: PageSize;
+    /**
+     * Page margins for this section.
+     */
     readonly margin?: PageMargin;
+    /**
+     * A list of promises that must be resolved before the section can be paginated.
+     */
     readonly suspense?: Promise<unknown>[];
 }
 
@@ -35,11 +51,27 @@ export interface SectionState {
 
 const logPrefix = '\x1b[43mREPORT\x1b[0m';
 
+/**
+ * Represents the result of a scheduled pagination process.
+ */
 export interface ScheduleResult {
+    /**
+     * List of all registered sections.
+     */
     sections: SectionContext[];
+
+    /**
+     * If there are any suspended sections, this Promise tracks their state
+     * and resolves only after all suspended sections have been resumed
+     * and paginated.
+     */
     suspension: Promise<void>;
 }
 
+/**
+ * The report builder class that contains the logic for handling pagination
+ * and managing the report layout.
+ */
 export class ReportBuilder {
     private readonly _sections: Map<string, SectionState>;
     private readonly _monitor: EventDispatcher<ReportBuilderEvents>;
@@ -61,14 +93,29 @@ export class ReportBuilder {
         this._injectStyle(reportStyles.globalStyle);
     }
 
+    /**
+     * Monitor instance used to subscribe to pagination events.
+     * See {@link ReportBuilderEvents} for available event types.
+     */
     public get monitor(): Monitor<ReportBuilderEvents> {
         return this._monitor;
     }
 
+    /**
+     * Removes a section from the registered sections, if it has already been registered in the report.
+     */
     public removeSection(sectionId: string): void {
         this._sections.delete(sectionId);
     }
 
+    /**
+     * Registers a section by its ID, specifying the page size, margins, and other options.
+     *
+     * @param options - Configuration options for the section.
+     * @param components - The DOM components associated with the section.
+     * @param onPaginationCompleted - Callback invoked when pagination for the section is completed.
+     * @returns `true` if the section was added to the report’s section list, or `false` if it already exists.
+     */
     public tryAddSection(
         options: SectionOptions,
         components: SectionComponents,
@@ -100,7 +147,22 @@ export class ReportBuilder {
         return true;
     }
 
-    public async schedulePaginate(): Promise<ScheduleResult> {
+    /**
+     * Schedules a pagination operation.
+     *
+     * It is not possible to schedule multiple pagination operations in parallel,
+     * as the process involves DOM manipulation, and concurrent modifications
+     * could cause conflicts and unexpected results.
+     * Each newly scheduled operation is queued and executed sequentially.
+     * When a new pagination is scheduled, any ongoing or pending operations
+     * will be aborted, and the new pagination will start immediately afterward.
+     *
+     * @returns A promise that resolves when the first pagination cycle is completed.
+     * It does not wait for suspended sections to resolve and be paginated.
+     * To wait for all sections to complete pagination, use the
+     * `suspension` property of the returned result object.
+     */
+    public async schedulePagination(): Promise<ScheduleResult> {
         if (this._sections.size === 0) {
             window[paprize_isReady] = true;
             return {

@@ -17,5 +17,3 @@ export * from './components/useJsonData';
 
 export type * from './internal/eventHelper';
 export type * from './internal/SectionControllerContext';
-
-export type { PaginationPlugin, PaginationConfig } from '@paprize/core/src';

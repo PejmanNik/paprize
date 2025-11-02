@@ -68,7 +68,7 @@ describe('ReportBuilder', () => {
             expect(sectionCreated).toHaveBeenCalled();
             const eventArg = sectionCreated.mock.calls[0][0];
             expect(eventArg.sectionId).toBe('sec1');
-            expect(eventArg.index).toBe(0);
+            expect(eventArg.sectionIndex).toBe(0);
             expect(eventArg.pages).toEqual([]);
             expect(eventArg.isSuspended).toEqual(withsuspense);
         }
@@ -80,8 +80,8 @@ describe('ReportBuilder', () => {
         expect(result).toBe(false);
     });
 
-    it('schedulePaginate without sections should return empty result', async () => {
-        const result = await rb.schedulePaginate();
+    it('schedulePagination without sections should return empty result', async () => {
+        const result = await rb.schedulePagination();
 
         expect(result.sections).toEqual([]);
 
@@ -89,7 +89,7 @@ describe('ReportBuilder', () => {
         expect(window[paprize_isReady]).toBe(true);
     });
 
-    it('schedulePaginate should call Paginator.paginate and dispatch lifecycle events', async () => {
+    it('schedulePagination should call Paginator.paginate and dispatch lifecycle events', async () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>', '<div>page2</div>']);
 
@@ -122,7 +122,7 @@ describe('ReportBuilder', () => {
         );
         expect(added).toBe(true);
 
-        await rb.schedulePaginate();
+        await rb.schedulePagination();
 
         // paginate should have been called with the cloned pageContent and page size
         expect(paginateMock).toHaveBeenCalled();
@@ -143,7 +143,7 @@ describe('ReportBuilder', () => {
         expect(window[paprize_isReady]).toBe(true);
     });
 
-    it('schedulePaginate should call Paginator.paginate after suspense resolved', async () => {
+    it('schedulePagination should call Paginator.paginate after suspense resolved', async () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>']);
 
@@ -180,7 +180,7 @@ describe('ReportBuilder', () => {
 
         expect(added).toBe(true);
 
-        const result = await rb.schedulePaginate();
+        const result = await rb.schedulePagination();
 
         expect(result.sections.length).toBe(2);
         expect(result.sections[0].isSuspended).toBe(true);
@@ -211,9 +211,9 @@ describe('ReportBuilder', () => {
 
         rb.tryAddSection(options, components, vi.fn());
 
-        const section1Promise = rb.schedulePaginate();
+        const section1Promise = rb.schedulePagination();
         await new Promise((resolve) => setTimeout(resolve, 0));
-        const section2Promise = rb.schedulePaginate();
+        const section2Promise = rb.schedulePagination();
 
         const [section1Result, section2Result] = await Promise.all([
             section1Promise,
@@ -230,8 +230,8 @@ describe('ReportBuilder', () => {
 
         rb.tryAddSection(options, components, vi.fn());
 
-        const section1Promise = rb.schedulePaginate();
-        const section2Promise = rb.schedulePaginate();
+        const section1Promise = rb.schedulePagination();
+        const section2Promise = rb.schedulePagination();
 
         const [section1Result, section2Result] = await Promise.all([
             section1Promise,
@@ -256,7 +256,7 @@ describe('ReportBuilder', () => {
         );
 
         rb.removeSection(sectionId);
-        const result = await rb.schedulePaginate();
+        const result = await rb.schedulePagination();
 
         expect(result.sections.length).toBe(0);
     });

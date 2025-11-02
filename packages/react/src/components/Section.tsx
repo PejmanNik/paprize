@@ -8,7 +8,7 @@ import {
     type PageSize,
     type PageMargin,
     type PageOrientation,
-    type PaginationConfig,
+    type PaginationOptions,
 } from '@paprize/core/src';
 import { SectionLayout } from '../internal/SectionLayout';
 
@@ -18,7 +18,7 @@ export interface SectionProps {
     size: PageSize;
     orientation?: PageOrientation;
     margin?: PageMargin;
-    config?: Partial<PaginationConfig>;
+    config?: Partial<PaginationOptions>;
 }
 
 let sectionIdCounter = 1;
