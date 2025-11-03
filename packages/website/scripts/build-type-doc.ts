@@ -32,6 +32,7 @@ export async function buildTypeDoc(dirname: string) {
         tableColumnSettings: {
             hideSources: true,
             hideModifiers: true,
+            hideInherited: true,
         },
         hideBreadcrumbs: true,
         hidePageHeader: true,

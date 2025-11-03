@@ -6,9 +6,117 @@ sidebar_position: 99
 
 # @paprize/core
 
+## ReportBuilder
+
+Defined in: [report/ReportBuilder.ts:82](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L82)
+
+The report builder class that contains the logic for handling pagination
+and managing the report layout.
+
+### Accessors
+
+#### monitor
+
+##### Get Signature
+
+> **get** **monitor**(): `Monitor`\<[`ReportBuilderEvents`](#reportbuilderevents)\>
+
+Defined in: [report/ReportBuilder.ts:107](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L107)
+
+Monitor instance used to subscribe to pagination events.
+See [ReportBuilderEvents](#reportbuilderevents) for available event types.
+
+###### Returns
+
+`Monitor`\<[`ReportBuilderEvents`](#reportbuilderevents)\>
+
+### Methods
+
+#### removeSection()
+
+> **removeSection**(`sectionId`): `void`
+
+Defined in: [report/ReportBuilder.ts:114](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L114)
+
+Removes a section from the registered sections, if it has already been registered in the report.
+
+##### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `sectionId` | `string` |
+
+##### Returns
+
+`void`
+
+#### schedulePagination()
+
+> **schedulePagination**(): `Promise`\<[`ScheduleResult`](#scheduleresult)\>
+
+Defined in: [report/ReportBuilder.ts:178](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L178)
+
+Schedules a pagination operation.
+
+It is not possible to schedule multiple pagination operations in parallel,
+as the process involves DOM manipulation, and concurrent modifications
+could cause conflicts and unexpected results.
+Each newly scheduled operation is queued and executed sequentially.
+When a new pagination is scheduled, any ongoing or pending operations
+will be aborted, and the new pagination will start immediately afterward.
+
+##### Returns
+
+`Promise`\<[`ScheduleResult`](#scheduleresult)\>
+
+A promise that resolves when the first pagination cycle is completed.
+It does not wait for suspended sections to resolve and be paginated.
+To wait for all sections to complete pagination, use the
+`suspension` property of the returned result object.
+
+#### tryAddSection()
+
+> **tryAddSection**(`options`, `components`, `onPaginationCompleted`): `boolean`
+
+Defined in: [report/ReportBuilder.ts:126](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L126)
+
+Registers a section by its ID, specifying the page size, margins, and other options.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`SectionOptions`](#sectionoptions) | Configuration options for the section. |
+| `components` | [`SectionComponents`](#sectioncomponents) | The DOM components associated with the section. |
+| `onPaginationCompleted` | (`pages`) => `void` | Callback invoked when pagination for the section is completed. |
+
+##### Returns
+
+`boolean`
+
+`true` if the section was added to the report’s section list, or `false` if it already exists.
+
+***
+
+## LayoutOptions
+
+Defined in: [paginate/LayoutOptions.ts:4](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/paginate/LayoutOptions.ts#L4)
+
+Layout options for the pagination engine
+
+### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| <a id="hyphen"></a> `hyphen?` | `string` | `"-"` | Specifies the character used for hyphenation when a word is broken across lines. |
+| <a id="hyphenationdisabled"></a> `hyphenationDisabled?` | `boolean` | `false` | Disables automatic word hyphenation. When disabled, if a word (a sequence of text without whitespace) does not fit on the current page, it will move to the next page instead of being split with a hyphen character. |
+| <a id="keeponsamepage"></a> `keepOnSamePage?` | `boolean` | `false` | Prevents an element from being split across pages. If an element does not fit in the available space on the current page, it will be moved entirely to the next page. If it still does not fit on an empty page, it will be skipped and not rendered. |
+
+***
+
 ## PageContext
 
-Defined in: [report/ReportBuilderEvents.ts:4](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/ReportBuilderEvents.ts#L4)
+Defined in: [report/ReportBuilderEvents.ts:4](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L4)
 
 Context information for a paginated page.
 
@@ -25,10 +133,12 @@ Context information for a paginated page.
 
 ## PageMargin
 
-Defined in: [report/pageTypes.ts:16](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/pageTypes.ts#L16)
+Defined in: [report/pageTypes.ts:20](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L20)
 
 Represents the margin sizes for a page.
 All values should be valid CSS size strings (e.g., '10mm', '1in').
+
+Common presets are available in [pageMargin](#pagemargin-1)
 
 ### Properties
 
@@ -43,10 +153,12 @@ All values should be valid CSS size strings (e.g., '10mm', '1in').
 
 ## PageSize
 
-Defined in: [report/pageTypes.ts:5](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/pageTypes.ts#L5)
+Defined in: [report/pageTypes.ts:7](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L7)
 
 Represents the dimensions of a page.
 All values should be valid CSS size strings (e.g., '210mm', '8.5in').
+
+Common presets are available in  [pageSize](#pagesize-1)
 
 ### Properties
 
@@ -57,9 +169,73 @@ All values should be valid CSS size strings (e.g., '210mm', '8.5in').
 
 ***
 
+## PaginationCycleCompleted
+
+Defined in: [report/ReportBuilderEvents.ts:53](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L53)
+
+Context information for pagination cycle.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="sections"></a> `sections` | [`SectionContext`](#sectioncontext)[] | All paginated section within the report. |
+
+***
+
+## PaginationOptions
+
+Defined in: [paginate/PaginationOptions.ts:10](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/paginate/PaginationOptions.ts#L10)
+
+Pagination options
+
+### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| <a id="hyphen-1"></a> `hyphen` | `string` | `"-"` | Specifies the character used for hyphenation when a word is broken across lines. |
+| <a id="hyphenationdisabled-1"></a> `hyphenationDisabled` | `boolean` | `false` | Disables automatic word hyphenation. When disabled, if a word (a sequence of text without whitespace) does not fit on the current page, it will move to the next page instead of being split with a hyphen character. |
+| <a id="id"></a> `id` | `string` | `undefined` | Unique id of the pagination. |
+| <a id="keeponsamepage-1"></a> `keepOnSamePage` | `boolean` | `false` | Prevents an element from being split across pages. If an element does not fit in the available space on the current page, it will be moved entirely to the next page. If it still does not fit on an empty page, it will be skipped and not rendered. |
+| <a id="plugins"></a> `plugins` | `PaginationPlugin`[] | `undefined` | List of plugins to use during pagination. |
+
+***
+
+## ReportBuilderEvents
+
+Defined in: [report/ReportBuilderEvents.ts:63](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L63)
+
+Available events that can be subscribed to, during the pagination process.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="pagecompleted"></a> `pageCompleted` | (`event`) => `void` | Triggered when a page has been fully paginated. event: [PageContext](#pagecontext) |
+| <a id="paginationcyclecompleted-1"></a> `paginationCycleCompleted` | (`event`) => `void` | Triggered when an entire pagination cycle is completed. event: [PaginationCycleCompleted](#paginationcyclecompleted) |
+| <a id="sectioncompleted"></a> `sectionCompleted` | (`event`) => `void` | Triggered when a section has been fully paginated. event: [SectionContext](#sectioncontext) |
+| <a id="sectioncreated"></a> `sectionCreated` | (`event`) => `void` | Triggered when a new section is created. event: [SectionContext](#sectioncontext) |
+
+***
+
+## ScheduleResult
+
+Defined in: [report/ReportBuilder.ts:64](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L64)
+
+Represents the result of a scheduled pagination process.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="sections-1"></a> `sections` | [`SectionContext`](#sectioncontext)[] | List of all registered sections. |
+| <a id="suspension"></a> `suspension` | `Promise`\<`void`\> | If there are any suspended sections, this Promise tracks their state and resolves only after all suspended sections have been resumed and paginated. |
+
+***
+
 ## SectionComponents
 
-Defined in: [report/sectionComponents.ts:5](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/sectionComponents.ts#L5)
+Defined in: [report/sectionComponents.ts:5](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/sectionComponents.ts#L5)
 
 Represents the collection of DOM elements generated by
 the pagination engine from the report components on the current page.
@@ -76,9 +252,53 @@ the pagination engine from the report components on the current page.
 
 ***
 
+## SectionContext
+
+Defined in: [report/ReportBuilderEvents.ts:26](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L26)
+
+Context information for a paginated section.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="ispaginated"></a> `isPaginated` | `boolean` | Indicates whether pagination for this section has completed. |
+| <a id="issuspended"></a> `isSuspended` | `boolean` | Indicates whether pagination for this section is suspended and waiting for the suspension to be resolved. |
+| <a id="pages"></a> `pages` | [`PageContext`](#pagecontext)[] | All paginated pages that belong to this section. |
+| <a id="sectionid-1"></a> `sectionId` | `string` | Unique identifier of the section. |
+| <a id="sectionindex"></a> `sectionIndex` | `number` | Index of the section within the report. |
+
+***
+
+## SectionOptions
+
+Defined in: [report/ReportBuilder.ts:27](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L27)
+
+Configuration options for a section.
+
+### Extends
+
+- `Partial`\<`Omit`\<[`PaginationOptions`](#paginationoptions), `"id"`\>\>
+
+### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| <a id="hyphen-2"></a> `hyphen?` | `string` | `"-"` | Specifies the character used for hyphenation when a word is broken across lines. |
+| <a id="hyphenationdisabled-2"></a> `hyphenationDisabled?` | `boolean` | `false` | Disables automatic word hyphenation. When disabled, if a word (a sequence of text without whitespace) does not fit on the current page, it will move to the next page instead of being split with a hyphen character. |
+| <a id="id-1"></a> `id` | `string` | `undefined` | Unique id of the section within the report. |
+| <a id="keeponsamepage-2"></a> `keepOnSamePage?` | `boolean` | `false` | Prevents an element from being split across pages. If an element does not fit in the available space on the current page, it will be moved entirely to the next page. If it still does not fit on an empty page, it will be skipped and not rendered. |
+| <a id="margin"></a> `margin?` | [`PageMargin`](#pagemargin) | `undefined` | Page margins for this section. |
+| <a id="orientation"></a> `orientation?` | `"portrait"` \| `"landscape"` | `undefined` | Page orientation used for this section. **Default** `portrait` |
+| <a id="plugins-1"></a> `plugins?` | `PaginationPlugin`[] | `undefined` | List of plugins to use during pagination. |
+| <a id="size"></a> `size` | [`PageSize`](#pagesize) | `undefined` | Page size used for this section. |
+| <a id="suspense"></a> `suspense?` | `Promise`\<`unknown`\>[] | `undefined` | A list of promises that must be resolved before the section can be paginated. |
+
+***
+
 ## TablePluginOptions
 
-Defined in: [plugins/TablePlugin.ts:12](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/plugins/TablePlugin.ts#L12)
+Defined in: [plugins/TablePlugin.ts:12](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/plugins/TablePlugin.ts#L12)
 
 Table plugin options
 
@@ -96,7 +316,7 @@ Table plugin options
 
 > **PageOrientation** = `"portrait"` \| `"landscape"`
 
-Defined in: [report/pageTypes.ts:35](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/pageTypes.ts#L35)
+Defined in: [report/pageTypes.ts:39](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L39)
 
 Describes the page orientation.
 
@@ -111,34 +331,18 @@ Describes the page orientation.
 
 > `const` **pageMargin**: `object`
 
-Defined in: [report/pageConst.ts:26](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/pageConst.ts#L26)
+Defined in: [report/pageConst.ts:40](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageConst.ts#L40)
 
-shorthand values [PageMargin](#pagemargin)
+Predefined values for commonly used [PageMargin](#pagemargin)
 
 ### Type Declaration
 
-| Name | Type | Default value |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| <a id="narrow"></a> `Narrow` | `object` | - |
-| `Narrow.bottom` | `"0.6in"` | `'0.6in'` |
-| `Narrow.left` | `"0.6in"` | `'0.6in'` |
-| `Narrow.right` | `"0.6in"` | `'0.6in'` |
-| `Narrow.top` | `"0.4in"` | `'0.4in'` |
-| <a id="none"></a> `None` | `object` | - |
-| `None.bottom` | `"0in"` | `'0in'` |
-| `None.left` | `"0in"` | `'0in'` |
-| `None.right` | `"0in"` | `'0in'` |
-| `None.top` | `"0in"` | `'0in'` |
-| <a id="normal"></a> `Normal` | `object` | - |
-| `Normal.bottom` | `"1in"` | `'1in'` |
-| `Normal.left` | `"1in"` | `'1in'` |
-| `Normal.right` | `"1in"` | `'1in'` |
-| `Normal.top` | `"1in"` | `'1in'` |
-| <a id="wide"></a> `Wide` | `object` | - |
-| `Wide.bottom` | `"0.5in"` | `'0.5in'` |
-| `Wide.left` | `"2in"` | `'2in'` |
-| `Wide.right` | `"2in"` | `'2in'` |
-| `Wide.top` | `"0.5in"` | `'0.5in'` |
+| <a id="narrow"></a> `Narrow` | [`PageMargin`](#pagemargin) | Top: 0.4in, Right, Bottom, Left: 0.6in |
+| <a id="none"></a> `None` | [`PageMargin`](#pagemargin) | Top, Right, Bottom, Left: 0 |
+| <a id="normal"></a> `Normal` | [`PageMargin`](#pagemargin) | Top, Right, Bottom, Left: 1in |
+| <a id="wide"></a> `Wide` | [`PageMargin`](#pagemargin) | Top, Bottom: 0.5in, Right, Left: 2in |
 
 ***
 
@@ -146,47 +350,23 @@ shorthand values [PageMargin](#pagemargin)
 
 > `const` **pageSize**: `object`
 
-Defined in: [report/pageConst.ts:7](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/core/src/report/pageConst.ts#L7)
+Defined in: [report/pageConst.ts:8](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageConst.ts#L8)
 
-shorthand types [PageSize](#pagesize)
+Predefined values for commonly used [PageSize](#pagesize)
 
 ### Type Declaration
 
-| Name | Type | Default value |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| <a id="a1"></a> `A1` | `object` | - |
-| `A1.height` | `"841mm"` | `'841mm'` |
-| `A1.width` | `"594mm"` | `'594mm'` |
-| <a id="a2"></a> `A2` | `object` | - |
-| `A2.height` | `"594mm"` | `'594mm'` |
-| `A2.width` | `"420mm"` | `'420mm'` |
-| <a id="a3"></a> `A3` | `object` | - |
-| `A3.height` | `"420mm"` | `'420mm'` |
-| `A3.width` | `"297mm"` | `'297mm'` |
-| <a id="a4"></a> `A4` | `object` | - |
-| `A4.height` | `"297mm"` | `'297mm'` |
-| `A4.width` | `"210mm"` | `'210mm'` |
-| <a id="a5"></a> `A5` | `object` | - |
-| `A5.height` | `"210mm"` | `'210mm'` |
-| `A5.width` | `"148mm"` | `'148mm'` |
-| <a id="a6"></a> `A6` | `object` | - |
-| `A6.height` | `"148mm"` | `'148mm'` |
-| `A6.width` | `"105mm"` | `'105mm'` |
-| <a id="b3"></a> `B3` | `object` | - |
-| `B3.height` | `"500mm"` | `'500mm'` |
-| `B3.width` | `"353mm"` | `'353mm'` |
-| <a id="b4"></a> `B4` | `object` | - |
-| `B4.height` | `"353mm"` | `'353mm'` |
-| `B4.width` | `"250mm"` | `'250mm'` |
-| <a id="b5"></a> `B5` | `object` | - |
-| `B5.height` | `"250mm"` | `'250mm'` |
-| `B5.width` | `"176mm"` | `'176mm'` |
-| <a id="legal"></a> `Legal` | `object` | - |
-| `Legal.height` | `"11in"` | `'11in'` |
-| `Legal.width` | `"8.5in"` | `'8.5in'` |
-| <a id="letter"></a> `Letter` | `object` | - |
-| `Letter.height` | `"8.5in"` | `'8.5in'` |
-| `Letter.width` | `"11in"` | `'11in'` |
-| <a id="tabloid"></a> `Tabloid` | `object` | - |
-| `Tabloid.height` | `"11in"` | `'11in'` |
-| `Tabloid.width` | `"17in"` | `'17in'` |
+| <a id="a1"></a> `A1` | [`PageSize`](#pagesize) | 841mm x 594mm |
+| <a id="a2"></a> `A2` | [`PageSize`](#pagesize) | 594mm x 420mm |
+| <a id="a3"></a> `A3` | [`PageSize`](#pagesize) | 420mm x 297mm |
+| <a id="a4"></a> `A4` | [`PageSize`](#pagesize) | 297mm x 210mm |
+| <a id="a5"></a> `A5` | [`PageSize`](#pagesize) | 210mm x 148mm |
+| <a id="a6"></a> `A6` | [`PageSize`](#pagesize) | 148mm x 105mm |
+| <a id="b3"></a> `B3` | [`PageSize`](#pagesize) | 500mm x 353mm |
+| <a id="b4"></a> `B4` | [`PageSize`](#pagesize) | 353mm x 250mm |
+| <a id="b5"></a> `B5` | [`PageSize`](#pagesize) | 250mm x 176mm |
+| <a id="legal"></a> `Legal` | [`PageSize`](#pagesize) | 11in x 8.5in |
+| <a id="letter"></a> `Letter` | [`PageSize`](#pagesize) | 8.5in x 11in |
+| <a id="tabloid"></a> `Tabloid` | [`PageSize`](#pagesize) | 11in x 17in |

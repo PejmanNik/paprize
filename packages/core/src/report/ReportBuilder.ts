@@ -2,7 +2,7 @@ import { isDebugMode } from '../debugUtilities/debugMode';
 import { Paginator } from '../paginate/Paginator';
 import { defaultPlugins } from '../plugins';
 import { pageMargin } from './pageConst';
-import type { PageSize, PageMargin } from './pageTypes';
+import type { PageSize, PageMargin, PageOrientation } from './pageTypes';
 import type { Monitor } from './EventDispatcher';
 import { EventDispatcher } from './EventDispatcher';
 import type {
@@ -18,6 +18,7 @@ import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
 import logger from '../logger';
 import type { PaginationOptions } from '../paginate/PaginationOptions';
+import { adjustPageSize } from '../utils';
 
 /**
  * Configuration options for a section.
@@ -32,6 +33,12 @@ export interface SectionOptions extends Partial<Omit<PaginationOptions, 'id'>> {
      * Page size used for this section.
      */
     readonly size: PageSize;
+    /**
+     * Page orientation used for this section.
+     * @inlineType PageOrientation
+     * @default portrait
+     */
+    readonly orientation?: PageOrientation;
     /**
      * Page margins for this section.
      */
@@ -134,7 +141,13 @@ export class ReportBuilder {
         };
         this._sections.set(options.id, {
             context,
-            options,
+            options: {
+                ...options,
+                size: adjustPageSize(
+                    options.size,
+                    options.orientation ?? 'portrait'
+                ),
+            },
             components,
             onPaginationCompleted,
         });

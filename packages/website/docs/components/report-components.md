@@ -32,6 +32,10 @@ The fundamental building block of every report is the **Section**. A report is d
 <Tabs>
 <TabItem value="Vanilla">
 
+Provide [SectionOptions](/core/api#sectionoptions) to the `addSection` method. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
+
+For more advanced and fine grained customization, you can use [Plugins](/plugin.md).
+
 ```html
 <div data-pz-section id="section-1">...</div>
 
@@ -55,6 +59,9 @@ The fundamental building block of every report is the **Section**. A report is d
 </TabItem>
 <TabItem value="Zero">
 
+- Page Size: use one of the [pageSize](/core/api.md#pagesize-1), including A1-6
+- Page Margin: use one the [pageMargin](/core/api.md#pagemargin-1) include `none`
+
 ```html
 <div
     data-pz-section
@@ -74,12 +81,16 @@ The fundamental building block of every report is the **Section**. A report is d
 </TabItem>
 <TabItem value="React">
 
+Provide [SectionProps](/react/api#sectionprops) to the `Section` component. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
+
+For more advanced and fine grained customization, you can use [Plugins](/plugin.md).
+
 ```tsx
 <Section
     margin={pageMargin.Narrow}
     dimension={pageSize.A4}
     orientation={'landscape'}
-    config={configs}
+    {...configs}
 >
     ...
 </Section>

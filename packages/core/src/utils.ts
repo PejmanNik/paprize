@@ -6,7 +6,7 @@ export function buildPageId(sectionId: string, pageIndex: number): string {
 
 export function adjustPageSize(
     size: PageSize,
-    orientation: PageOrientation
+    orientation?: PageOrientation
 ): PageSize {
     if (orientation === 'landscape') {
         return { height: size.width, width: size.height };

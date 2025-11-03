@@ -41,7 +41,11 @@ The PageBreak component forces a page break and pushes any subsequent content to
 
 The Layout component allows you to customize the pagination engine’s behavior for the element and its children.
 
-The available values are described in [Configuration](/configuration.md).
+The available values are described in [LayoutOptions](/core/api.md#layoutoptions). All props/attributes are optional and follow this order of precedence:
+
+1. Props defined on this component (highest priority)
+1. Props inherited from the nearest parent component
+1. Global configuration provided to [Section](report-components.md#section)
 
 <Tabs>
 <TabItem value="Vanilla" label="Vanilla | Zero">
@@ -71,9 +75,3 @@ The available values are described in [Configuration](/configuration.md).
 <ComponentCatalog.Container noChildren>
 <ComponentCatalog.Parent>[PageContent](report-components.md#page-content)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
-
-All props/attributes are optional and follow this order of precedence:
-
-1. Props defined on this component (highest priority)
-1. Props inherited from the nearest parent component
-1. Global configuration provided to [Section](report-components.md#section)

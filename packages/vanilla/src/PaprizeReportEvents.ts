@@ -1,19 +1,19 @@
 import type { SectionComponents } from '@paprize/core/src';
 
 /**
- * Context information for a paginated page.
+ * {@inheritDoc @paprize/core!PageContext}
  */
 export interface DomPageContext {
     /**
-     * Id of the section to which this page belongs
+     * {@inheritDoc @paprize/core!PageContext.sectionId}
      */
     sectionId: string;
     /**
-     * Index of this page within its section.
+     * {@inheritDoc @paprize/core!PageContext.pageIndex}
      */
     pageIndex: number;
     /**
-     * Total number of pages in the section that contains this page.
+     * {@inheritDoc @paprize/core!PageContext.totalPages}
      */
     totalPages: number;
     /**
@@ -27,40 +27,43 @@ export interface DomPageContext {
 }
 
 /**
- * Context information for a paginated section.
+ * {@inheritDoc @paprize/core!SectionContext}
  */
 export interface DomSectionContext {
     /**
-     * Index of the section within the report.
+     * {@inheritDoc @paprize/core!SectionContext.sectionIndex}
      */
     sectionIndex: number;
     /**
-     * Unique identifier of the section.
+     * {@inheritDoc @paprize/core!SectionContext.sectionId}
      */
     sectionId: string;
     /**
-     * Indicates whether pagination for this section is suspended
-     * and waiting for the suspension to be resolved.
+     * {@inheritDoc @paprize/core!SectionContext.isSuspended}
      */
     isSuspended: boolean;
     /**
-     * All paginated pages that belong to this section.
+     * {@inheritDoc @paprize/core!SectionContext.isPaginated}
+     */
+    isPaginated: boolean;
+    /**
+     * {@inheritDoc @paprize/core!SectionContext.pages}
      */
     pages: DomPageContext[];
 }
 
 /**
- * Context information for pagination cycle.
+ * {@inheritDoc @paprize/core!PaginationCycleCompleted}
  */
 export interface DomPaginationCycleCompleted {
     /**
-     * All paginated section within the report.
+     * {@inheritDoc @paprize/core!PaginationCycleCompleted.sections}
      */
     sections: DomSectionContext[];
 }
 
 /**
- * Available events that can be subscribed to, during the pagination process.
+ * {@inheritDoc @paprize/core!ReportBuilderEvents}
  */
 export interface PaprizeReportEvents {
     /**

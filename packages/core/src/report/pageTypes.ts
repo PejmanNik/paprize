@@ -1,6 +1,8 @@
 /**
  * Represents the dimensions of a page.
  * All values should be valid CSS size strings (e.g., '210mm', '8.5in').
+ *
+ * Common presets are available in  {@link pageSize}
  */
 export interface PageSize {
     /** @public */
@@ -12,6 +14,8 @@ export interface PageSize {
 /**
  * Represents the margin sizes for a page.
  * All values should be valid CSS size strings (e.g., '10mm', '1in').
+ *
+ * Common presets are available in {@link pageMargin}
  */
 export interface PageMargin {
     /** @public */

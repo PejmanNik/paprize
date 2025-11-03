@@ -2,41 +2,35 @@ import { useMemo, type ReactNode } from 'react';
 import parseSectionChildren from '../internal/parseSectionChildren';
 import { SectionIdContext } from '../internal/SectionIdContext';
 import {
-    adjustPageSize,
     reportStyles,
     sectionClassName,
-    type PageSize,
-    type PageMargin,
-    type PageOrientation,
-    type PaginationOptions,
+    type SectionOptions,
 } from '@paprize/core/src';
 import { SectionLayout } from '../internal/SectionLayout';
 
-export interface SectionProps {
+/**
+ * Configuration options for a section.
+ * @inlineType SectionOptions
+ */
+export interface SectionProps extends Omit<SectionOptions, 'id' | 'suspense'> {
     children: ReactNode;
+    /**
+     * Unique id of the section within the report. If not set, a random id will be used.
+     */
     id?: string;
-    size: PageSize;
-    orientation?: PageOrientation;
-    margin?: PageMargin;
-    config?: Partial<PaginationOptions>;
 }
 
 let sectionIdCounter = 1;
 
-export function Section({
-    children,
-    id,
-    size,
-    orientation = 'portrait',
-    margin,
-    config,
-}: SectionProps) {
+export function Section({ children, id, ...options }: SectionProps) {
     const sectionId = useMemo(() => id ?? `__000${sectionIdCounter++}`, [id]);
     const elements = useMemo(() => parseSectionChildren(children), [children]);
-
-    const adjustedSize = useMemo(
-        () => adjustPageSize(size, orientation),
-        [size, orientation]
+    const sectionOptions = useMemo(
+        () => ({
+            ...options,
+            id: sectionId,
+        }),
+        [options, sectionId]
     );
 
     return (
@@ -46,12 +40,7 @@ export function Section({
             style={reportStyles.section(sectionId)}
         >
             <SectionIdContext value={sectionId}>
-                <SectionLayout
-                    elements={elements}
-                    size={adjustedSize}
-                    margin={margin}
-                    config={config}
-                />
+                <SectionLayout elements={elements} options={sectionOptions} />
             </SectionIdContext>
         </section>
     );

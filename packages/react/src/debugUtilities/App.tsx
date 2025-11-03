@@ -45,9 +45,7 @@ export default function App() {
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [Paprize.debugPlugin],
-                    }}
+                    plugins={[Paprize.debugPlugin]}
                 >
                     <PageContent>
                         <MyTOC tocProvider={tocPlugin} />
@@ -61,13 +59,11 @@ export default function App() {
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [
-                            Paprize.debugPlugin,
-                            new Paprize.TablePlugin({ cloneHeader: true }),
-                            tocPlugin,
-                        ],
-                    }}
+                    plugins={[
+                        Paprize.debugPlugin,
+                        new Paprize.TablePlugin({ cloneHeader: true }),
+                        tocPlugin,
+                    ]}
                 >
                     <SectionHeader>
                         <h2>Section Header</h2>
@@ -113,9 +109,7 @@ export default function App() {
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [Paprize.debugPlugin, tocPlugin],
-                    }}
+                    plugins={[Paprize.debugPlugin, tocPlugin]}
                 >
                     <SectionHeader>
                         <h1>Section 2 Header</h1>

@@ -2,6 +2,9 @@
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Puppeteer Quick Start
 
 Get started by adding the `@paprize/puppeteer` library to your project.
@@ -10,27 +13,60 @@ Get started by adding the `@paprize/puppeteer` library to your project.
 npm install @paprize/puppeteer
 ```
 
+This library requires an instance of [Puppeteer](https://pptr.dev). After installing and setting up the appropriate version of Puppeteer or Puppeteer Core in your environment, you can use it to export your report as a PDF, image, or HTML file.
+
 :::warning
 
 This is a back-end only library and can be used exclusively in server-side applications.
 
 :::
 
-## Prepare Your Report
+<Tabs>
+<TabItem value="Vanilla" label="Vanilla | Zero">
 
-The first step is to prepare your report file.  
-If you are using React or a more complex project setup, you need to build your project so it can be served.
+1. Setup the report HTML file
+1. Add [Report Components](/components/report-components.md) to your report.
+1. Convert report HTML file to PDF
 
-## Serve Report
+```ts title="script.ts"
+import { reportToPdf } from '@paprize/puppeteer';
+import { promises as fs } from 'fs';
+import puppeteer, { type Browser } from 'puppeteer';
 
-Use the `serveReport` function to create a local HTTP server for your reports.
+let browser!: Browser;
 
-- `serveReport` accepts the directory of your built assets (JS + HTML)
-- You can also provide an optional port number to serve it on.
+try {
+    browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--disable-web-security',
+        ],
+    });
 
-## Convert to PDF
+    const page = await browser.newPage();
 
-The final step requires an instance of [Puppeteer](https://pptr.dev). After installing and setting it up in your environment, Create a new `Page` in Puppeteer and pass that page instance to the `reportToPdf` function to generate the PDF.
+    const pdf = await reportToPdf(
+        page,
+        new URL(`file://${import.meta.dirname}/report.html`)
+    );
+
+    await fs.writeFile('report.pdf', pdf);
+} finally {
+    await browser.close();
+}
+```
+
+</TabItem>
+<TabItem value="React">
+
+1. Add [Report Components](/components/report-components.md) to your report.
+1. Build your React app assets (JavaScript and HTML).
+1. Serve the React app using a local HTTP server.
+1. Convert the rendered React report into a PDF file.
 
 ```ts
 import { promises as fs } from 'fs';
@@ -67,3 +103,6 @@ try {
     server.close();
 }
 ```
+
+</TabItem>
+</Tabs>

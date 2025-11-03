@@ -1,11 +1,10 @@
 import {
+    adjustPageSize,
     reportStyles,
     type PageContext,
-    type PageSize,
-    type PageMargin,
-    type PaginationOptions,
+    type SectionOptions,
 } from '@paprize/core/src';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Page } from '../components/Page';
 import { useReportBuilder } from './useReportBuilder';
@@ -16,20 +15,13 @@ import { SectionControllerContext } from './SectionControllerContext';
 
 export interface SectionLayoutProps {
     elements: PageElements;
-    size: PageSize;
-    margin: PageMargin | undefined;
-    config?: Partial<PaginationOptions>;
+    options: SectionOptions;
 }
 
-export function SectionLayout({
-    elements,
-    size,
-    margin,
-    config,
-}: SectionLayoutProps) {
+export function SectionLayout({ elements, options }: SectionLayoutProps) {
     const sectionId = useContext(SectionIdContext);
     const { controllerState, controllerValue } = useSectionControllerState(
-        config?.plugins
+        options?.plugins
     );
     const reportBuilder = useReportBuilder();
     const pageRef = useRef<HTMLDivElement>(null);
@@ -38,6 +30,10 @@ export function SectionLayout({
     const pageHeaderRef = useRef<HTMLDivElement>(null);
     const pageFooterRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const realizedSize = useMemo(
+        () => adjustPageSize(options.size, options.orientation),
+        [options.orientation, options.size]
+    );
     const [pageContexts, setPageContexts] = useState<PageContext[] | null>(
         null
     );
@@ -49,10 +45,8 @@ export function SectionLayout({
 
         reportBuilder.tryAddSection(
             {
-                ...config,
+                ...options,
                 id: sectionId,
-                size: size,
-                margin: margin,
                 plugins: controllerState.plugins,
                 suspense: controllerState.suspense,
             },
@@ -71,7 +65,13 @@ export function SectionLayout({
         return () => {
             reportBuilder.removeSection(sectionId);
         };
-    }, [config, controllerState, size, margin, reportBuilder, sectionId]);
+    }, [
+        controllerState.plugins,
+        controllerState.suspense,
+        options,
+        reportBuilder,
+        sectionId,
+    ]);
 
     return (
         <SectionControllerContext value={controllerValue}>
@@ -89,8 +89,8 @@ export function SectionLayout({
                             />
                         ),
                     }}
-                    size={size}
-                    margin={margin}
+                    size={realizedSize}
+                    margin={options.margin}
                     pageIndex={pageContext.pageIndex}
                     totalPages={pageContext.totalPages}
                 />
@@ -100,8 +100,8 @@ export function SectionLayout({
                 <div style={reportStyles.outOfScreen}>
                     <Page
                         elements={elements}
-                        size={size}
-                        margin={margin}
+                        size={realizedSize}
+                        margin={options.margin}
                         pageIndex={0}
                         totalPages={1}
                         ref={pageRef}

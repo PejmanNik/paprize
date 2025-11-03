@@ -4,6 +4,9 @@ import { useReportBuilder } from '../internal/useReportBuilder';
 import { SectionIdContext } from '../internal/SectionIdContext';
 import type { SectionInfo } from '../internal/eventHelper';
 
+/**
+ * React hook that returns information about the current section.
+ */
 export const useSectionInfo = (): SectionInfo => {
     const sectionId = useContext(SectionIdContext);
     const reportBuilder = useReportBuilder();

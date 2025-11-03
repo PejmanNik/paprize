@@ -6,9 +6,98 @@ sidebar_position: 99
 
 # @paprize/vanilla
 
+## PaprizeReport
+
+Defined in: [PaprizeReport.ts:72](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L72)
+
+The report builder class that contains the logic for handling pagination
+and managing the report layout.
+
+### Constructors
+
+#### Constructor
+
+> **new PaprizeReport**(`options?`): [`PaprizeReport`](#paprizereport)
+
+Defined in: [PaprizeReport.ts:80](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L80)
+
+##### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options?` | [`PaprizeReportOptions`](#paprizereportoptions) |
+
+##### Returns
+
+[`PaprizeReport`](#paprizereport)
+
+### Accessors
+
+#### monitor
+
+##### Get Signature
+
+> **get** **monitor**(): `Core.Monitor`\<[`PaprizeReportEvents`](#paprizereportevents)\>
+
+Defined in: [PaprizeReport.ts:159](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L159)
+
+Monitor instance used to subscribe to pagination events.
+See [PaprizeReportEvents](#paprizereportevents) for available event types.
+
+###### Returns
+
+`Core.Monitor`\<[`PaprizeReportEvents`](#paprizereportevents)\>
+
+### Methods
+
+#### addSection()
+
+> **addSection**(`options`): [`PaprizeReport`](#paprizereport)
+
+Defined in: [PaprizeReport.ts:168](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L168)
+
+Registers a section by its id, specifying the page size, margins, and other options.
+If a section with the same id already exists, the operation will be ignored.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`SectionOptions`](/core/api.md#sectionoptions) | Configuration options for the section. |
+
+##### Returns
+
+[`PaprizeReport`](#paprizereport)
+
+#### schedulePagination()
+
+> **schedulePagination**(): `Promise`\<[`DomScheduleResult`](#domscheduleresult)\>
+
+Defined in: [PaprizeReport.ts:143](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L143)
+
+Schedules a pagination operation.
+
+It is not possible to schedule multiple pagination operations in parallel,
+as the process involves DOM manipulation, and concurrent modifications
+could cause conflicts and unexpected results.
+Each newly scheduled operation is queued and executed sequentially.
+When a new pagination is scheduled, any ongoing or pending operations
+will be aborted, and the new pagination will start immediately afterward.
+
+##### Returns
+
+`Promise`\<[`DomScheduleResult`](#domscheduleresult)\>
+
+A promise that resolves when the first pagination cycle is completed.
+It does not wait for suspended sections to resolve and be paginated.
+To wait for all sections to complete pagination, use the
+`suspension` property of the returned result object.
+
+***
+
 ## DomPageContext
 
-Defined in: [PaprizeReportEvents.ts:6](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/vanilla/src/PaprizeReportEvents.ts#L6)
+Defined in: [PaprizeReportEvents.ts:6](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReportEvents.ts#L6)
 
 Context information for a paginated page.
 
@@ -19,14 +108,14 @@ Context information for a paginated page.
 | <a id="components"></a> `components` | [`SectionComponents`](/core/api.md#sectioncomponents) | Collection of HTMLElement components present on this page. |
 | <a id="page"></a> `page` | `HTMLElement` | The root HTMLElement for this paginated page in the DOM. |
 | <a id="pageindex"></a> `pageIndex` | `number` | Index of this page within its section. |
-| <a id="sectionid"></a> `sectionId` | `string` | Id of the section to which this page belongs |
+| <a id="sectionid"></a> `sectionId` | `string` | Index of the section to which this page belongs |
 | <a id="totalpages"></a> `totalPages` | `number` | Total number of pages in the section that contains this page. |
 
 ***
 
 ## DomPaginationCycleCompleted
 
-Defined in: [PaprizeReportEvents.ts:55](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/vanilla/src/PaprizeReportEvents.ts#L55)
+Defined in: [PaprizeReportEvents.ts:58](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReportEvents.ts#L58)
 
 Context information for pagination cycle.
 
@@ -38,9 +127,24 @@ Context information for pagination cycle.
 
 ***
 
+## DomScheduleResult
+
+Defined in: [PaprizeReport.ts:50](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L50)
+
+Represents the result of a scheduled pagination process.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="sections-1"></a> `sections` | [`DomSectionContext`](#domsectioncontext)[] | List of all registered sections. |
+| <a id="suspension"></a> `suspension` | `Promise`\<`void`\> | If there are any suspended sections, this Promise tracks their state and resolves only after all suspended sections have been resumed and paginated. |
+
+***
+
 ## DomSectionContext
 
-Defined in: [PaprizeReportEvents.ts:32](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/vanilla/src/PaprizeReportEvents.ts#L32)
+Defined in: [PaprizeReportEvents.ts:32](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReportEvents.ts#L32)
 
 Context information for a paginated section.
 
@@ -48,6 +152,7 @@ Context information for a paginated section.
 
 | Property | Type | Description |
 | ------ | ------ | ------ |
+| <a id="ispaginated"></a> `isPaginated` | `boolean` | Indicates whether pagination for this section has completed. |
 | <a id="issuspended"></a> `isSuspended` | `boolean` | Indicates whether pagination for this section is suspended and waiting for the suspension to be resolved. |
 | <a id="pages"></a> `pages` | [`DomPageContext`](#dompagecontext)[] | All paginated pages that belong to this section. |
 | <a id="sectionid-1"></a> `sectionId` | `string` | Unique identifier of the section. |
@@ -57,7 +162,7 @@ Context information for a paginated section.
 
 ## PaprizeReportEvents
 
-Defined in: [PaprizeReportEvents.ts:65](https://github.com/PejmanNik/paprize/blob/97002c850bb1bb81b71ccd231d41df0e043fd33f/packages/vanilla/src/PaprizeReportEvents.ts#L65)
+Defined in: [PaprizeReportEvents.ts:68](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReportEvents.ts#L68)
 
 Available events that can be subscribed to, during the pagination process.
 
@@ -69,3 +174,18 @@ Available events that can be subscribed to, during the pagination process.
 | <a id="paginationcyclecompleted"></a> `paginationCycleCompleted` | (`event`) => `void` | Triggered when an entire pagination cycle is completed. event: [DomPaginationCycleCompleted](#dompaginationcyclecompleted) |
 | <a id="sectioncompleted"></a> `sectionCompleted` | (`event`) => `void` | Triggered when a section has been fully paginated. event: [DomSectionContext](#domsectioncontext) |
 | <a id="sectioncreated"></a> `sectionCreated` | (`event`) => `void` | Triggered when a new section is created. event: [DomSectionContext](#domsectioncontext) |
+
+***
+
+## PaprizeReportOptions
+
+Defined in: [PaprizeReport.ts:32](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/vanilla/src/PaprizeReport.ts#L32)
+
+Options for configuring a `PaprizeReport` instance.
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| <a id="keepinitialelementafterpagination"></a> `keepInitialElementAfterPagination?` | `boolean` | Determines whether to keep the original DOM elements after pagination. When set to `false` (default), the original elements are removed and replaced with the paginated output. When set to `true`, the original elements remain in the DOM but are marked as invisible. |
+| <a id="root"></a> `root?` | `HTMLElement` | Optional root element where the final paginated report will be created. If not specified, `document.body` will be used as the default container. |
