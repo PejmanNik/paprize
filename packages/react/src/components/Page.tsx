@@ -6,13 +6,13 @@ import {
     pageClassName,
     pageMargin,
     reportStyles,
-    type PageDimension,
+    type PageSize,
     type PageMargin,
 } from '@paprize/core/src';
 
 export interface PageProps {
     elements: PageElements;
-    dimension: PageDimension;
+    size: PageSize;
     margin?: PageMargin;
     pageIndex: number;
     totalPages: number;
@@ -26,7 +26,7 @@ export interface PageProps {
 
 export function Page({
     elements,
-    dimension,
+    size,
     margin,
     pageIndex,
     totalPages,
@@ -49,7 +49,7 @@ export function Page({
                 id={`${sectionId}-${pageIndex}`}
                 className={pageClassName}
                 ref={ref}
-                style={reportStyles.page(dimension, margin ?? pageMargin.None)}
+                style={reportStyles.page(size, margin ?? pageMargin.None)}
             >
                 {elements.sectionHeader && pageIndex === 0 && (
                     <div style={reportStyles.component} ref={sectionHeaderRef}>

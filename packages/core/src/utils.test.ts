@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPageId, adjustDimension } from './utils';
+import { buildPageId, adjustPageSize } from './utils';
 
 describe('utils', () => {
     it('buildPageId should create a unique ID for each page', () => {
@@ -7,16 +7,16 @@ describe('utils', () => {
         expect(result).toBe('section1-1');
     });
 
-    describe('adjustDimension', () => {
-        it('should not modify dimensions for portrait orientation', () => {
-            const dimension = { width: '800px', height: '1000px' };
-            const result = adjustDimension(dimension, 'portrait');
-            expect(result).toEqual(dimension);
+    describe('adjustPageSize', () => {
+        it('should not modify size for portrait orientation', () => {
+            const size = { width: '800px', height: '1000px' };
+            const result = adjustPageSize(size, 'portrait');
+            expect(result).toEqual(size);
         });
 
         it('should swap width and height for landscape orientation', () => {
-            const dimension = { width: '800px', height: '1000px' };
-            const result = adjustDimension(dimension, 'landscape');
+            const size = { width: '800px', height: '1000px' };
+            const result = adjustPageSize(size, 'landscape');
             expect(result).toEqual({ width: '1000px', height: '800px' });
         });
     });

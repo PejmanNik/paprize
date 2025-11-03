@@ -1,5 +1,5 @@
 import { getVisibleHeight, isElement, isTextNode } from './domUtilities';
-import { type PaginationConfig } from './PaginationConfig';
+import { type PaginationOptions } from './PaginationOptions';
 import { callPluginHook } from './PaginationPlugin';
 import type { Transaction } from './Transaction';
 
@@ -18,7 +18,7 @@ export const PageNodeType = {
 export class PageElement {
     private readonly _node: Element;
 
-    public config: PaginationConfig;
+    public config: PaginationOptions;
 
     public readonly type: 'element' = PageNodeType.Element;
     public readonly transaction: Transaction;
@@ -28,7 +28,7 @@ export class PageElement {
     constructor(
         element: Element,
         transaction: Transaction,
-        config: PaginationConfig,
+        config: PaginationOptions,
         clonedFrom?: PageElement
     ) {
         this._node = element;
@@ -105,12 +105,12 @@ export class PageText {
     public readonly type: 'text' = PageNodeType.Text;
     public readonly transaction: Transaction;
 
-    public config: PaginationConfig;
+    public config: PaginationOptions;
 
     constructor(
         text: Text,
         transaction: Transaction,
-        config: PaginationConfig
+        config: PaginationOptions
     ) {
         this._node = text;
         this.transaction = transaction;
@@ -141,22 +141,22 @@ export type PageNode = PageElement | PageText;
 export function createPageNode(
     node: Element,
     transaction: Transaction,
-    config: PaginationConfig
+    config: PaginationOptions
 ): PageElement;
 export function createPageNode(
     node: Text,
     transaction: Transaction,
-    config: PaginationConfig
+    config: PaginationOptions
 ): PageText;
 export function createPageNode(
     node: Node,
     transaction: Transaction,
-    config: PaginationConfig
+    config: PaginationOptions
 ): PageNode;
 export function createPageNode(
     node: Node,
     transaction: Transaction,
-    config: PaginationConfig
+    config: PaginationOptions
 ): PageNode {
     if (isTextNode(node)) {
         return new PageText(node, transaction, config);

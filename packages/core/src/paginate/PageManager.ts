@@ -6,10 +6,10 @@ import {
     type PageText,
 } from './PageNodes';
 import { Transaction } from './Transaction';
-import type { PageSize } from './PageSize';
+import type { RealizedPageSize } from './RealizedPageSize';
 import { unmarkCurrentNode } from '../debugUtilities/pageNodeMarker';
 import logger from '../logger';
-import { type PaginationConfig } from './PaginationConfig';
+import { type PaginationOptions } from './PaginationOptions';
 import { callPluginHook } from './PaginationPlugin';
 
 const logPrefix = '\x1b[102mPAGE\x1b[0m';
@@ -76,13 +76,13 @@ export class PageManager {
 
     private readonly _transaction: Transaction;
     private readonly _tempContainer: Element;
-    private readonly _config: PaginationConfig;
+    private readonly _config: PaginationOptions;
 
     public constructor(
         tempContainer: Element,
-        pageSize: PageSize,
+        pageSize: RealizedPageSize,
         transaction: Transaction,
-        config: PaginationConfig
+        config: PaginationOptions
     ) {
         this._tempContainer = tempContainer;
         this._config = config;

@@ -1,4 +1,4 @@
 **/node_modules/**/*
 **/*.gen.ts
-packages/website/**/*
+packages/website/static/*
 package-lock.json

@@ -3,21 +3,23 @@ sidebar_position: 3
 ---
 
 import ComponentCatalog from "@site/src/components/ComponentCatalog";
-import PageComponents from './\_page-components.md';
+import PageComponents from '../components/\_page-components.md';
 
 # Page Info
 
-Pagination information is provided through several different hooks, as the data becomes available at various stages of React’s rendering lifecycle. Using these hooks can cause the page to re-render, which may in turn trigger the pagination engine to run again.
+Pagination information is provided through several hooks, as the data becomes available at different stages of React’s rendering and pagination lifecycle.
+
+Using these hooks may cause the page to re-render, which can trigger the pagination engine to run again. To avoid an infinite loop, consider using [Layout Suspension](section-suspension.md) to pause the pagination engine for a specific section until all required data is available.
 
 ## usePageInfo
 
-Gets the current page number within the current section, starting from 1.
+Gets the [current page info](api.md#pageinfo) within the current section.
 
 ```jsx
-const { pageNumber, totalPages } = usePageInfo();
+const { pageIndex, totalPages } = usePageInfo();
 ```
 
-<ComponentCatalog.Container isHook>
+<ComponentCatalog.Container noChildren>
 <ComponentCatalog.Parent>
 <PageComponents />
 </ComponentCatalog.Parent>
@@ -25,39 +27,24 @@ const { pageNumber, totalPages } = usePageInfo();
 
 ## useSectionInfo
 
-Gets the total number of pages within the current section.
+Get information about the [current section and its pages](api.md#sectioninfo).
 
 ```jsx
-const { sectionName, totalPages, isPaginated, pendingSuspensions } : SectionInfo = useSectionInfo();
+const { sectionId } : SectionInfo = useSectionInfo();
 ```
 
-<ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
+<ComponentCatalog.Container noChildren>
+<ComponentCatalog.Parent>[Section](/components/report-components.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
-
-| Name               | Type   | Description                                                                           |
-| :----------------- | :----- | :------------------------------------------------------------------------------------ |
-| sectionName        | string | unique name of current section.                                                       |
-| totalPages         | number | The total number of pages in the section. When isPaginated is false, this value is 0. |
-| isPaginated        | bool   | Indicates whether the section is paginated.                                           |
-| pendingSuspensions | number | The number of pending suspensions in the section.                                     |
 
 ## useReportInfo
 
-Retrieves information about all sections within the report. To use this as part of the [PageContent](/react/components.md#pagecontent), you need to use [Layout Suspension](/react/section-suspension.md). You can learn more about this in the `PageContent`.
+Retrieves information about [all sections within the report](api.md#reportinfo).
 
 ```jsx
-const { sections, isPaginated, totalPages, isFirstPaginationCompleted } =
-    useReportInfo();
+const { sections } = useReportInfo();
 ```
 
-<ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[ReportRoot](/react/components.md#reportroot)</ComponentCatalog.Parent>
+<ComponentCatalog.Container noChildren>
+<ComponentCatalog.Parent>[ReportRoot](/react/components.md#report-root)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
-
-| Name                       | Type          | Description                                                                                                                                                                 |
-| :------------------------- | :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| sections                   | SectionInfo[] | An array of sections in the report, each containing details about the section.                                                                                              |
-| totalPages                 | number        | The total number of pages in the report. When isFirstPaginationCompleted is false, this value is 0. When isPaginated is false, this value is not guaranteed to be accurate. |
-| isPaginated                | bool          | Indicates whether the report is ready and all sections are paginated.                                                                                                       |
-| isFirstPaginationCompleted | bool          | Indicates whether the first pagination process has been completed. This becomes true once at least one section has been paginated.                                          |

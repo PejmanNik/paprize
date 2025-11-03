@@ -38,36 +38,32 @@ export default function App() {
             <ReportPreview>
                 <Section
                     id="section-1"
-                    dimension={{ height: '300px', width: '400px' }}
+                    size={{ height: '300px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [Paprize.debugPlugin],
-                    }}
+                    plugins={[Paprize.debugPlugin]}
                 >
                     <PageContent>
                         <MyTOC tocProvider={tocPlugin} />
                     </PageContent>
                 </Section>
                 <Section
-                    dimension={{ height: '400px', width: '400px' }}
+                    size={{ height: '400px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [
-                            Paprize.debugPlugin,
-                            new Paprize.TablePlugin({ cloneHeader: true }),
-                            tocPlugin,
-                        ],
-                    }}
+                    plugins={[
+                        Paprize.debugPlugin,
+                        new Paprize.TablePlugin({ cloneHeader: true }),
+                        tocPlugin,
+                    ]}
                 >
                     <SectionHeader>
                         <h2>Section Header</h2>
@@ -106,16 +102,14 @@ export default function App() {
                 </Section>
 
                 <Section
-                    dimension={{ height: '600px', width: '400px' }}
+                    size={{ height: '600px', width: '400px' }}
                     margin={{
                         top: '10px',
                         right: '10px',
                         bottom: '10px',
                         left: '10px',
                     }}
-                    config={{
-                        plugins: [Paprize.debugPlugin, tocPlugin],
-                    }}
+                    plugins={[Paprize.debugPlugin, tocPlugin]}
                 >
                     <SectionHeader>
                         <h1>Section 2 Header</h1>

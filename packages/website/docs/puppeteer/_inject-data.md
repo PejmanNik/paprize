@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
@@ -47,8 +47,8 @@ function MyComponent() {
 }
 ```
 
-<ComponentCatalog.Container isHook>
-<ComponentCatalog.Parent>[Section](/react/components.md#section)</ComponentCatalog.Parent>
+<ComponentCatalog.Container noChildren>
+<ComponentCatalog.Parent>[Section](/components/report-components.md#section)</ComponentCatalog.Parent>
 </ComponentCatalog.Container>
 
 </TabItem>

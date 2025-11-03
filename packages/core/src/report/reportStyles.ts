@@ -4,7 +4,7 @@ import {
     previewClassName,
     sectionClassName,
 } from '../constants';
-import type { PageDimension, PageMargin } from './pageTypes';
+import type { PageSize, PageMargin } from './pageTypes';
 import { shorthand } from './utils';
 
 export const globalStyle = `
@@ -73,15 +73,12 @@ const outOfScreen: CSSProperties = {
     visibility: 'hidden',
 };
 
-const page = (
-    pageDimension: PageDimension,
-    pageMargin: PageMargin
-): CSSProperties => ({
+const page = (pageSize: PageSize, pageMargin: PageMargin): CSSProperties => ({
     display: 'flex',
     flexDirection: 'column',
-    width: pageDimension.width,
-    height: pageDimension.height,
-    maxHeight: pageDimension.height,
+    width: pageSize.width,
+    height: pageSize.height,
+    maxHeight: pageSize.height,
     position: 'relative',
     padding: shorthand(pageMargin),
     zIndex: '1',
@@ -105,12 +102,12 @@ const section = (sectionId: string): CSSProperties => ({
     page: `section-${sectionId}`,
 });
 
-function sectionPageMedia(sectionId: string, dimension: PageDimension): string {
+function sectionPageMedia(sectionId: string, size: PageSize): string {
     return `@page section-${sectionId} {
       margin: none; 
-      size:${dimension.width} ${dimension.height}; 
-      width:${dimension.width};
-      height:${dimension.height};
+      size:${size.width} ${size.height}; 
+      width:${size.width};
+      height:${size.height};
     }`;
 }
 

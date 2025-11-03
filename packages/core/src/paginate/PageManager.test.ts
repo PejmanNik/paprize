@@ -1,6 +1,6 @@
 import { describe, expect, vi, beforeEach, type Mocked, test } from 'vitest';
 import { PageManager } from './PageManager';
-import type { PaginationConfig } from './PaginationConfig';
+import type { PaginationOptions } from './PaginationOptions';
 import { Transaction } from './Transaction';
 import {
     type PageElement,
@@ -39,7 +39,7 @@ describe('PageManager', () => {
 
     beforeEach(() => {
         const transaction = new Transaction();
-        const config = { plugins: [] } as unknown as PaginationConfig;
+        const config = { plugins: [] } as unknown as PaginationOptions;
 
         vi.clearAllMocks();
 
@@ -256,7 +256,7 @@ describe('PageManager', () => {
                 addCommitCallback: vi.fn(),
                 isActive: false,
             } as unknown as Mocked<Transaction>;
-            const config = { plugins: [] } as unknown as PaginationConfig;
+            const config = { plugins: [] } as unknown as PaginationOptions;
             tempContainer = document.createElement('section');
             pageManager = new PageManager(
                 tempContainer,

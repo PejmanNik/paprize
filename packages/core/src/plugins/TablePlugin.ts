@@ -6,6 +6,9 @@ import {
 } from '../paginate/PageNodes';
 import type { PaginationPlugin } from '../paginate/PaginationPlugin';
 
+/**
+ * Table plugin options
+ */
 export interface TablePluginOptions {
     /**
      * If true, the table header (thead) will be cloned on each page.

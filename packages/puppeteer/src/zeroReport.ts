@@ -2,7 +2,7 @@ import {
     attributePrefix,
     pageMargin,
     pageSize,
-    type PageDimension,
+    type PageSize,
     type PageMargin,
 } from '@paprize/core/src';
 import { PaprizeReport, sectionAttribute } from '@paprize/vanilla/src';
@@ -10,20 +10,20 @@ import { PaprizeReport, sectionAttribute } from '@paprize/vanilla/src';
 export const sectionPageSizeAttribute = `${attributePrefix}section-page-size`;
 export const sectionPageMarginAttribute = `${attributePrefix}section-page-margin`;
 
-function parsePageSizeAttribute(section: Element): PageDimension {
-    const size = section.getAttribute(sectionPageSizeAttribute);
+function parsePageSizeAttribute(section: Element): PageSize {
+    const sizeAttributeValue = section.getAttribute(sectionPageSizeAttribute);
     console.warn(
         'ss',
-        size,
+        sizeAttributeValue,
         section.getAttributeNames().join(','),
         sectionPageSizeAttribute,
         section.getAttribute('data-pz-section-page-size')
     );
-    const dimension = Object.entries(pageSize).find(
-        ([key]) => key.toLowerCase() === size?.toLowerCase()
+    const size = Object.entries(pageSize).find(
+        ([key]) => key.toLowerCase() === sizeAttributeValue?.toLowerCase()
     )?.[1];
 
-    return dimension ?? pageSize.A4;
+    return size ?? pageSize.A4;
 }
 
 function parsePageMarginAttribute(section: Element): PageMargin {
@@ -45,10 +45,10 @@ document.querySelectorAll(`[${sectionAttribute}]`).forEach((el) => {
     }
 
     report.addSection({
-        dimension: parsePageSizeAttribute(el),
+        size: parsePageSizeAttribute(el),
         margin: parsePageMarginAttribute(el),
         id,
     });
 });
 
-report.schedulePaginate();
+report.schedulePagination();

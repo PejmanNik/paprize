@@ -5,6 +5,7 @@ import {
     pageHeaderAttribute,
     pageIndexMetadataAttribute,
     pageNumberValueAttribute,
+    previewAttribute,
     sectionAttribute,
     sectionFooterAttribute,
     sectionHeaderAttribute,
@@ -15,6 +16,7 @@ import {
 } from './attributes';
 import type {
     DomPageContext,
+    DomSectionContext,
     PaprizeReportEvents,
 } from './PaprizeReportEvents';
 
@@ -24,10 +26,37 @@ const globalStyles = `
     }
 `;
 
+/**
+ * Options for configuring a `PaprizeReport` instance.
+ */
 export interface PaprizeReportOptions {
+    /**
+     * Optional root element where the final paginated report will be created.
+     * If not specified, `document.body` will be used as the default container.
+     */
     root?: HTMLElement;
-    usePreviewMode?: boolean;
+
+    /**
+     * Determines whether to keep the original DOM elements after pagination.
+     * When set to `false` (default), the original elements are removed and replaced with the paginated output.
+     * When set to `true`, the original elements remain in the DOM but are marked as invisible.
+     */
     keepInitialElementAfterPagination?: boolean;
+}
+
+/**
+ * {@inheritDoc @paprize/core!ScheduleResult}
+ */
+export interface DomScheduleResult {
+    /**
+     * {@inheritDoc @paprize/core!ScheduleResult.sections}
+     */
+    sections: DomSectionContext[];
+
+    /**
+     * {@inheritDoc @paprize/core!ScheduleResult.suspension}
+     */
+    suspension: Promise<void>;
 }
 
 interface SectionState {
@@ -37,6 +66,9 @@ interface SectionState {
     options: Core.SectionOptions;
 }
 
+/**
+ * {@inheritDoc @paprize/core!ReportBuilder}
+ */
 export class PaprizeReport {
     private readonly _sections: Map<string, SectionState> = new Map();
     private readonly _reportManager: Core.ReportBuilder;
@@ -44,6 +76,7 @@ export class PaprizeReport {
     private readonly _root: HTMLElement;
     private readonly _options: PaprizeReportOptions;
 
+    /** @public */
     constructor(options?: PaprizeReportOptions) {
         const style = document.createElement('style');
         style.textContent = globalStyles;
@@ -77,7 +110,7 @@ export class PaprizeReport {
             'pageCompleted',
             (event) => {
                 const pages = this._getSectionState(event.sectionId).pages;
-                this._monitor.dispatch('pageCompleted', pages[event.index]);
+                this._monitor.dispatch('pageCompleted', pages[event.pageIndex]);
             }
         );
         this._reportManager.monitor.addEventListener(
@@ -96,7 +129,7 @@ export class PaprizeReport {
     _createRootElement(): HTMLElement {
         const wrapper = document.createElement('div');
 
-        if (this._options.usePreviewMode) {
+        if (document.querySelector(`[${previewAttribute}]`)) {
             wrapper.classList.add(Core.previewClassName);
         }
 
@@ -104,16 +137,34 @@ export class PaprizeReport {
         return wrapper;
     }
 
-    public async schedulePaginate(): Promise<
-        Awaited<ReturnType<Core.ReportBuilder['schedulePaginate']>>
-    > {
-        return this._reportManager.schedulePaginate();
+    /**
+     * {@inheritDoc @paprize/core!ReportBuilder.schedulePagination}
+     */
+    public async schedulePagination(): Promise<DomScheduleResult> {
+        const result = await this._reportManager.schedulePagination();
+
+        return {
+            suspension: result.suspension,
+            sections: result.sections.map((s) => ({
+                ...s,
+                pages: this._sections.get(s.sectionId)?.pages ?? [],
+            })),
+        };
     }
 
+    /**
+     * Monitor instance used to subscribe to pagination events.
+     * See {@link PaprizeReportEvents} for available event types.
+     */
     public get monitor(): Core.Monitor<PaprizeReportEvents> {
         return this._monitor;
     }
 
+    /**
+     * Registers a section by its id, specifying the page size, margins, and other options.
+     * If a section with the same id already exists, the operation will be ignored.
+     * @param options - Configuration options for the section.
+     */
     public addSection(options: Core.SectionOptions): PaprizeReport {
         if (this._sections.has(options.id)) {
             return this;
@@ -218,23 +269,23 @@ export class PaprizeReport {
         for (const pageContext of pageContexts) {
             const page = document.createElement('div');
             page.classList.add(Core.pageClassName);
-            page.id = Core.buildPageId(options.id, pageContext.index);
+            page.id = Core.buildPageId(options.id, pageContext.pageIndex);
             page.setAttribute(
                 pageIndexMetadataAttribute,
-                pageContext.index.toString()
+                pageContext.pageIndex.toString()
             );
 
             Object.assign(
                 page.style,
                 Core.reportStyles.page(
-                    options.dimension,
+                    options.size,
                     options.margin ?? Core.pageMargin.None
                 )
             );
 
             const components = Core.cloneComponents(state.components);
 
-            if (pageContext.index === 0 && components.sectionHeader) {
+            if (pageContext.pageIndex === 0 && components.sectionHeader) {
                 page.appendChild(components.sectionHeader);
             }
             if (components.pageHeader) {
@@ -251,7 +302,7 @@ export class PaprizeReport {
                 pageFooterContainer.appendChild(components.pageFooter);
             }
             if (
-                pageContext.index === pageContexts.length - 1 &&
+                pageContext.pageIndex === pageContexts.length - 1 &&
                 components.sectionFooter
             ) {
                 pageFooterContainer.appendChild(
@@ -271,11 +322,10 @@ export class PaprizeReport {
 
             const domPageContext: DomPageContext = {
                 sectionId: options.id,
-                index: pageContext.index,
+                pageIndex: pageContext.pageIndex,
                 totalPages: pageContexts.length,
-                ...components,
                 page,
-                pageContent,
+                components: { ...components, pageContent },
             };
             pages.push(domPageContext);
         }
@@ -296,7 +346,7 @@ export class PaprizeReport {
             component
                 .querySelectorAll(`[${pageNumberValueAttribute}]`)
                 .forEach((el) => {
-                    el.textContent = (pageContext.index + 1).toString();
+                    el.textContent = (pageContext.pageIndex + 1).toString();
                 });
             component
                 .querySelectorAll(`[${totalPagesValueAttribute}]`)

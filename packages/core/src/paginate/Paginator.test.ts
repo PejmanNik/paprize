@@ -12,8 +12,11 @@ import { PageManager } from './PageManager';
 import { DomState } from './DomState';
 import { PageElement, PageNodeType, PageText } from './PageNodes';
 import { SplitResult } from './SplitResult';
-import type { PageSize } from './PageSize';
-import { defaultConfig, type PaginationConfig } from './PaginationConfig';
+import type { RealizedPageSize } from './RealizedPageSize';
+import {
+    defaultPaginationOptions,
+    type PaginationOptions,
+} from './PaginationOptions';
 import { tempContainerClassName } from '../constants';
 import { paginateTextByWord } from './paginateText';
 import { paginateElementAcrossPages } from './paginateElement';
@@ -29,8 +32,8 @@ vi.mock('../utilities/pageNodeMarker', () => ({
 
 describe('Paginator', () => {
     let root: Element;
-    let pageSize: PageSize;
-    let config: PaginationConfig;
+    let pageSize: RealizedPageSize;
+    let config: PaginationOptions;
 
     let mockDomState: {
         goToNextNode: Mock;
@@ -49,7 +52,7 @@ describe('Paginator', () => {
         document.body.innerHTML = '';
         root = document.createElement('div');
         pageSize = { width: 100, height: 100 };
-        config = { id: 'X' } as PaginationConfig;
+        config = { id: 'X' } as PaginationOptions;
 
         mockDomState = {
             goToNextNode: vi.fn(),
@@ -134,10 +137,10 @@ describe('Paginator', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
-            { ...defaultConfig, ...config }
+            { ...defaultPaginationOptions, ...config }
         );
         expect(DomState).toHaveBeenCalledWith(root, expect.anything(), {
-            ...defaultConfig,
+            ...defaultPaginationOptions,
             ...config,
         });
     });

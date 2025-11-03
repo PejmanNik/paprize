@@ -1,16 +1,16 @@
-import type { PageDimension, PageOrientation } from './report/pageTypes';
+import type { PageSize, PageOrientation } from './report/pageTypes';
 
 export function buildPageId(sectionId: string, pageIndex: number): string {
     return `${sectionId}-${pageIndex + 1}`;
 }
 
-export function adjustDimension(
-    dimension: PageDimension,
-    orientation: PageOrientation
-): PageDimension {
+export function adjustPageSize(
+    size: PageSize,
+    orientation?: PageOrientation
+): PageSize {
     if (orientation === 'landscape') {
-        return { height: dimension.width, width: dimension.height };
+        return { height: size.width, width: size.height };
     }
 
-    return dimension;
+    return size;
 }

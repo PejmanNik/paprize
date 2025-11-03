@@ -21,7 +21,7 @@ export function PageContent({ children }: { children: ReactNode }) {
     // if we don't do this, the new content will be ignored in the pagination
     useEffect(() => {
         if (isFirstCycleCompleted.current) {
-            reportBuilder.schedulePaginate();
+            reportBuilder.schedulePagination();
         }
     }, [children, reportBuilder]);
 

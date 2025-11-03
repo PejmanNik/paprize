@@ -1,6 +1,7 @@
 import { attributePrefix } from '@paprize/core/src';
 
 export const sectionAttribute = `${attributePrefix}section`;
+export const previewAttribute = `${attributePrefix}preview`;
 
 export const sectionHeaderAttribute = `${attributePrefix}section-header`;
 export const sectionFooterAttribute = `${attributePrefix}section-footer`;

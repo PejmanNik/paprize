@@ -15,7 +15,7 @@ export function getVisibleSize(element: Element) {
     };
 }
 
-export function calculatePageDimensions(
+export function calculatePageSizes(
     current: HTMLElement,
     sectionHeader: HTMLElement | null,
     sectionFooter: HTMLElement | null

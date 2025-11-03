@@ -5,9 +5,8 @@ import Recipe from '@site/static/img/recipe.svg';
 
 export interface ComponentCatalogProps {
     isMandatory: boolean;
-    hasFixedHight?: boolean;
     mustBeADirectChild?: boolean;
-    isHook?: boolean;
+    noChildren?: boolean;
     children?: React.ReactNode;
 }
 
@@ -16,8 +15,7 @@ type SubComponent = React.ReactElement<{ children: React.ReactNode }>;
 function Container({
     isMandatory,
     mustBeADirectChild,
-    hasFixedHight,
-    isHook,
+    noChildren,
     children,
 }: ComponentCatalogProps) {
     const childrenList = React.Children.toArray(children).filter(
@@ -37,21 +35,10 @@ function Container({
             className={styles.admonition}
         >
             <div className={styles.container}>
-                {!isHook && (
+                {!noChildren && (
                     <>
                         <div className={styles.title}>Type</div>
                         <div>{isMandatory ? 'Mandatory' : 'Optional'}</div>
-                        <div className={styles.border} />
-                        <div className={styles.title}>Dynamic Height</div>
-                        <div>
-                            {hasFixedHight ? (
-                                <>
-                                    <b>NOT</b> supported
-                                </>
-                            ) : (
-                                'Supported'
-                            )}
-                        </div>
                         <div className={styles.border} />
                     </>
                 )}
@@ -62,7 +49,7 @@ function Container({
                         : 'Direct or indirect child of '}
                     {validParent ?? 'Any components'}
                 </div>
-                {!isHook && (
+                {!noChildren && (
                     <>
                         <div className={styles.border} />
                         <div className={styles.title}>Valid Children</div>

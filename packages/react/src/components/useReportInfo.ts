@@ -6,6 +6,9 @@ import {
     type ReportInfo,
 } from '../internal/eventHelper';
 
+/**
+ * React hook that returns information about the report.
+ */
 export function useReportInfo(): ReportInfo {
     const reportBuilder = useReportBuilder();
     const stateRef = useRef<PaginationCycleCompleted>({

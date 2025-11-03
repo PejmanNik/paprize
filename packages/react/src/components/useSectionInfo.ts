@@ -4,6 +4,9 @@ import { useReportBuilder } from '../internal/useReportBuilder';
 import { SectionIdContext } from '../internal/SectionIdContext';
 import type { SectionInfo } from '../internal/eventHelper';
 
+/**
+ * React hook that returns information about the current section.
+ */
 export const useSectionInfo = (): SectionInfo => {
     const sectionId = useContext(SectionIdContext);
     const reportBuilder = useReportBuilder();
@@ -11,7 +14,7 @@ export const useSectionInfo = (): SectionInfo => {
         pages: [],
         isPaginated: false,
         isSuspended: false,
-        index: -1,
+        sectionIndex: -1,
         sectionId: sectionId,
     });
 
@@ -31,11 +34,11 @@ export const useSectionInfo = (): SectionInfo => {
 
     return {
         sectionId: sectionId,
-        sectionIndex: state.index,
+        sectionIndex: state.sectionIndex,
         isSuspended: state.isSuspended,
         isPaginated: state.isPaginated,
         pages: state.pages.map((p) => ({
-            pageIndex: p.index,
+            pageIndex: p.pageIndex,
             totalPages: p.totalPages,
         })),
     };
