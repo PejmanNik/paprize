@@ -4,11 +4,11 @@ sidebar_position: 2
 
 # PaprizeReport
 
-The [PaprizeReport](api#paprizereport) class is responsible for building the report and handling pagination. You need to create an instance of it with the desired [options](api#paprizereportoptions).
+The [PaprizeReport](api.md#paprizereport) class is responsible for building the report and handling pagination. You need to create an instance of it with the desired [options](api.md#paprizereportoptions).
 
-After organizing your report with [Report Components](/components/report-components.md), you must [register](api#addsection) each section within the `PaprizeReport` instance. Provide a unique ID, specify the [page size](/core/api#pagesize), and define other [SectionOptions](/core/api#sectionoptions). Once configured, you can [schedule a pagination operation](api#schedulepagination).
+After organizing your report with [Report Components](/components/report-components.md), you must [register](api#addsection) each section within the `PaprizeReport` instance. Provide a unique ID, specify the [page size](/core/api.md#pagesize), and define other [SectionOptions](/core/api.md#sectionoptions). Once configured, you can [schedule a pagination operation](api.md#schedulepagination).
 
-During pagination, the report replaces your initial DOM content. While the process runs, the report components are hidden from the user. Note that the scheduler does **not** support parallel pagination operations, see details [here](api#schedulepagination).
+During pagination, the report replaces your initial DOM content. While the process runs, the report components are hidden from the user. Note that the scheduler does **not** support parallel pagination operations, see details [here](api.md#schedulepagination).
 
 If you need access to page information (e.g., page number or total pages), subscribe to the pagination events and modify the paginated content accordingly, as described in [PageInfo](page-info.md).
 

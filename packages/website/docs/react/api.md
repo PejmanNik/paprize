@@ -8,7 +8,7 @@ sidebar_position: 99
 
 ## PageInfo
 
-Defined in: [react/src/internal/eventHelper.ts:9](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/internal/eventHelper.ts#L9)
+Defined in: [react/src/internal/eventHelper.ts:9](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/internal/eventHelper.ts#L9)
 
 Context information for a paginated page.
 
@@ -23,7 +23,7 @@ Context information for a paginated page.
 
 ## ReportInfo
 
-Defined in: [react/src/internal/eventHelper.ts:50](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/internal/eventHelper.ts#L50)
+Defined in: [react/src/internal/eventHelper.ts:50](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/internal/eventHelper.ts#L50)
 
 Context information for pagination cycle.
 
@@ -37,7 +37,7 @@ Context information for pagination cycle.
 
 ## SectionInfo
 
-Defined in: [react/src/internal/eventHelper.ts:23](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/internal/eventHelper.ts#L23)
+Defined in: [react/src/internal/eventHelper.ts:23](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/internal/eventHelper.ts#L23)
 
 Context information for a paginated section.
 
@@ -55,7 +55,7 @@ Context information for a paginated section.
 
 ## SectionProps
 
-Defined in: [react/src/components/Section.tsx:15](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/Section.tsx#L15)
+Defined in: [react/src/components/Section.tsx:15](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/Section.tsx#L15)
 
 Configuration options for a section.
 
@@ -80,7 +80,7 @@ Configuration options for a section.
 
 ## SectionSuspension
 
-Defined in: [react/src/components/useSectionSuspension.ts:8](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/useSectionSuspension.ts#L8)
+Defined in: [react/src/components/useSectionSuspension.ts:8](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/useSectionSuspension.ts#L8)
 
 Controls the section suspension.
 
@@ -97,7 +97,7 @@ Controls the section suspension.
 
 > **usePageInfo**(): [`PageInfo`](#pageinfo)
 
-Defined in: [react/src/components/usePageInfo.ts:8](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/usePageInfo.ts#L8)
+Defined in: [react/src/components/usePageInfo.ts:8](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/usePageInfo.ts#L8)
 
 React hook that returns information about the current page.
 
@@ -111,7 +111,7 @@ React hook that returns information about the current page.
 
 > **useReportInfo**(): [`ReportInfo`](#reportinfo)
 
-Defined in: [react/src/components/useReportInfo.ts:12](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/useReportInfo.ts#L12)
+Defined in: [react/src/components/useReportInfo.ts:12](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/useReportInfo.ts#L12)
 
 React hook that returns information about the report.
 
@@ -125,7 +125,7 @@ React hook that returns information about the report.
 
 > **useSectionInfo**(): [`SectionInfo`](#sectioninfo)
 
-Defined in: [react/src/components/useSectionInfo.ts:10](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/useSectionInfo.ts#L10)
+Defined in: [react/src/components/useSectionInfo.ts:10](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/useSectionInfo.ts#L10)
 
 React hook that returns information about the current section.
 
@@ -141,7 +141,7 @@ React hook that returns information about the current section.
 
 > **useSectionSuspension**(`promise`): `void`
 
-Defined in: [react/src/components/useSectionSuspension.ts:28](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/useSectionSuspension.ts#L28)
+Defined in: [react/src/components/useSectionSuspension.ts:28](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/useSectionSuspension.ts#L28)
 
 Suspends pagination for this section.
 
@@ -159,7 +159,7 @@ Suspends pagination for this section.
 
 > **useSectionSuspension**(): `object`
 
-Defined in: [react/src/components/useSectionSuspension.ts:35](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/react/src/components/useSectionSuspension.ts#L35)
+Defined in: [react/src/components/useSectionSuspension.ts:35](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/react/src/components/useSectionSuspension.ts#L35)
 
 Suspends pagination for this section. You need to call the `release` method
 of the returned value; otherwise, the pagination engine will never paginate this section.

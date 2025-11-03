@@ -8,7 +8,7 @@ sidebar_position: 99
 
 ## ReportBuilder
 
-Defined in: [report/ReportBuilder.ts:82](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L82)
+Defined in: [report/ReportBuilder.ts:82](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L82)
 
 The report builder class that contains the logic for handling pagination
 and managing the report layout.
@@ -21,7 +21,7 @@ and managing the report layout.
 
 > **get** **monitor**(): `Monitor`\<[`ReportBuilderEvents`](#reportbuilderevents)\>
 
-Defined in: [report/ReportBuilder.ts:107](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L107)
+Defined in: [report/ReportBuilder.ts:107](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L107)
 
 Monitor instance used to subscribe to pagination events.
 See [ReportBuilderEvents](#reportbuilderevents) for available event types.
@@ -36,7 +36,7 @@ See [ReportBuilderEvents](#reportbuilderevents) for available event types.
 
 > **removeSection**(`sectionId`): `void`
 
-Defined in: [report/ReportBuilder.ts:114](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L114)
+Defined in: [report/ReportBuilder.ts:114](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L114)
 
 Removes a section from the registered sections, if it has already been registered in the report.
 
@@ -54,7 +54,7 @@ Removes a section from the registered sections, if it has already been registere
 
 > **schedulePagination**(): `Promise`\<[`ScheduleResult`](#scheduleresult)\>
 
-Defined in: [report/ReportBuilder.ts:178](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L178)
+Defined in: [report/ReportBuilder.ts:178](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L178)
 
 Schedules a pagination operation.
 
@@ -78,7 +78,7 @@ To wait for all sections to complete pagination, use the
 
 > **tryAddSection**(`options`, `components`, `onPaginationCompleted`): `boolean`
 
-Defined in: [report/ReportBuilder.ts:126](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L126)
+Defined in: [report/ReportBuilder.ts:126](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L126)
 
 Registers a section by its ID, specifying the page size, margins, and other options.
 
@@ -100,7 +100,7 @@ Registers a section by its ID, specifying the page size, margins, and other opti
 
 ## LayoutOptions
 
-Defined in: [paginate/LayoutOptions.ts:4](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/paginate/LayoutOptions.ts#L4)
+Defined in: [paginate/LayoutOptions.ts:4](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/paginate/LayoutOptions.ts#L4)
 
 Layout options for the pagination engine
 
@@ -116,7 +116,7 @@ Layout options for the pagination engine
 
 ## PageContext
 
-Defined in: [report/ReportBuilderEvents.ts:4](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L4)
+Defined in: [report/ReportBuilderEvents.ts:4](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilderEvents.ts#L4)
 
 Context information for a paginated page.
 
@@ -133,7 +133,7 @@ Context information for a paginated page.
 
 ## PageMargin
 
-Defined in: [report/pageTypes.ts:20](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L20)
+Defined in: [report/pageTypes.ts:20](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/pageTypes.ts#L20)
 
 Represents the margin sizes for a page.
 All values should be valid CSS size strings (e.g., '10mm', '1in').
@@ -153,7 +153,7 @@ Common presets are available in [pageMargin](#pagemargin-1)
 
 ## PageSize
 
-Defined in: [report/pageTypes.ts:7](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L7)
+Defined in: [report/pageTypes.ts:7](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/pageTypes.ts#L7)
 
 Represents the dimensions of a page.
 All values should be valid CSS size strings (e.g., '210mm', '8.5in').
@@ -171,7 +171,7 @@ Common presets are available in  [pageSize](#pagesize-1)
 
 ## PaginationCycleCompleted
 
-Defined in: [report/ReportBuilderEvents.ts:53](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L53)
+Defined in: [report/ReportBuilderEvents.ts:53](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilderEvents.ts#L53)
 
 Context information for pagination cycle.
 
@@ -185,7 +185,7 @@ Context information for pagination cycle.
 
 ## PaginationOptions
 
-Defined in: [paginate/PaginationOptions.ts:10](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/paginate/PaginationOptions.ts#L10)
+Defined in: [paginate/PaginationOptions.ts:10](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/paginate/PaginationOptions.ts#L10)
 
 Pagination options
 
@@ -203,7 +203,7 @@ Pagination options
 
 ## ReportBuilderEvents
 
-Defined in: [report/ReportBuilderEvents.ts:63](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L63)
+Defined in: [report/ReportBuilderEvents.ts:63](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilderEvents.ts#L63)
 
 Available events that can be subscribed to, during the pagination process.
 
@@ -220,7 +220,7 @@ Available events that can be subscribed to, during the pagination process.
 
 ## ScheduleResult
 
-Defined in: [report/ReportBuilder.ts:64](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L64)
+Defined in: [report/ReportBuilder.ts:64](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L64)
 
 Represents the result of a scheduled pagination process.
 
@@ -235,7 +235,7 @@ Represents the result of a scheduled pagination process.
 
 ## SectionComponents
 
-Defined in: [report/sectionComponents.ts:5](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/sectionComponents.ts#L5)
+Defined in: [report/sectionComponents.ts:5](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/sectionComponents.ts#L5)
 
 Represents the collection of DOM elements generated by
 the pagination engine from the report components on the current page.
@@ -254,7 +254,7 @@ the pagination engine from the report components on the current page.
 
 ## SectionContext
 
-Defined in: [report/ReportBuilderEvents.ts:26](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilderEvents.ts#L26)
+Defined in: [report/ReportBuilderEvents.ts:26](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilderEvents.ts#L26)
 
 Context information for a paginated section.
 
@@ -272,7 +272,7 @@ Context information for a paginated section.
 
 ## SectionOptions
 
-Defined in: [report/ReportBuilder.ts:27](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/ReportBuilder.ts#L27)
+Defined in: [report/ReportBuilder.ts:27](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/ReportBuilder.ts#L27)
 
 Configuration options for a section.
 
@@ -298,7 +298,7 @@ Configuration options for a section.
 
 ## TablePluginOptions
 
-Defined in: [plugins/TablePlugin.ts:12](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/plugins/TablePlugin.ts#L12)
+Defined in: [plugins/TablePlugin.ts:12](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/plugins/TablePlugin.ts#L12)
 
 Table plugin options
 
@@ -316,7 +316,7 @@ Table plugin options
 
 > **PageOrientation** = `"portrait"` \| `"landscape"`
 
-Defined in: [report/pageTypes.ts:39](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageTypes.ts#L39)
+Defined in: [report/pageTypes.ts:39](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/pageTypes.ts#L39)
 
 Describes the page orientation.
 
@@ -331,7 +331,7 @@ Describes the page orientation.
 
 > `const` **pageMargin**: `object`
 
-Defined in: [report/pageConst.ts:40](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageConst.ts#L40)
+Defined in: [report/pageConst.ts:40](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/pageConst.ts#L40)
 
 Predefined values for commonly used [PageMargin](#pagemargin)
 
@@ -350,7 +350,7 @@ Predefined values for commonly used [PageMargin](#pagemargin)
 
 > `const` **pageSize**: `object`
 
-Defined in: [report/pageConst.ts:8](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/core/src/report/pageConst.ts#L8)
+Defined in: [report/pageConst.ts:8](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/core/src/report/pageConst.ts#L8)
 
 Predefined values for commonly used [PageSize](#pagesize)
 

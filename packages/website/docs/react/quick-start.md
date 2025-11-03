@@ -10,7 +10,7 @@ Get started by adding the `@paprize/react` library to your React project.
 npm install @paprize/react
 ```
 
-1. Start with [ReportRoot](/react/components.md#reportroot) component.
+1. Start with [ReportRoot](/react/components.md#report-root) component.
 1. Add [Report Components](/components/report-components.md) to your report.
 1. Use [Page Info](/react/page-info.md) hooks to adjust the report content.
 

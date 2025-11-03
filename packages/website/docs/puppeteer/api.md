@@ -10,7 +10,7 @@ sidebar_position: 99
 
 > **openReport**(`page`, `reportUrl`, `jsonData`, `timeout`): `Promise`\<`void`\>
 
-Defined in: [openReport.ts:21](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/puppeteer/src/openReport.ts#L21)
+Defined in: [openReport.ts:21](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/puppeteer/src/openReport.ts#L21)
 
 Opens a report in the given Puppeteer page, injects a JSON data file if provided,
 and waits for the report to be ready.
@@ -40,7 +40,7 @@ Will throw an error if the report does not become ready within the specified tim
 
 > **pageToPdf**(`page`, `options?`): `Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
 
-Defined in: [pageToPdf.ts:12](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/puppeteer/src/pageToPdf.ts#L12)
+Defined in: [pageToPdf.ts:12](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/puppeteer/src/pageToPdf.ts#L12)
 
 Generates a PDF from the given Puppeteer `Page` instance using the specified options.
 
@@ -63,7 +63,7 @@ A promise that resolves to a `Uint8Array` containing the generated PDF data.
 
 > **reportToPdf**(`page`, `reportUrl`, `jsonData?`, `pdfOptions?`): `Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
 
-Defined in: [reportToPdf.ts:15](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/puppeteer/src/reportToPdf.ts#L15)
+Defined in: [reportToPdf.ts:15](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/puppeteer/src/reportToPdf.ts#L15)
 
 Generates a PDF from a report by navigating to the specified report URL
 and optionally sending JSON data to the page.
@@ -89,7 +89,7 @@ A promise that resolves to a `Uint8Array` containing the generated PDF data.
 
 > **serveReport**(`dir`, `port?`): `Promise`\<`ReportServer`\>
 
-Defined in: [serveReport.ts:23](https://github.com/PejmanNik/paprize/blob/5401ccdfd6ce7700b6c249bdf20087826fc428bd/packages/puppeteer/src/serveReport.ts#L23)
+Defined in: [serveReport.ts:23](https://github.com/PejmanNik/paprize/blob/5572a32927e9349b76b59cef9b5484ca4ce0766b/packages/puppeteer/src/serveReport.ts#L23)
 
 Serves a static report from the specified directory over HTTP.
 

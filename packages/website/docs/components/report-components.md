@@ -32,7 +32,7 @@ The fundamental building block of every report is the **Section**. A report is d
 <Tabs>
 <TabItem value="Vanilla">
 
-Provide [SectionOptions](/core/api#sectionoptions) to the `addSection` method. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
+Provide [SectionOptions](/core/api.md#sectionoptions) to the `addSection` method. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
 
 For more advanced and fine grained customization, you can use [Plugins](/plugin.md).
 
@@ -81,7 +81,7 @@ For more advanced and fine grained customization, you can use [Plugins](/plugin.
 </TabItem>
 <TabItem value="React">
 
-Provide [SectionProps](/react/api#sectionprops) to the `Section` component. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
+Provide [SectionProps](/react/api.md#sectionprops) to the `Section` component. Some of these options can be customized per element using the [Layout Component](layout-components.md#layout).
 
 For more advanced and fine grained customization, you can use [Plugins](/plugin.md).
 
