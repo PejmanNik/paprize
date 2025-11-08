@@ -7,7 +7,7 @@ type EventHandler<TKey extends keyof TEvents, TEvents> = TEvents[TKey] extends (
 export class EventDispatcher<TEvents> {
     private registry = new Map<
         keyof TEvents,
-        Set<(...args: unknown[]) => void>
+        Set<(...args: unknown[]) => unknown | Promise<unknown>>
     >();
 
     public addEventListener<T extends keyof TEvents>(
@@ -34,7 +34,7 @@ export class EventDispatcher<TEvents> {
         registry.set(name, listeners);
     }
 
-    public dispatch<T extends keyof TEvents>(
+    public async dispatch<T extends keyof TEvents>(
         name: T,
         ...args: Parameters<EventHandler<T, TEvents>>
     ) {
@@ -46,7 +46,7 @@ export class EventDispatcher<TEvents> {
         }
 
         for (const listener of listeners) {
-            listener(...args);
+            await listener(...args);
         }
     }
 }

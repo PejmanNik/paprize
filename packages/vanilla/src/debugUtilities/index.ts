@@ -137,13 +137,13 @@ const myPromise = new Promise<void>((res) => {
 });
 
 const r = new PaprizeReport();
-r.addSection({
+await r.addSection({
     id: '1',
     size: { height: '350px', width: '400px' },
     margin: pageMargin.None,
 });
 
-r.addSection({
+await r.addSection({
     id: '2',
     size: { height: '350px', width: '400px' },
     margin: pageMargin.None,

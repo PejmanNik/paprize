@@ -28,14 +28,14 @@ npm install @paprize/vanilla
 
     const report = new PaprizeReport();
 
-    report.addSection({
+    await report.addSection({
         id: 'section-1',
         dimension: pageSize.A4,
         margin: pageMargin.Narrow,
         ...configs,
     });
 
-    report.addSection({
+    await report.addSection({
         id: 'section-2',
         dimension: pageSize.A5,
         margin: pageMargin.None,

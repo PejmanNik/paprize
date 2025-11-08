@@ -16,13 +16,13 @@ const myPromise = new Promise<void>((res) => {
     resolve = res;
 });
 
-report.addSection({
+await report.addSection({
     id: 'section-1',
     dimension: pageSize.A4,
     suspense: [myPromise],
 });
 
-report.addSection({
+await report.addSection({
     id: 'section-2',
     dimension: pageSize.A4,
 });

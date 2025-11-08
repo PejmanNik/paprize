@@ -20,7 +20,7 @@ import { PaprizeReport } from '@paprize/vanilla';
 
 const report = new PaprizeReport();
 
-report.addSection({
+await report.addSection({
     id: 'section-1',
     dimension: pageSize.A4,
     margin: pageMargin.Narrow,

@@ -4,6 +4,7 @@ import { Paginator } from '../paginate/Paginator';
 import { paprize_isInitialized, paprize_isReady } from '../window';
 import type { SectionComponents } from './sectionComponents';
 import { globalStyleId } from '../constants';
+import { jsonDataReader } from './utils';
 
 vi.mock('../paginate/Paginator', () => {
     const paginate = vi.fn();
@@ -22,6 +23,7 @@ vi.mock('./utils', async () => {
             sectionFooterHeight: 5,
         }),
         createSectionPageHeightPlugin: vi.fn().mockReturnValue({}),
+        jsonDataReader: vi.fn(),
     };
 });
 
@@ -53,7 +55,7 @@ describe('ReportBuilder', () => {
 
     it.for([true, false])(
         'tryAddSection should add a section and dispatch sectionCreated',
-        (withsuspense) => {
+        async (withsuspense) => {
             const sectionCreated = vi.fn();
             rb.monitor.addEventListener('sectionCreated', sectionCreated);
 
@@ -62,7 +64,11 @@ describe('ReportBuilder', () => {
                 suspense: withsuspense ? [Promise.resolve()] : [],
             };
 
-            const added = rb.tryAddSection(testOptions, components, () => {});
+            const added = await rb.tryAddSection(
+                testOptions,
+                components,
+                () => {}
+            );
             expect(added).toBe(true);
 
             expect(sectionCreated).toHaveBeenCalled();
@@ -74,9 +80,9 @@ describe('ReportBuilder', () => {
         }
     );
 
-    it('tryAddSection should return false if section id already exists', () => {
-        rb.tryAddSection(options, components, () => {});
-        const result = rb.tryAddSection(options, components, () => {});
+    it('tryAddSection should return false if section id already exists', async () => {
+        await rb.tryAddSection(options, components, () => {});
+        const result = await rb.tryAddSection(options, components, () => {});
         expect(result).toBe(false);
     });
 
@@ -115,7 +121,7 @@ describe('ReportBuilder', () => {
 
         const onPaginationCompleted = vi.fn();
 
-        const added = rb.tryAddSection(
+        const added = await rb.tryAddSection(
             options,
             testComponents,
             onPaginationCompleted
@@ -160,7 +166,7 @@ describe('ReportBuilder', () => {
         const section1 = 'se1';
         const section2 = 'se2';
 
-        rb.tryAddSection(
+        await rb.tryAddSection(
             {
                 ...options,
                 id: section1,
@@ -169,7 +175,7 @@ describe('ReportBuilder', () => {
             components,
             onPaginationCompleted
         );
-        const added = rb.tryAddSection(
+        const added = await rb.tryAddSection(
             {
                 ...options,
                 id: section2,
@@ -209,7 +215,7 @@ describe('ReportBuilder', () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>']);
 
-        rb.tryAddSection(options, components, vi.fn());
+        await rb.tryAddSection(options, components, vi.fn());
 
         const section1Promise = rb.schedulePagination();
         await new Promise((resolve) => setTimeout(resolve, 0));
@@ -228,7 +234,7 @@ describe('ReportBuilder', () => {
         const paginateMock = vi.mocked(Paginator.paginate);
         paginateMock.mockReturnValue(['<div>page1</div>']);
 
-        rb.tryAddSection(options, components, vi.fn());
+        await rb.tryAddSection(options, components, vi.fn());
 
         const section1Promise = rb.schedulePagination();
         const section2Promise = rb.schedulePagination();
@@ -246,7 +252,7 @@ describe('ReportBuilder', () => {
         const sectionId = 'test-section';
         const onPaginationCompleted = vi.fn();
 
-        rb.tryAddSection(
+        await rb.tryAddSection(
             {
                 id: sectionId,
                 size: { width: '100px', height: '200px' },
@@ -259,6 +265,39 @@ describe('ReportBuilder', () => {
         const result = await rb.schedulePagination();
 
         expect(result.sections.length).toBe(0);
+    });
+
+    it('getJsonData should call jsonDataReader once', async () => {
+        const data = {
+            a: 'a',
+        };
+        vi.mocked(jsonDataReader).mockResolvedValue(data);
+
+        const result1 = await rb.getJsonData({ a: 'b' });
+        const result2 = await rb.getJsonData({ a: 'b' });
+
+        expect(result1).toMatchObject(data);
+        expect(result2).toMatchObject(data);
+        expect(vi.mocked(jsonDataReader)).toHaveBeenCalledOnce();
+    });
+
+    it('getJsonData should return default value when jsonDataReader is not available', async () => {
+        const defaultData = {
+            a: 'a',
+        };
+        vi.mocked(jsonDataReader).mockResolvedValue(undefined);
+
+        const result = await rb.getJsonData(defaultData);
+
+        expect(result).toMatchObject(defaultData);
+    });
+
+    it('getJsonData should return null without default value and jsonDataReader', async () => {
+        vi.mocked(jsonDataReader).mockResolvedValue(null);
+
+        const result = await rb.getJsonData();
+
+        expect(result).toBeNull();
     });
 });
 

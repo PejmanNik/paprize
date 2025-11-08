@@ -17,3 +17,4 @@ export const pageNumberValueAttribute = `${attributePrefix}v-page-number`;
 export const totalPagesValueAttribute = `${attributePrefix}v-total-pages`;
 export const sectionNumberValueAttribute = `${attributePrefix}v-section-number`;
 export const totalSectionsValueAttribute = `${attributePrefix}v-total-sections`;
+export const jsonDataValueAttribute = `${attributePrefix}v-json-data-key`;

@@ -1,5 +1,6 @@
 import { getVisibleHeight } from '../paginate/domUtilities';
 import type { PaginationPlugin } from '../paginate/PaginationPlugin';
+import { paprize_readJsonDataFile } from '../window';
 import type { PageMargin } from './pageTypes';
 
 export function getVisibleSize(element: Element) {
@@ -69,4 +70,24 @@ export function shorthand(margin?: PageMargin) {
     return margin
         ? `${margin.top} ${margin.right} ${margin.bottom} ${margin.left}`
         : '0';
+}
+
+export function lazyPromise<T>(factory: () => Promise<T>): () => Promise<T> {
+    let promise: Promise<T> | null = null;
+
+    return () => {
+        if (!promise) {
+            promise = factory();
+        }
+        return promise;
+    };
+}
+
+export async function jsonDataReader() {
+    if (!(paprize_readJsonDataFile in window)) {
+        return null;
+    }
+
+    const strData = await window[paprize_readJsonDataFile]?.();
+    return strData ? (JSON.parse(strData) as unknown) : null;
 }
