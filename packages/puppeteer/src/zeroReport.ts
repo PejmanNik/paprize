@@ -12,13 +12,6 @@ export const sectionPageMarginAttribute = `${attributePrefix}section-page-margin
 
 function parsePageSizeAttribute(section: Element): PageSize {
     const sizeAttributeValue = section.getAttribute(sectionPageSizeAttribute);
-    console.warn(
-        'ss',
-        sizeAttributeValue,
-        section.getAttributeNames().join(','),
-        sectionPageSizeAttribute,
-        section.getAttribute('data-pz-section-page-size')
-    );
     const size = Object.entries(pageSize).find(
         ([key]) => key.toLowerCase() === sizeAttributeValue?.toLowerCase()
     )?.[1];
@@ -38,17 +31,19 @@ function parsePageMarginAttribute(section: Element): PageMargin {
 let sectionId = 1;
 const report = new PaprizeReport();
 
-document.querySelectorAll(`[${sectionAttribute}]`).forEach((el) => {
+const elements = document.querySelectorAll(`[${sectionAttribute}]`);
+
+for (const el of elements) {
     const id = el.id || `section-${sectionId++}`;
     if (!el.id) {
         el.id = id;
     }
 
-    report.addSection({
+    await report.addSection({
         size: parsePageSizeAttribute(el),
         margin: parsePageMarginAttribute(el),
         id,
     });
-});
+}
 
-report.schedulePagination();
+await report.schedulePagination();

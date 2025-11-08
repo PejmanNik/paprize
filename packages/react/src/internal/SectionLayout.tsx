@@ -1,5 +1,6 @@
 import {
     adjustPageSize,
+    logger,
     reportStyles,
     type PageContext,
     type SectionOptions,
@@ -43,24 +44,26 @@ export function SectionLayout({ elements, options }: SectionLayoutProps) {
             return;
         }
 
-        reportBuilder.tryAddSection(
-            {
-                ...options,
-                id: sectionId,
-                plugins: controllerState.plugins,
-                suspense: controllerState.suspense,
-            },
-            {
-                pageContent: contentRef.current,
-                sectionHeader: sectionHeaderRef.current,
-                sectionFooter: sectionFooterRef.current,
-                pageFooter: pageFooterRef.current,
-                pageHeader: pageHeaderRef.current,
-            },
-            (pages) => {
-                setPageContexts(pages);
-            }
-        );
+        reportBuilder
+            .tryAddSection(
+                {
+                    ...options,
+                    id: sectionId,
+                    plugins: controllerState.plugins,
+                    suspense: controllerState.suspense,
+                },
+                {
+                    pageContent: contentRef.current,
+                    sectionHeader: sectionHeaderRef.current,
+                    sectionFooter: sectionFooterRef.current,
+                    pageFooter: pageFooterRef.current,
+                    pageHeader: pageHeaderRef.current,
+                },
+                (pages) => {
+                    setPageContexts(pages);
+                }
+            )
+            .catch((e) => logger.error(e));
 
         return () => {
             reportBuilder.removeSection(sectionId);

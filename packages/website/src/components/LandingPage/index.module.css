@@ -143,6 +143,10 @@
     width: 20vw;
 }
 
+.sampleCode {
+    font-size: 1cqw;
+}
+
 .codeBlock {
     flex-basis: 40%;
     align-self: self-start;
@@ -172,12 +176,9 @@
     height: 80px;
     background:
         linear-gradient(black, black) center/100% 8px no-repeat,
-        repeating-linear-gradient(90deg, black 0 10px, transparent 10px 40px)
-            2px/40px 51% repeat-x,
-        radial-gradient(circle at center, black 20%, transparent 22%) left 27px
-            top 100% / 40px 40px repeat-x,
-        radial-gradient(circle at center, black 17%, transparent 17%) left 27px
-            top 0% / 40px 40px repeat-x;
+        repeating-linear-gradient(90deg, black 0 10px, transparent 10px 40px) 2px/40px 51% repeat-x,
+        radial-gradient(circle at center, black 20%, transparent 22%) left 27px top 100% / 40px 40px repeat-x,
+        radial-gradient(circle at center, black 17%, transparent 17%) left 27px top 0% / 40px 40px repeat-x;
 }
 
 .footer {
@@ -194,16 +195,12 @@
     .paperGrid {
         background-color: var(--dark-background);
         background-image:
-            linear-gradient(
-                to right,
+            linear-gradient(to right,
                 var(--grid-dark-color) 1px,
-                transparent 1px
-            ),
-            linear-gradient(
-                to bottom,
+                transparent 1px),
+            linear-gradient(to bottom,
                 var(--grid-dark-color) 1px,
-                transparent 1px
-            );
+                transparent 1px);
     }
 
     .heroTitle {
@@ -256,5 +253,9 @@
 
     .featureIllustration {
         width: 40vw;
+    }
+
+    .sampleCode {
+        font-size: 2cqw;
     }
 }

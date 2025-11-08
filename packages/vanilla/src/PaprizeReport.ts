@@ -1,5 +1,6 @@
 import * as Core from '@paprize/core/src';
 import {
+    jsonDataValueAttribute,
     pageContentAttribute,
     pageFooterAttribute,
     pageHeaderAttribute,
@@ -19,6 +20,7 @@ import type {
     DomSectionContext,
     PaprizeReportEvents,
 } from './PaprizeReportEvents';
+import { get } from './utils';
 
 const globalStyles = `
     [${sectionAttribute}=true] {
@@ -165,7 +167,9 @@ export class PaprizeReport {
      * If a section with the same id already exists, the operation will be ignored.
      * @param options - Configuration options for the section.
      */
-    public addSection(options: Core.SectionOptions): PaprizeReport {
+    public async addSection(
+        options: Core.SectionOptions
+    ): Promise<PaprizeReport> {
         if (this._sections.has(options.id)) {
             return this;
         }
@@ -181,7 +185,7 @@ export class PaprizeReport {
 
         // to maintain the order of sections
         const sectionElement = this._createSectionInDom(options.id);
-        const result = this._reportManager.tryAddSection(
+        const result = await this._reportManager.tryAddSection(
             options,
             components,
             (pageContexts) => {
@@ -314,7 +318,7 @@ export class PaprizeReport {
                 page.appendChild(pageFooterContainer);
             }
 
-            this._replaceContentInfoValues(
+            await this._replaceContentInfoValues(
                 { ...components, pageContent },
                 pageContext
             );
@@ -336,10 +340,12 @@ export class PaprizeReport {
         });
     }
 
-    private _replaceContentInfoValues(
+    private async _replaceContentInfoValues(
         components: Record<string, HTMLElement | null>,
         pageContext: Core.PageContext
     ) {
+        const jsonData = await this._reportManager.getJsonData();
+
         for (const component of Object.values(components)) {
             if (!component) continue;
 
@@ -366,6 +372,13 @@ export class PaprizeReport {
                 .querySelectorAll(`[${totalSectionsValueAttribute}]`)
                 .forEach((el) => {
                     el.textContent = this._sections.size.toString();
+                });
+            component
+                .querySelectorAll(`[${jsonDataValueAttribute}]`)
+                .forEach((el) => {
+                    const key = el.getAttribute(jsonDataValueAttribute);
+                    const value = get(jsonData, key);
+                    el.textContent = value ?? '';
                 });
         }
     }

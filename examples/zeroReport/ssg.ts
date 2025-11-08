@@ -20,7 +20,14 @@ try {
 
     const pdf = await reportToPdf(
         page,
-        new URL(`file://${import.meta.dirname}/index.html`)
+        new URL(`file://${import.meta.dirname}/index.html`),
+        {
+            info: {
+                name: 'Mike',
+                lastName: 'Ross',
+                age: 24,
+            },
+        }
     );
 
     await fs.writeFile('index.pdf', pdf);

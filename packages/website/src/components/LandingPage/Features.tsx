@@ -5,8 +5,7 @@ import Page from '@site/static/img/page.svg';
 import PaginatedPage from '@site/static/img/paginatedPage.svg';
 import ArrowHorizontal from '@site/static/img/arrowHorizontal.svg';
 import ArrowVertical from '@site/static/img/arrowVertical.svg';
-import CodeLight from '@site/static/img/codeLight.png';
-import CodeDark from '@site/static/img/codeDark.png';
+import { SampleCode } from './SampleCode';
 
 export function Features({ children }: { children: React.ReactNode }) {
     return (
@@ -34,16 +33,7 @@ export function FeatureContent() {
                             page, transforming it into a beautiful,
                             professional, print-ready report.
                         </p>
-                        <img
-                            className={styles.codeExampleLight}
-                            src={CodeLight}
-                            alt="Code example"
-                        />
-                        <img
-                            className={styles.codeExampleDark}
-                            src={CodeDark}
-                            alt="Code example"
-                        />
+                        <SampleCode className={styles.sampleCode} />
                         <ArrowHorizontal className={styles.flowArrow} />
                         <ArrowVertical className={styles.flowArrowMobile} />
                     </div>

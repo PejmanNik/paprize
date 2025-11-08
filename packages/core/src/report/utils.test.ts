@@ -4,11 +4,14 @@ import {
     calculatePageSizes,
     createSectionPageHeightPlugin,
     shorthand,
+    jsonDataReader,
+    lazyPromise,
 } from './utils';
 import * as DomUtilities from '../paginate/domUtilities';
 import type { PageManager, PageState } from '../paginate/PageManager';
 import type { DomState } from '../paginate/DomState';
 import { SplitResult } from '../paginate/SplitResult';
+import { paprize_readJsonDataFile } from '../window';
 
 vi.mock('../paginate/domUtilities');
 vi.mock('../debugUtilities/debugMode');
@@ -201,5 +204,65 @@ describe('shorthand', () => {
     });
     it('returns 0 if margin is undefined', () => {
         expect(shorthand()).toBe('0');
+    });
+});
+
+describe('jsonDataReader', () => {
+    it('returns null when not available', async () => {
+        delete window[paprize_readJsonDataFile];
+
+        const reader = await jsonDataReader();
+        expect(reader).toBe(null);
+    });
+    it('returns JSON value when available', async () => {
+        const data = {
+            x: 1,
+            y: 'a',
+        };
+        window[paprize_readJsonDataFile] = () =>
+            Promise.resolve(JSON.stringify(data));
+
+        const result = await jsonDataReader();
+
+        expect(result).toMatchObject(data);
+    });
+    it('returns null value injected data is empty', async () => {
+        window[paprize_readJsonDataFile] = () => Promise.resolve('');
+
+        const result = await jsonDataReader();
+
+        expect(result).toBeNull();
+    });
+});
+
+describe('lazyPromise', () => {
+    it('should call factory only once on multiple invocations', async () => {
+        const factory = vi.fn().mockResolvedValue('result');
+        const lazy = lazyPromise(factory);
+
+        await lazy();
+        await lazy();
+        await lazy();
+
+        expect(factory).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the same promise instance on multiple calls', () => {
+        const factory = vi.fn().mockResolvedValue('result');
+        const lazy = lazyPromise(factory);
+
+        const promise1 = lazy();
+        const promise2 = lazy();
+        const promise3 = lazy();
+
+        expect(promise1).toBe(promise2);
+        expect(promise2).toBe(promise3);
+    });
+
+    it('should not call factory until first invocation', () => {
+        const factory = vi.fn().mockResolvedValue('result');
+        lazyPromise(factory);
+
+        expect(factory).not.toHaveBeenCalled();
     });
 });

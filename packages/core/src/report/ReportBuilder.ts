@@ -12,7 +12,12 @@ import type {
 } from './ReportBuilderEvents';
 import { reportStyles } from './reportStyles';
 import { cloneComponents, type SectionComponents } from './sectionComponents';
-import { calculatePageSizes, createSectionPageHeightPlugin } from './utils';
+import {
+    calculatePageSizes,
+    createSectionPageHeightPlugin,
+    jsonDataReader,
+    lazyPromise,
+} from './utils';
 import { paprize_isInitialized, paprize_isReady } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
@@ -123,11 +128,11 @@ export class ReportBuilder {
      * @param onPaginationCompleted - Callback invoked when pagination for the section is completed.
      * @returns `true` if the section was added to the report’s section list, or `false` if it already exists.
      */
-    public tryAddSection(
+    public async tryAddSection(
         options: SectionOptions,
         components: SectionComponents,
         onPaginationCompleted: (pages: PageContext[]) => void
-    ): boolean {
+    ): Promise<boolean> {
         if (this._sections.has(options.id)) {
             return false;
         }
@@ -155,7 +160,8 @@ export class ReportBuilder {
         this._injectStyle(
             reportStyles.sectionPageMedia(options.id, options.size)
         );
-        this._monitor.dispatch('sectionCreated', context);
+
+        await this._monitor.dispatch('sectionCreated', context);
 
         return true;
     }
@@ -204,6 +210,27 @@ export class ReportBuilder {
         return this._executePagination();
     }
 
+    /**
+     * Retrieves JSON data injected by **@paprize/puppeteer** during server-side rendering (SSR).
+     *
+     * If no injected data is available, the function returns the provided `defaultData`, or `null` if none is given.
+     *
+     * ⚠️ **Important Notes:**
+     * - This function is **not type-safe** — it performs **no runtime type validation** on the returned data.
+     * - It is available **only during server-side rendering** when using **@paprize/puppeteer**.
+     * - When used in **client-side rendering** or **development** mode, you should provide a `defaultData` value for testing purposes.
+     *
+     * @template T - The expected type of the injected JSON data.
+     * @param defaultData - Optional fallback value to return if no injected data is found.
+     * @returns A promise resolving to the injected JSON data if available, otherwise the provided default value or `null`.
+     */
+    public async getJsonData<T>(defaultData?: T): Promise<T | null> {
+        const json = await this._lazyJsonDataReader().catch(() => defaultData);
+        return (json as T) ?? defaultData ?? null;
+    }
+
+    private _lazyJsonDataReader = lazyPromise(jsonDataReader);
+
     private async _executePagination(): Promise<ScheduleResult> {
         this._paginationInProgress = true;
         this._currentAbortController = new AbortController();
@@ -249,9 +276,9 @@ export class ReportBuilder {
             }
 
             const reportTracker = new PromiseTracker();
-            reportTracker.monitor.addEventListener('onChange', () => {
+            reportTracker.monitor.addEventListener('onChange', async () => {
                 logger.debug(logPrefix, 'Report pagination completed.');
-                this._monitor.dispatch('paginationCycleCompleted', {
+                await this._monitor.dispatch('paginationCycleCompleted', {
                     sections: [...this._sections.values()].map(
                         (s) => s.context
                     ),
@@ -395,7 +422,7 @@ export class ReportBuilder {
         state.onPaginationCompleted(pageContexts);
 
         for (const pageContext of pageContexts) {
-            this._monitor.dispatch('pageCompleted', pageContext);
+            await this._monitor.dispatch('pageCompleted', pageContext);
         }
 
         const sectionContext: SectionContext = {
@@ -409,6 +436,6 @@ export class ReportBuilder {
             context: sectionContext,
         });
 
-        this._monitor.dispatch('sectionCompleted', sectionContext);
+        await this._monitor.dispatch('sectionCompleted', sectionContext);
     }
 }

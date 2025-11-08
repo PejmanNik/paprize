@@ -15,7 +15,7 @@ import { pageToPdf } from './pageToPdf';
 export async function reportToPdf(
     page: Page,
     reportUrl: URL,
-    jsonData?: string,
+    jsonData?: unknown,
     pdfOptions?: PDFOptions
 ): Promise<Uint8Array> {
     await openReport(page, reportUrl, jsonData, pdfOptions?.timeout);

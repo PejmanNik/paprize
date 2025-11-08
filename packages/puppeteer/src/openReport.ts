@@ -13,7 +13,7 @@ import { setupLogger } from './setupLogger';
  *
  * @param page - The Puppeteer `Page` instance where the report will be opened.
  * @param reportUrl - The URL of the report to be opened.
- * @param jsonData - Optional JSON data as a string to be injected into the page.
+ * @param jsonData - Optional JSON data to be injected into the page.
  * @param timeout - The maximum time to wait for the report to be ready, in milliseconds. Defaults to 30,000 ms.
  * @returns A promise that resolves when the report is ready.
  * @throws Will throw an error if the report does not become ready within the specified timeout.
@@ -21,12 +21,14 @@ import { setupLogger } from './setupLogger';
 export async function openReport(
     page: Page,
     reportUrl: URL,
-    jsonData: string | undefined,
+    jsonData: unknown | undefined,
     timeout: number = 30000
 ): Promise<void> {
     setupLogger(page);
+
+    const jsonDataStr = JSON.stringify(jsonData);
     await page.exposeFunction(paprize_readJsonDataFile, () => {
-        return jsonData;
+        return jsonDataStr;
     });
 
     await page.goto(reportUrl.toString(), {
