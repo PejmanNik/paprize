@@ -1,6 +1,6 @@
 {
     "name": "@paprize/react",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "React library for creating professional, print-ready reports",
     "type": "module",
     "files": [

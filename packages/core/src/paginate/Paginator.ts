@@ -53,7 +53,7 @@ export class Paginator {
         tempContainer.setAttribute(`${attributePrefix}-section-id`, id);
 
         tempContainer.classList.add(tempContainerClassName);
-        DEV: if (!isDebugMode()) {
+        if (!isDebugMode()) {
             moveOffscreen(tempContainer);
         }
         document.body.appendChild(tempContainer);
@@ -72,7 +72,7 @@ export class Paginator {
             .filter((x) => isElement(x))
             .map((x) => x.innerHTML);
 
-        DEV: if (!isDebugMode()) {
+        if (!isDebugMode()) {
             paginator._tempContainer.remove();
         }
 

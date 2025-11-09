@@ -16,17 +16,31 @@ export class PromiseTracker {
 
     public readonly monitor: EventDispatcher<PromiseTrackerEvents>;
 
-    public get promise(): Promise<void> {
+    public constructor() {
+        this._promises = [];
+        this.monitor = new EventDispatcher<PromiseTrackerEvents>();
+    }
+
+    public toPromise(): Promise<void> {
         return this._promises.length > 0
             ? Promise.allSettled(this._promises.map((p) => p.promise)).then(
-                  () => {}
+                  (r) => {
+                      const rejected = r.find(
+                          (res) => res.status === 'rejected'
+                      );
+                      if (rejected) {
+                          return Promise.reject(rejected.reason);
+                      }
+                      return Promise.resolve();
+                  }
               )
             : Promise.resolve();
     }
 
-    public constructor() {
-        this._promises = [];
-        this.monitor = new EventDispatcher<PromiseTrackerEvents>();
+    public then(onFulfilled?: () => Promise<unknown>) {
+        this._promises.push(
+            PromiseTracker.toTracked(this.toPromise().then(onFulfilled))
+        );
     }
 
     public async add(promises: Promise<unknown>[] = []) {
@@ -49,9 +63,13 @@ export class PromiseTracker {
             status: 'pending',
         };
 
-        tracked.promise.finally(() => {
-            tracked.status = 'resolved';
-        });
+        tracked.promise
+            .then(() => {
+                tracked.status = 'resolved';
+            })
+            .catch(() => {
+                tracked.status = 'rejected';
+            });
 
         return tracked;
     }

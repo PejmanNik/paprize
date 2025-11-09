@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ReportBuilder, type SectionOptions } from './ReportBuilder';
+import { ReportBuilder } from './ReportBuilder';
+import { type SectionOptions } from './SectionOptions';
 import { Paginator } from '../paginate/Paginator';
 import { paprize_isInitialized, paprize_isReady } from '../window';
 import type { SectionComponents } from './sectionComponents';
 import { globalStyleId } from '../constants';
-import { jsonDataReader } from './utils';
+import { calculatePageSizes, jsonDataReader } from './utils';
 
 vi.mock('../paginate/Paginator', () => {
     const paginate = vi.fn();
@@ -16,12 +17,7 @@ vi.mock('./utils', async () => {
 
     return {
         ...original,
-        calculatePageSizes: vi.fn().mockReturnValue({
-            height: 100,
-            width: 200,
-            sectionHeaderHeight: 10,
-            sectionFooterHeight: 5,
-        }),
+        calculatePageSizes: vi.fn(),
         createSectionPageHeightPlugin: vi.fn().mockReturnValue({}),
         jsonDataReader: vi.fn(),
     };
@@ -49,6 +45,12 @@ describe('ReportBuilder', () => {
             value: { ready: Promise.resolve() },
         });
 
+        vi.mocked(calculatePageSizes).mockReturnValue({
+            height: 100,
+            width: 200,
+            sectionHeaderHeight: 10,
+            sectionFooterHeight: 5,
+        });
         document.body.innerHTML = '';
         window[paprize_isReady] = false;
     });
@@ -93,6 +95,31 @@ describe('ReportBuilder', () => {
 
         await Promise.resolve();
         expect(window[paprize_isReady]).toBe(true);
+    });
+
+    it('schedulePagination should throw error when content size is zero', async () => {
+        vi.mocked(calculatePageSizes).mockReturnValue({
+            height: 0,
+            width: 0,
+            sectionHeaderHeight: 10,
+            sectionFooterHeight: 10,
+        });
+
+        const component = document.createElement('div');
+        const testComponents: SectionComponents = {
+            sectionHeader: component,
+            sectionFooter: component,
+            pageHeader: component,
+            pageFooter: component,
+            pageContent: component,
+        };
+
+        const onPaginationCompleted = vi.fn();
+
+        await rb.tryAddSection(options, testComponents, onPaginationCompleted);
+
+        const result = await rb.schedulePagination();
+        await expect(result.suspension).rejects.toThrowError();
     });
 
     it('schedulePagination should call Paginator.paginate and dispatch lifecycle events', async () => {
@@ -145,7 +172,7 @@ describe('ReportBuilder', () => {
         expect(sectionCompleted).toHaveBeenCalled();
         expect(paginationCycleCompleted).toHaveBeenCalled();
 
-        await Promise.resolve();
+        await new Promise((resolve) => setTimeout(resolve, 0));
         expect(window[paprize_isReady]).toBe(true);
     });
 
@@ -199,7 +226,7 @@ describe('ReportBuilder', () => {
             expect.objectContaining({ sectionId: section1 })
         );
 
-        await Promise.resolve();
+        await new Promise((resolve) => setTimeout(resolve, 0));
         expect(window[paprize_isReady]).toBe(false);
 
         resolve!();
