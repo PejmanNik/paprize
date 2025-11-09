@@ -188,9 +188,7 @@ export class PaprizeReport {
         const result = await this._reportManager.tryAddSection(
             options,
             components,
-            (pageContexts) => {
-                this._renderSection(options, pageContexts);
-            }
+            (pageContexts) => this._renderSection(options, pageContexts)
         );
 
         if (!result) {
@@ -344,8 +342,6 @@ export class PaprizeReport {
         components: Record<string, HTMLElement | null>,
         pageContext: Core.PageContext
     ) {
-        const jsonData = await this._reportManager.getJsonData();
-
         for (const component of Object.values(components)) {
             if (!component) continue;
 
@@ -373,13 +369,21 @@ export class PaprizeReport {
                 .forEach((el) => {
                     el.textContent = this._sections.size.toString();
                 });
-            component
-                .querySelectorAll(`[${jsonDataValueAttribute}]`)
-                .forEach((el) => {
-                    const key = el.getAttribute(jsonDataValueAttribute);
-                    const value = get(jsonData, key);
-                    el.textContent = value ?? '';
-                });
+
+            const jsonDataElements = component.querySelectorAll(
+                `[${jsonDataValueAttribute}]`
+            );
+
+            if (jsonDataElements.length > 0) {
+                const jsonData = await this._reportManager.getJsonData();
+                component
+                    .querySelectorAll(`[${jsonDataValueAttribute}]`)
+                    .forEach((el) => {
+                        const key = el.getAttribute(jsonDataValueAttribute);
+                        const value = get(jsonData, key);
+                        el.textContent = value ?? '';
+                    });
+            }
         }
     }
 }

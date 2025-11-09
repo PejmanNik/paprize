@@ -2,7 +2,6 @@ import { isDebugMode } from '../debugUtilities/debugMode';
 import { Paginator } from '../paginate/Paginator';
 import { defaultPlugins } from '../plugins';
 import { pageMargin } from './pageConst';
-import type { PageSize, PageMargin, PageOrientation } from './pageTypes';
 import type { Monitor } from './EventDispatcher';
 import { EventDispatcher } from './EventDispatcher';
 import type {
@@ -22,43 +21,18 @@ import { paprize_isInitialized, paprize_isReady } from '../window';
 import { globalStyleId } from '../constants';
 import { PromiseTracker } from './PromiseTracker';
 import logger from '../logger';
-import type { PaginationOptions } from '../paginate/PaginationOptions';
 import { adjustPageSize } from '../utils';
+import type { SectionOptions } from './SectionOptions';
 
-/**
- * Configuration options for a section.
- * @inlineType PaginationConfig
- */
-export interface SectionOptions extends Partial<Omit<PaginationOptions, 'id'>> {
-    /**
-     * Unique id of the section within the report.
-     */
-    readonly id: string;
-    /**
-     * Page size used for this section.
-     */
-    readonly size: PageSize;
-    /**
-     * Page orientation used for this section.
-     * @inlineType PageOrientation
-     * @default portrait
-     */
-    readonly orientation?: PageOrientation;
-    /**
-     * Page margins for this section.
-     */
-    readonly margin?: PageMargin;
-    /**
-     * A list of promises that must be resolved before the section can be paginated.
-     */
-    readonly suspense?: Promise<unknown>[];
+export interface ReportContext {
+    jsonData: unknown | null;
 }
 
 export interface SectionState {
     options: SectionOptions;
     context: SectionContext;
     components: SectionComponents;
-    onPaginationCompleted: (pages: PageContext[]) => void;
+    onPaginationCompleted: (pages: PageContext[]) => Promise<unknown> | void;
 }
 
 const logPrefix = '\x1b[43mREPORT\x1b[0m';
@@ -131,7 +105,7 @@ export class ReportBuilder {
     public async tryAddSection(
         options: SectionOptions,
         components: SectionComponents,
-        onPaginationCompleted: (pages: PageContext[]) => void
+        onPaginationCompleted: SectionState['onPaginationCompleted']
     ): Promise<boolean> {
         if (this._sections.has(options.id)) {
             return false;
@@ -259,7 +233,7 @@ export class ReportBuilder {
                     );
                 });
 
-                tracker.promise.then(async () => {
+                tracker.then(async () => {
                     if (abortSignal.aborted) {
                         return;
                     }
@@ -269,7 +243,7 @@ export class ReportBuilder {
                         `Start paginating section '${state.options.id}'.`
                     );
                     state.context.isSuspended = false;
-                    this._paginateSection(state);
+                    await this._paginateSection(state);
                 });
 
                 trackers.push(tracker);
@@ -291,11 +265,11 @@ export class ReportBuilder {
                 });
             }
 
-            await reportTracker.add(trackers.map((t) => t.promise));
+            await reportTracker.add(trackers.map((t) => t.toPromise()));
 
             return {
                 sections: [...this._sections.values()].map((s) => s.context),
-                suspension: reportTracker.promise.then(() => {
+                suspension: reportTracker.toPromise().then(() => {
                     window[paprize_isReady] = true;
                 }),
             };
@@ -395,6 +369,18 @@ export class ReportBuilder {
                 components.sectionFooter
             );
 
+        if (height === 0) {
+            logger.error(
+                `Pagination failed for section '${state.options.id}': insufficient space for page content or content is empty. ` +
+                    `Ensure that the section has content and that the header and footer do not occupy all available space.`
+            );
+            temporarilyContainer.remove();
+
+            throw new Error(
+                `Pagination failed: no available space for content in section '${state.options.id}'.`
+            );
+        }
+
         const paginatorResult = Paginator.paginate(
             components.pageContent,
             { height, width },
@@ -419,7 +405,7 @@ export class ReportBuilder {
             pageContentHtml: content,
         }));
 
-        state.onPaginationCompleted(pageContexts);
+        await state.onPaginationCompleted(pageContexts);
 
         for (const pageContext of pageContexts) {
             await this._monitor.dispatch('pageCompleted', pageContext);

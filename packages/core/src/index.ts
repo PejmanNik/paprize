@@ -15,6 +15,7 @@ export * from './report/reportStyles';
 export * from './report/sectionComponents';
 export * from './report/ReportBuilderEvents';
 export * from './report/ReportBuilder';
+export * from './report/SectionOptions';
 export type * from './report/pageTypes';
 
 export { default as logger } from './logger';

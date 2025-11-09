@@ -26,7 +26,7 @@ export async function openReport(
 ): Promise<void> {
     setupLogger(page);
 
-    const jsonDataStr = JSON.stringify(jsonData);
+    const jsonDataStr = jsonData ? JSON.stringify(jsonData) : null;
     await page.exposeFunction(paprize_readJsonDataFile, () => {
         return jsonDataStr;
     });

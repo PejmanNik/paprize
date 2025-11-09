@@ -55,7 +55,7 @@ describe('PromiseTracker', () => {
         await Promise.resolve();
         expect(tracker.getPending().length).toBe(0);
 
-        await tracker.promise;
+        await tracker.toPromise();
     });
 
     it('handles mix of resolved, rejected, and pending promises', async () => {
@@ -81,7 +81,7 @@ describe('PromiseTracker', () => {
         reject2!();
         await Promise.resolve();
 
-        await tracker.promise;
+        await tracker.toPromise();
         expect(onChange).toHaveBeenCalledTimes(3);
         expect(onChange).toHaveBeenNthCalledWith(1, 2);
         expect(onChange).toHaveBeenNthCalledWith(2, 1);
@@ -96,7 +96,7 @@ describe('PromiseTracker', () => {
         tracker.monitor.addEventListener('onChange', onChange);
 
         await tracker.add(input);
-        await tracker.promise;
+        await tracker.toPromise();
 
         expect(onChange).toHaveBeenCalledOnce();
     });
