@@ -1,0 +1,16 @@
+{
+    "name": "examples-zero-report",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "ssg": "node ssg.ts"
+    },
+    "dependencies": {
+        "@paprize/puppeteer": "*",
+        "puppeteer": "^24.23.0"
+    },
+    "devDependencies": {
+        "typescript": "~5.9.3"
+    }
+}
