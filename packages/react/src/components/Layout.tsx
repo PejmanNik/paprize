@@ -1,7 +1,4 @@
-import {
-    layoutOptionsToAttributes,
-    type LayoutOptions,
-} from '@paprize/core/src';
+import { layoutOptionsToAttributes, type LayoutOptions } from '@paprize/core';
 
 export interface LayoutProps extends LayoutOptions {
     children: React.ReactNode;

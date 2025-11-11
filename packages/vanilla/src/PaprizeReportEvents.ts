@@ -1,4 +1,4 @@
-import type { SectionComponents } from '@paprize/core/src';
+import type { SectionComponents } from '@paprize/core';
 
 /**
  * {@inheritDoc @paprize/core!PageContext}

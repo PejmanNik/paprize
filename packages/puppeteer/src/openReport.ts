@@ -4,7 +4,7 @@ import {
     paprize_isInitialized,
     paprize_isReady,
     paprize_readJsonDataFile,
-} from '@paprize/core/src';
+} from '@paprize/core';
 import { setupLogger } from './setupLogger';
 
 /**

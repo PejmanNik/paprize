@@ -1,4 +1,4 @@
-import * as Core from '@paprize/core/src';
+import * as Core from '@paprize/core';
 import {
     jsonDataValueAttribute,
     pageContentAttribute,

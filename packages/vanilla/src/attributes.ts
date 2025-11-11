@@ -1,4 +1,4 @@
-import { attributePrefix } from '@paprize/core/src';
+import { attributePrefix } from '@paprize/core';
 
 export const sectionAttribute = `${attributePrefix}section`;
 export const previewAttribute = `${attributePrefix}preview`;

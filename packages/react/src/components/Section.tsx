@@ -5,7 +5,7 @@ import {
     reportStyles,
     sectionClassName,
     type SectionOptions,
-} from '@paprize/core/src';
+} from '@paprize/core';
 import { SectionLayout } from '../internal/SectionLayout';
 
 /**

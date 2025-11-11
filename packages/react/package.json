@@ -41,14 +41,14 @@
         "prepack": "node ../../scripts/prepack.mjs"
     },
     "dependencies": {
-        "@paprize/core": "*"
+        "@paprize/core": "workspace:*"
     },
     "peerDependencies": {
         "react": ">=17.0.0",
         "react-dom": ">=17.0.0"
     },
     "devDependencies": {
-        "@paprize/config": "*",
+        "@paprize/config": "workspace:*",
         "@types/react": "^19.2.0",
         "@types/react-dom": "^19.2.0",
         "@vitejs/plugin-react-swc": "^4.1.0",

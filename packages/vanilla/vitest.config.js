@@ -1,12 +1,6 @@
 import { defineConfig, coverageConfigDefaults } from 'vitest/config';
 
-export default defineConfig(({ command }) => ({
-    resolve: {
-        alias:
-            command === 'build'
-                ? { '@paprize/core/src': '@paprize/core' }
-                : undefined,
-    },
+export default defineConfig({
     test: {
         environment: 'happy-dom',
         coverage: {
@@ -18,4 +12,4 @@ export default defineConfig(({ command }) => ({
             reporter: ['text'],
         },
     },
-}));
+});

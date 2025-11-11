@@ -4,13 +4,15 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "ssg": "node ssg.ts"
+        "ssg": "pnpm tsx ssg.ts"
     },
     "dependencies": {
-        "@paprize/puppeteer": "*",
+        "@paprize/core": "workspace:*",
+        "@paprize/puppeteer": "workspace:*",
         "puppeteer": "^24.23.0"
     },
     "devDependencies": {
+        "tsx": "^4.20.6",
         "typescript": "~5.9.3"
     }
 }

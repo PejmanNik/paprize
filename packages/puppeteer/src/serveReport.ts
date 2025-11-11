@@ -28,15 +28,17 @@ export async function serveReport(
         .filter((x) => x.isDirectory())
         .map((x) => ({ source: x.name, destination: `/${x.name}` }));
 
-    const server = http.createServer(async (req, res) => {
-        await handler(req, res, {
-            public: dir,
-            rewrites: [
-                ...staticDirectories,
-                { source: '**', destination: '/index.html' },
-            ],
-        });
-    });
+    const server = http.createServer(
+        async (req: http.IncomingMessage, res: http.ServerResponse) => {
+            await handler(req, res, {
+                public: dir,
+                rewrites: [
+                    ...staticDirectories,
+                    { source: '**', destination: '/index.html' },
+                ],
+            });
+        }
+    );
 
     server.listen(port);
     const address = server.address() as AddressInfo;

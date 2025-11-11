@@ -1,4 +1,4 @@
-import { logger } from '@paprize/core/src';
+import { logger } from '@paprize/core';
 import type { Page } from 'puppeteer-core';
 
 export function setupLogger(page: Page) {

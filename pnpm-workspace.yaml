@@ -1,0 +1,10 @@
+packages:
+    - packages/*
+    - examples/*
+
+onlyBuiltDependencies:
+    - '@swc/core'
+    - core-js
+    - core-js-pure
+    - esbuild
+    - puppeteer
