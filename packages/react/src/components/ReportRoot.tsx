@@ -1,5 +1,5 @@
 import { useEffect, useMemo, type ReactNode } from 'react';
-import { ReportBuilder } from '@paprize/core/src';
+import { ReportBuilder } from '@paprize/core';
 import { ReportBuilderContext } from '../internal/useReportBuilder';
 
 export interface ReportRootProps {

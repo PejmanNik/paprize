@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type SectionController } from './SectionControllerContext';
-import type { PaginationPlugin } from '@paprize/core/src';
+import type { PaginationPlugin } from '@paprize/core';
 
 export function useSectionControllerState(plugins?: PaginationPlugin[]) {
     const state = useMemo(

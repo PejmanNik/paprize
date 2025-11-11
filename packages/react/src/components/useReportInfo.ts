@@ -1,6 +1,6 @@
 import { useRef, useSyncExternalStore } from 'react';
 import { useReportBuilder } from '../internal/useReportBuilder';
-import type { PaginationCycleCompleted } from '@paprize/core/src';
+import type { PaginationCycleCompleted } from '@paprize/core';
 import {
     paginationCycleToReportInfo,
     type ReportInfo,

@@ -1,7 +1,4 @@
-import type {
-    PaginationCycleCompleted,
-    SectionContext,
-} from '@paprize/core/src';
+import type { PaginationCycleCompleted, SectionContext } from '@paprize/core';
 
 /**
  * {@inheritDoc @paprize/core!PageContext}

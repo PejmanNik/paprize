@@ -4,7 +4,7 @@ import {
     reportStyles,
     type PageContext,
     type SectionOptions,
-} from '@paprize/core/src';
+} from '@paprize/core';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Page } from '../components/Page';

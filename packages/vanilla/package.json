@@ -12,13 +12,17 @@
     "source": "./src/index.ts",
     "exports": {
         ".": {
-            "types": "./dist/paprize-vanilla.d.ts",
-            "import": "./dist/paprize-vanilla.js",
-            "require": "./dist/paprize-vanilla.umd.cjs"
-        },
-        "./src": {
             "types": "./src/index.ts",
             "import": "./src/index.ts"
+        }
+    },
+    "publishConfig": {
+        "exports": {
+            ".": {
+                "types": "./dist/paprize-vanilla.d.ts",
+                "import": "./dist/paprize-vanilla.js",
+                "require": "./dist/paprize-vanilla.umd.cjs"
+            }
         }
     },
     "keywords": [
@@ -40,14 +44,13 @@
     "author": "PejmanNikram",
     "scripts": {
         "dev": "vite",
-        "test": "vitest",
         "coverage": "vitest run --coverage",
         "build": "tsc && vite build",
         "preview": "vite preview",
         "prepack": "node ../../scripts/prepack.mjs"
     },
     "devDependencies": {
-        "@paprize/config": "*",
+        "@paprize/config": "workspace:*",
         "@vitest/coverage-v8": "^3.2.4",
         "happy-dom": "^20.0.0",
         "preact": "^10.27.2",
@@ -56,6 +59,6 @@
         "vitest": "^3.2.4"
     },
     "dependencies": {
-        "@paprize/core": "*"
+        "@paprize/core": "workspace:*"
     }
 }

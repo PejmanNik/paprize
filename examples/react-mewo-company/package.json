@@ -7,10 +7,12 @@
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "ssg": "node ssg.ts"
+        "ssg": "pnpm tsx ssg.ts"
     },
     "dependencies": {
-        "@paprize/puppeteer": "*",
+        "@paprize/core": "workspace:*",
+        "@paprize/puppeteer": "workspace:*",
+        "@paprize/react": "workspace:*",
         "puppeteer": "^24.23.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
@@ -25,6 +27,7 @@
         "eslint-plugin-react-hooks": "^6.1.1",
         "eslint-plugin-react-refresh": "^0.4.23",
         "globals": "^16.4.0",
+        "tsx": "^4.20.6",
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.45.0",
         "vite": "^7.1.12"
