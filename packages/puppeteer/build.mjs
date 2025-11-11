@@ -11,16 +11,7 @@ await esbuild.build({
     platform: 'node',
     format: 'esm',
     target: ['node22'],
-    external: [
-        'serve-handler',
-        '@paprize/core',
-        '@paprize/vanilla',
-        './paprize-vanilla.js',
-    ],
-    alias: {
-        '@paprize/core/src': '@paprize/core',
-        '@paprize/vanilla/src': '@paprize/vanilla',
-    },
+    external: ['serve-handler', '@paprize/core', '@paprize/vanilla'],
     outfile: 'dist/paprize-puppeteer.js',
     plugins: [dts({ bundleTypes: true })],
 });

@@ -14,10 +14,6 @@
             "types": "./dist/paprize-puppeteer.d.ts",
             "import": "./dist/paprize-puppeteer.js",
             "require": "./dist/paprize-puppeteer.umd.cjs"
-        },
-        "./src": {
-            "types": "./src/window.ts",
-            "import": "./src/window.ts"
         }
     },
     "keywords": [
@@ -42,8 +38,8 @@
         "prepack": "node ../../scripts/prepack.mjs"
     },
     "devDependencies": {
-        "@paprize/core": "*",
-        "@paprize/vanilla": "*",
+        "@paprize/vanilla": "workspace:*",
+        "@paprize/core": "workspace:*",
         "@types/serve-handler": "^6.1.4",
         "esbuild": "0.25.10",
         "puppeteer-core": "^24.23.0",

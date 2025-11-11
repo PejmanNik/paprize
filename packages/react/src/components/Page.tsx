@@ -8,7 +8,7 @@ import {
     reportStyles,
     type PageSize,
     type PageMargin,
-} from '@paprize/core/src';
+} from '@paprize/core';
 
 export interface PageProps {
     elements: PageElements;

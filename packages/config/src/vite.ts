@@ -11,22 +11,13 @@ export function paprizeConfig(
     };
 }
 
-async function createGlobalConfig({
-    command,
-    mode,
-}: ConfigEnv): Promise<UserConfig> {
+async function createGlobalConfig({ mode }: ConfigEnv): Promise<UserConfig> {
     const tsconfigPath = await fs
         .access('./tsconfig.app.json')
         .then(() => 'tsconfig.app.json')
         .catch(() => 'tsconfig.json');
 
     return {
-        resolve: {
-            alias:
-                command === 'build'
-                    ? { '@paprize/core/src': '@paprize/core' }
-                    : undefined,
-        },
         build: {
             rollupOptions: {
                 external: ['@paprize/core'],
@@ -45,15 +36,6 @@ async function createGlobalConfig({
                 bundleTypes: true,
                 tsconfigPath,
                 aliases: [],
-                beforeWriteFile: (filePath, content) => {
-                    return {
-                        filePath,
-                        content: content.replace(
-                            /@paprize\/core\/src/g,
-                            '@paprize/core'
-                        ),
-                    };
-                },
             }),
             checker({
                 typescript: true,

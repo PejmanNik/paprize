@@ -1,5 +1,5 @@
 import { useContext, useRef, useSyncExternalStore } from 'react';
-import type { SectionContext } from '@paprize/core/src';
+import type { SectionContext } from '@paprize/core';
 import { useReportBuilder } from '../internal/useReportBuilder';
 import { SectionIdContext } from '../internal/SectionIdContext';
 import type { SectionInfo } from '../internal/eventHelper';

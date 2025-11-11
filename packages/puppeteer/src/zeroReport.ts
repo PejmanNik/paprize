@@ -4,8 +4,8 @@ import {
     pageSize,
     type PageSize,
     type PageMargin,
-} from '@paprize/core/src';
-import { PaprizeReport, sectionAttribute } from '@paprize/vanilla/src';
+} from '@paprize/core';
+import { PaprizeReport, sectionAttribute } from '@paprize/vanilla';
 
 export const sectionPageSizeAttribute = `${attributePrefix}section-page-size`;
 export const sectionPageMarginAttribute = `${attributePrefix}section-page-margin`;

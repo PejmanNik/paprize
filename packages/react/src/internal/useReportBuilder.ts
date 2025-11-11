@@ -1,4 +1,4 @@
-import type { ReportBuilder } from '@paprize/core/src';
+import type { ReportBuilder } from '@paprize/core';
 import { createContext, useContext } from 'react';
 
 export const ReportBuilderContext = createContext<ReportBuilder | null>(null);

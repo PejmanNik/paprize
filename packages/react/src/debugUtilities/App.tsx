@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import * as Paprize from '@paprize/core/src';
-import '@paprize/core/src/debug-styles.css';
+import * as Paprize from '@paprize/core';
+import '@paprize/core/debug-styles.css';
 
 import {
     ReportPreview,
@@ -18,7 +18,7 @@ import {
     useSectionInfo,
     useReportInfo,
 } from '../index';
-import { SectionTocPlugin } from '@paprize/core/src';
+import { SectionTocPlugin } from '@paprize/core';
 import { useReportBuilder } from '../internal/useReportBuilder';
 
 export default function App() {

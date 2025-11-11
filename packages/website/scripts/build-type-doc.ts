@@ -20,6 +20,7 @@ export async function buildTypeDoc(dirname: string) {
         ],
         excludeGroups: true,
         readme: 'none',
+        mergeReadme: false,
         useCodeBlocks: false,
         router: 'module',
         gitRevision: 'main',
@@ -33,6 +34,9 @@ export async function buildTypeDoc(dirname: string) {
             hideSources: true,
             hideModifiers: true,
             hideInherited: true,
+        },
+        headings: {
+            readme: false,
         },
         hideBreadcrumbs: true,
         hidePageHeader: true,

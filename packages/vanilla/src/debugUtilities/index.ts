@@ -1,6 +1,6 @@
 import { h, render } from 'preact';
 import * as Paprize from '../index';
-import { createLoremIpsumParagraph, pageMargin } from '@paprize/core/src';
+import { createLoremIpsumParagraph, pageMargin } from '@paprize/core';
 import { PaprizeReport } from '../PaprizeReport';
 
 const App = () => {
