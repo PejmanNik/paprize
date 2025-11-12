@@ -5,7 +5,7 @@
     "scripts": {
         "website:build": "pnpm -r --filter @paprize/website build",
         "build": "pnpm -r --filter './packages/**' build",
-        "release": "pnpm -r --filter './packages/**' --filter=!@paprize/config publish --access public",
+        "release": "pnpm build && pnpm -r --filter './packages/**' --filter=!@paprize/config publish --access public",
         "test": "pnpm -r --if-present test -- --run",
         "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
