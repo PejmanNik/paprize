@@ -33,7 +33,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run website:build
+        run: pnpm run build:website
 
       - name: Upload web artifact
         uses: actions/upload-pages-artifact@v3

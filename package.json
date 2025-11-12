@@ -3,9 +3,10 @@
     "type": "module",
     "packageManager": "pnpm@10.21.0",
     "scripts": {
-        "website:build": "pnpm -r --filter @paprize/website build",
+        "build:website": "pnpm -r --filter @paprize/website build",
         "build": "pnpm -r --filter './packages/**' build",
-        "release": "pnpm build && pnpm -r --filter './packages/**' --filter=!@paprize/config publish --access public",
+        "build:packages": "pnpm -r --filter './packages/**' --filter=!@paprize/config -filter=!@paprize/website build",
+        "release": "pnpm build:packages && pnpm -r --filter './packages/**' publish --access public",
         "test": "pnpm -r --if-present test -- --run",
         "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
