@@ -1,4 +1,4 @@
-name: Changesets
+name: Release
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
   packages: write
 
 jobs:
-  version:
+  release:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
