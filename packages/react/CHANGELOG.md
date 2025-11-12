@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.9
+
+### Patch Changes
+
+- 673b94e: switch to pnpm
+- Updated dependencies [673b94e]
+    - @paprize/core@0.0.9
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
