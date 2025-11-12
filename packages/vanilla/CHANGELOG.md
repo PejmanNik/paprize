@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.10
+
+### Patch Changes
+
+- 307425f: fix empty package issue
+- Updated dependencies [307425f]
+    - @paprize/core@0.0.10
+
 ## 0.0.9
 
 ### Patch Changes
