@@ -6,6 +6,7 @@ import { paprize_isInitialized, paprize_isReady } from '../window';
 import type { SectionComponents } from './sectionComponents';
 import { globalStyleId } from '../constants';
 import { calculatePageSizes, jsonDataReader } from './utils';
+import type { SectionContext } from './ReportBuilderEvents';
 
 vi.mock('../paginate/Paginator', () => {
     const paginate = vi.fn();
@@ -162,10 +163,12 @@ describe('ReportBuilder', () => {
 
         // onPaginationCompleted should be called with page contexts
         expect(onPaginationCompleted).toHaveBeenCalled();
-        const pagesArg = onPaginationCompleted.mock.calls[0][0];
-        expect(Array.isArray(pagesArg)).toBe(true);
-        expect(pagesArg.length).toBe(2);
-        expect(pagesArg[0].pageContentHtml).toBe('<div>page1</div>');
+        const pagesArg = onPaginationCompleted.mock
+            .calls[0][0] as SectionContext;
+        expect(pagesArg).toBeTypeOf('object');
+
+        expect(pagesArg.pages.length).toBe(2);
+        expect(pagesArg.pages[0].pageContentHtml).toBe('<div>page1</div>');
 
         // events should be dispatched for pages and section and pagination cycle
         expect(pageCompleted).toHaveBeenCalledTimes(2);

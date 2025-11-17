@@ -114,6 +114,13 @@ export class Paginator {
             }
         } while (this._domState.completed === false);
 
+        callPluginHook(
+            this._config.plugins,
+            'afterPagination',
+            this._config.id,
+            this._domState,
+            this._pageManager
+        );
         logger.debug(logPrefix, 'pagination completed');
     }
 

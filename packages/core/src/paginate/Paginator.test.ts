@@ -286,4 +286,34 @@ describe('Paginator', () => {
         );
         expect(afterVisitNode).toHaveBeenCalledTimes(1);
     });
+
+    it('should call afterPagination plugin hook after pagination completes', () => {
+        const afterPagination = vi.fn();
+        config.plugins = [
+            {
+                name: 'test-plugin',
+                order: 1,
+                afterPagination,
+            },
+        ];
+
+        const node = { type: PageNodeType.Element } as PageElement;
+        mockDomState.currentNode = node;
+        mockDomState.completed = false;
+        mockDomState.goToNextNode.mockImplementation(() => {
+            mockDomState.completed = true;
+        });
+        vi.mocked(paginateElementAcrossPages).mockReturnValue(
+            SplitResult.FullNodePlaced
+        );
+
+        Paginator.paginate(root, pageSize, config);
+
+        expect(afterPagination).toHaveBeenCalledWith(
+            config.id,
+            mockDomState,
+            mockPageManager
+        );
+        expect(afterPagination).toHaveBeenCalledTimes(1);
+    });
 });

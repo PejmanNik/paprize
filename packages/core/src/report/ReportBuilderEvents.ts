@@ -1,3 +1,6 @@
+import type { SectionComponents } from './sectionComponents';
+import type { SectionOptions } from './SectionOptions';
+
 /**
  * Context information for a paginated page.
  */
@@ -45,6 +48,18 @@ export interface SectionContext {
      * All paginated pages that belong to this section.
      */
     pages: PageContext[];
+    /**
+     * Options used for paginating this section.
+     *
+     * @remarks
+     * Options may differ from the original {@link SectionOptions}
+     * provided during section creation, as some values may be
+     */
+    options: SectionOptions;
+    /**
+     * Components used in this section.
+     */
+    components: SectionComponents;
 }
 
 /**
