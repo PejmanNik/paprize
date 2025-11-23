@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { paprizeConfig } from '@paprize/config/vite';
+import { paprizeConfig } from '@paprize-dev/config/vite';
 
 export default defineConfig(
     paprizeConfig({
