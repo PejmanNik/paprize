@@ -38,7 +38,7 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "prepack": "node ../../scripts/prepack.mjs"
+        "prepack": "node ../../utils/scripts/prepack.mjs"
     },
     "dependencies": {
         "@paprize/core": "workspace:*"
@@ -48,7 +48,7 @@
         "react-dom": ">=17.0.0"
     },
     "devDependencies": {
-        "@paprize-dev/config": "workspace:*",
+        "@paprize/config": "workspace:*",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react-swc": "^4.1.0",
