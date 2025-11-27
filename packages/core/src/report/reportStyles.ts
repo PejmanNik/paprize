@@ -20,7 +20,6 @@ export const globalStyle = `
 
     :root {
         --paprize-page-background-color: #ffffff;
-        --paprize-page-margin-bottom: 10px;
         --paprize-page-box-shadow: rgb(142 138 138) -1px 3px 5px 2px;
         --paprize-section-margin-bottom: 10px;
         --paprize-preview-background-color: rgb(218 220 224);
@@ -43,7 +42,6 @@ export const globalStyle = `
 
         .${pageClassName} {
             box-shadow: var(--paprize-page-box-shadow);
-            margin-bottom: var(--paprize-page-margin-bottom);
             background-color: var(--paprize-page-background-color);
         }
 

@@ -72,7 +72,13 @@ export class Paginator {
             .filter((x) => isElement(x))
             .map((x) => x.innerHTML);
 
-        if (!isDebugMode()) {
+        if (isDebugMode()) {
+            Array.from(paginator._tempContainer.childNodes).forEach((x) => {
+                const div = x as HTMLDivElement;
+                div.style.height = `${pageSize.height}px`;
+                div.style.width = `${pageSize.width}px`;
+            });
+        } else {
             paginator._tempContainer.remove();
         }
 

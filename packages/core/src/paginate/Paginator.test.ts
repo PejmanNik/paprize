@@ -20,6 +20,7 @@ import {
 import { tempContainerClassName } from '../constants';
 import { paginateTextByWord } from './paginateText';
 import { paginateElementAcrossPages } from './paginateElement';
+import { disableDebugMode, enableDebugMode } from '../debugUtilities/debugMode';
 
 vi.mock('./DomState');
 vi.mock('./PageManager');
@@ -49,6 +50,7 @@ describe('Paginator', () => {
     };
 
     beforeEach(() => {
+        disableDebugMode();
         document.body.innerHTML = '';
         root = document.createElement('div');
         pageSize = { width: 100, height: 100 };
@@ -160,6 +162,24 @@ describe('Paginator', () => {
             )
         ).toBe(true);
         expect(tempContainer).toBeNull();
+    });
+
+    it('should create keep tempContainer element in debug mode', () => {
+        enableDebugMode();
+
+        vi.mocked(mockDomState).goToNextNode.mockImplementation(() => {
+            const page = document.createElement('div');
+            document.body
+                .querySelector(`.${tempContainerClassName}`)
+                ?.appendChild(page);
+        });
+
+        Paginator.paginate(root, pageSize, config);
+        const tempContainer = document.body.querySelector(
+            `.${tempContainerClassName}`
+        );
+
+        expect(tempContainer).toBeDefined();
     });
 
     it('paginate() returns empty array if there is no result', () => {
