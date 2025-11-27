@@ -1,0 +1,24 @@
+{
+  "name": "@paprize/snapshot-tests",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node ./build.mjs",
+    "test": "pnpm run build && pnpm exec playwright test"
+  },
+  "devDependencies": {
+    "@paprize/core": "workspace:*",
+    "@paprize/react": "^0.0.10",
+    "@paprize/vanilla": "workspace:*",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "esbuild": "catalog:",
+    "preact": "catalog:",
+    "preact-render-to-string": "^6.6.3",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 export function copyFile(fileName) {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const rootReadme = path.resolve(__dirname, '..', fileName);
+    const rootReadme = path.resolve(__dirname, '..', '..', fileName);
 
     const targetReadme = path.resolve(process.cwd(), fileName);
 
