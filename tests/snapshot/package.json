@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@paprize/core": "workspace:*",
-    "@paprize/react": "^0.0.10",
+    "@paprize/react": "workspace:*",
     "@paprize/vanilla": "workspace:*",
     "@playwright/test": "^1.56.1",
     "@types/node": "^24.10.1",
@@ -19,6 +19,7 @@
     "preact": "catalog:",
     "preact-render-to-string": "^6.6.3",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "typescript": "catalog:"
   }
 }
