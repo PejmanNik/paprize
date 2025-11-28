@@ -1,5 +1,11 @@
 # @paprize/puppeteer
 
+## 0.0.11
+
+### Patch Changes
+
+- 89f4841: updated to use latest vanilla
+
 ## 0.0.10
 
 ### Patch Changes

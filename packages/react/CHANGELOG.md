@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.11
+
+### Patch Changes
+
+- b4a5711: - fix section hight calculation
+    - refactor `tryAddSection` to use section context instead of page contexts
+- Updated dependencies [b4a5711]
+- Updated dependencies [b4a5711]
+    - @paprize/core@0.0.11
+
 ## 0.0.10
 
 ### Patch Changes
