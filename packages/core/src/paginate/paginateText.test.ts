@@ -62,7 +62,7 @@ describe('paginateText', () => {
             expect(result).toBe(SplitResult.FullNodePlaced);
         });
 
-        it('should return SplitResult.None when hyphenation is disabled and token doesnt fit', () => {
+        it('should return SplitResult.None when hyphenation is disabled and token does not fit', () => {
             mockText.config.hyphenationDisabled = true;
             mockPageManager.isOverFlow.mockReturnValue(true);
 
@@ -89,6 +89,10 @@ describe('paginateText', () => {
                 commit: vi.fn(),
             });
 
+            mockPageManager.hasEmptySpace.mockImplementation(() => {
+                return true;
+            });
+
             let hasEmptySpaceCount = 0;
             mockPageManager.hasEmptySpace.mockImplementation(() => {
                 hasEmptySpaceCount++;
@@ -105,7 +109,33 @@ describe('paginateText', () => {
 
             const result = paginateTextByWord(mockText, mockPageManager);
             expect(result).toBe(SplitResult.FullNodePlaced);
-            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(2); // Once for full word try, once for remainder
+            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(1);
+        });
+
+        it('should creates a new page before hyphenation if needed', () => {
+            mockText.textContent = 'longword';
+            mockPageManager.startTransaction.mockReturnValue({
+                rollback: vi.fn(),
+                commit: vi.fn(),
+            });
+
+            mockPageManager.hasEmptySpace.mockImplementation(() => {
+                return false;
+            });
+
+            let isOverflowCount = 0;
+            mockPageManager.isOverFlow.mockImplementation(() => {
+                isOverflowCount++;
+                if (isOverflowCount === 1) return true;
+                if (isOverflowCount === 2) return true;
+
+                return false;
+            });
+
+            const result = paginateTextByWord(mockText, mockPageManager);
+            expect(result).toBe(SplitResult.FullNodePlaced);
+
+            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(2);
         });
     });
 
@@ -116,7 +146,7 @@ describe('paginateText', () => {
             expect(result).toBeNull();
         });
 
-        it('should return remainder of word when it doesnt fit', () => {
+        it('should return remainder of word when it does not fit', () => {
             let callCount = 0;
             mockPageManager.hasEmptySpace.mockImplementation(() => {
                 callCount++;
@@ -134,7 +164,7 @@ describe('paginateText', () => {
             expect(result).toBeNull();
         });
 
-        it('should handle word that doesnt fit at all', () => {
+        it('should handle word that does not fit at all', () => {
             mockPageManager.hasEmptySpace.mockReturnValue(false);
             const result = hyphenation('test', '-', mockPageManager);
             expect(result).toBe('test');
@@ -155,7 +185,7 @@ describe('paginateText', () => {
             expect(result).toBe(SplitResult.FullNodePlaced);
         });
 
-        it('should handle transaction rollback when token doesnt fit on new page', () => {
+        it('should handle transaction rollback when token does not fit on new page', () => {
             const mockRollback = vi.fn();
             mockPageManager.startTransaction.mockReturnValue({
                 rollback: mockRollback,

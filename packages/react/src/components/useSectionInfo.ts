@@ -10,7 +10,7 @@ import type { SectionInfo } from '../internal/eventHelper';
 export const useSectionInfo = (): SectionInfo => {
     const sectionId = useContext(SectionIdContext);
     const reportBuilder = useReportBuilder();
-    const stateRef = useRef<SectionContext>({
+    const stateRef = useRef<Omit<SectionContext, 'options' | 'components'>>({
         pages: [],
         isPaginated: false,
         isSuspended: false,

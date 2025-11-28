@@ -1,13 +1,15 @@
 {
     "name": "paprize",
     "type": "module",
-    "packageManager": "pnpm@10.21.0",
+    "packageManager": "pnpm@10.24.0",
     "scripts": {
-        "build:website": "pnpm -r --filter @paprize/website build",
-        "build": "pnpm -r --filter './packages/**' build",
-        "build:packages": "pnpm -r --filter './packages/**' --filter=!@paprize/config -filter=!@paprize/website build",
-        "release": "pnpm build:packages && pnpm -r --filter './packages/**' publish --access public",
-        "test": "pnpm -r --if-present test -- --run",
+        "build:website": "pnpm -r -F @paprize/website build",
+        "build": "pnpm -r -F './packages/**' build",
+        "release": "pnpm -r -F './packages/**' build && pnpm -r -F './packages/**' publish --access public",
+        "test": "pnpm run test:unit && pnpm run test:snapshot",
+        "test:unit": "pnpm -r -F=!@paprize/snapshot-tests --if-present test -- --run",
+        "test:snapshot": "pnpm -r -F @paprize/snapshot-tests test",
+        "coverage": "pnpm -r --if-present coverage",
         "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
     "devDependencies": {

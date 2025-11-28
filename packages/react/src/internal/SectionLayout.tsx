@@ -59,8 +59,8 @@ export function SectionLayout({ elements, options }: SectionLayoutProps) {
                     pageFooter: pageFooterRef.current,
                     pageHeader: pageHeaderRef.current,
                 },
-                (pages) => {
-                    setPageContexts(pages);
+                (sectionCtx) => {
+                    setPageContexts(sectionCtx.pages);
                 }
             )
             .catch((e) => logger.error(e));

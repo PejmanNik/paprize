@@ -1,6 +1,6 @@
 {
     "name": "@paprize/config",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "exports": {
@@ -10,9 +10,9 @@
     },
     "devDependencies": {
         "@microsoft/api-extractor": "^7.53.0",
-        "typescript": "~5.9.3",
+        "typescript": "catalog:",
         "unplugin-dts": "^1.0.0-beta.6",
         "vite-plugin-checker": "^0.11.0",
-        "vite": "^7.1.9"
+        "vite": "catalog:"
     }
 }

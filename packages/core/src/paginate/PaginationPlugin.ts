@@ -33,6 +33,11 @@ export interface PaginationPlugin {
     ) => void;
     onNewPage?: (id: string, pageManager: PageManager) => void;
     onClone?: (id: string, source: Element, cloned: PageElement) => void;
+    afterPagination?: (
+        id: string,
+        domState: DomState,
+        pageManager: PageManager
+    ) => void;
 }
 
 type PluginKeys = {

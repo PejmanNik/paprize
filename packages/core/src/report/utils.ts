@@ -45,9 +45,8 @@ export function createSectionPageHeightPlugin(
     return {
         name: 'sectionPageHeight',
         order: 1,
-        afterVisitNode: (_id, _result, domState, pageManager) => {
-            const lastPage = domState.completed;
-            if (!lastPage || sectionFooterHeight <= 0) return;
+        afterPagination: (_id, _domState, pageManager) => {
+            if (sectionFooterHeight <= 0) return;
 
             // if there is no empty space for the section footer, create a new page for it
             if (!pageManager.hasEmptySpace(sectionFooterHeight)) {

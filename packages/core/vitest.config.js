@@ -13,7 +13,10 @@ export default defineConfig({
                 'src/plugins/defaultPlugins.ts',
                 ...coverageConfigDefaults.exclude,
             ],
-            reporter: ['text'],
+            reporter: ['text', 'lcov'],
+            thresholds: {
+                100: true,
+            },
         },
     },
 });

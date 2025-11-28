@@ -64,8 +64,6 @@ export interface DomScheduleResult {
 interface SectionState {
     pages: DomPageContext[];
     sectionElement: HTMLElement;
-    components: Core.SectionComponents;
-    options: Core.SectionOptions;
 }
 
 /**
@@ -188,7 +186,7 @@ export class PaprizeReport {
         const result = await this._reportManager.tryAddSection(
             options,
             components,
-            (pageContexts) => this._renderSection(options, pageContexts)
+            (sectionContext) => this._renderSection(sectionContext)
         );
 
         if (!result) {
@@ -202,8 +200,6 @@ export class PaprizeReport {
         this._sections.set(options.id, {
             pages: [],
             sectionElement: sectionElement,
-            components,
-            options: options,
         });
 
         return this;
@@ -258,20 +254,20 @@ export class PaprizeReport {
         };
     }
 
-    private async _renderSection(
-        options: Core.SectionOptions,
-        pageContexts: Core.PageContext[]
-    ) {
-        const state = this._getSectionState(options.id);
+    private async _renderSection(sectionContext: Core.SectionContext) {
+        const state = this._getSectionState(sectionContext.options.id);
         if (!this._options.keepInitialElementAfterPagination) {
-            document.getElementById(options.id)?.remove();
+            document.getElementById(sectionContext.options.id)?.remove();
         }
         const pages: DomPageContext[] = [];
 
-        for (const pageContext of pageContexts) {
+        for (const pageContext of sectionContext.pages) {
             const page = document.createElement('div');
             page.classList.add(Core.pageClassName);
-            page.id = Core.buildPageId(options.id, pageContext.pageIndex);
+            page.id = Core.buildPageId(
+                sectionContext.options.id,
+                pageContext.pageIndex
+            );
             page.setAttribute(
                 pageIndexMetadataAttribute,
                 pageContext.pageIndex.toString()
@@ -280,12 +276,12 @@ export class PaprizeReport {
             Object.assign(
                 page.style,
                 Core.reportStyles.page(
-                    options.size,
-                    options.margin ?? Core.pageMargin.None
+                    sectionContext.options.size,
+                    sectionContext.options.margin ?? Core.pageMargin.None
                 )
             );
 
-            const components = Core.cloneComponents(state.components);
+            const components = Core.cloneComponents(sectionContext.components);
 
             if (pageContext.pageIndex === 0 && components.sectionHeader) {
                 page.appendChild(components.sectionHeader);
@@ -304,7 +300,7 @@ export class PaprizeReport {
                 pageFooterContainer.appendChild(components.pageFooter);
             }
             if (
-                pageContext.pageIndex === pageContexts.length - 1 &&
+                pageContext.pageIndex === sectionContext.pages.length - 1 &&
                 components.sectionFooter
             ) {
                 pageFooterContainer.appendChild(
@@ -323,16 +319,16 @@ export class PaprizeReport {
             state.sectionElement.appendChild(page);
 
             const domPageContext: DomPageContext = {
-                sectionId: options.id,
+                sectionId: sectionContext.options.id,
                 pageIndex: pageContext.pageIndex,
-                totalPages: pageContexts.length,
+                totalPages: sectionContext.pages.length,
                 page,
                 components: { ...components, pageContent },
             };
             pages.push(domPageContext);
         }
 
-        this._sections.set(options.id, {
+        this._sections.set(sectionContext.options.id, {
             ...state,
             pages,
         });

@@ -27,6 +27,7 @@ async function createGlobalConfig({ mode }: ConfigEnv): Promise<UserConfig> {
                     },
                 },
             },
+            minify: true,
         },
         esbuild: {
             dropLabels: mode === 'production' ? ['DEV'] : [],

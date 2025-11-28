@@ -55,9 +55,6 @@ function processToken(
     completed: boolean;
     pendingToken?: string;
 } {
-    if (!pageManager.hasEmptySpace()) {
-        pageManager.nextPage();
-    }
     const textNode = pageManager.addTextNode('');
 
     // tentatively append
@@ -75,6 +72,7 @@ function processToken(
     textNode.textContent = originalContent;
 
     const overflowResult = handleTokenOverflow(token, pageManager, config);
+
     return {
         pendingToken: overflowResult.leftovers,
         completed: overflowResult.completed,
@@ -114,6 +112,12 @@ function handleTokenOverflow(
         return {
             completed: false,
         };
+    }
+
+    // the text is overflowing and doesn’t fit on the current page.
+    // before we attempt hyphenation, verify that the page has sufficient free space to render it.
+    if (!pageManager.hasEmptySpace()) {
+        pageManager.nextPage();
     }
 
     const leftovers = hyphenation(token, config.hyphen, pageManager);

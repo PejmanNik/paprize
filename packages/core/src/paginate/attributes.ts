@@ -7,17 +7,22 @@ type LayoutOptionsAttributes = {
         reader: (value: unknown) => LayoutOptions[Key];
     };
 };
+
+export const layoutOptionHyphenAttribute = `${attributePrefix}hyphen`;
+export const layoutOptionKeepOnSamePageAttribute = `${attributePrefix}keep-on-same-page`;
+export const layoutOptionHyphenationDisabledAttribute = `${attributePrefix}hyphenation-disabled`;
+
 const layoutOptionsAttributes: LayoutOptionsAttributes = {
     hyphen: {
-        key: `${attributePrefix}hyphen`,
+        key: layoutOptionHyphenAttribute,
         reader: (value) => String(value),
     },
     keepOnSamePage: {
-        key: `${attributePrefix}keep-on-same-page`,
+        key: layoutOptionKeepOnSamePageAttribute,
         reader: (value) => value === 'true',
     },
     hyphenationDisabled: {
-        key: `${attributePrefix}hyphenation-disabled`,
+        key: layoutOptionHyphenationDisabledAttribute,
         reader: (value) => value === 'true',
     },
 };

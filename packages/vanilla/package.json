@@ -44,19 +44,18 @@
     "author": "PejmanNikram",
     "scripts": {
         "dev": "vite",
-        "coverage": "vitest run --coverage",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "prepack": "node ../../scripts/prepack.mjs"
+        "prepack": "node ../../utils/scripts/prepack.mjs"
     },
     "devDependencies": {
         "@paprize/config": "workspace:*",
         "@vitest/coverage-v8": "^3.2.4",
         "happy-dom": "^20.0.0",
-        "preact": "^10.27.2",
-        "typescript": "~5.9.3",
-        "vite": "^7.1.9",
-        "vitest": "^3.2.4"
+        "preact": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
     },
     "dependencies": {
         "@paprize/core": "workspace:*"

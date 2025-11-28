@@ -11,6 +11,7 @@ import { unmarkCurrentNode } from '../debugUtilities/pageNodeMarker';
 import logger from '../logger';
 import { type PaginationOptions } from './PaginationOptions';
 import { callPluginHook } from './PaginationPlugin';
+import { pageClassName } from '../constants';
 
 const logPrefix = '\x1b[102mPAGE\x1b[0m';
 
@@ -180,11 +181,13 @@ export class PageManager {
         const page = document.createElement('div');
         page.style.width = `${pageWidth}px`;
         page.style.maxWidth = `${pageWidth}px`;
+        page.className = pageClassName;
 
         return page;
     }
 
     private createNewPage(pageHtmlElement: Element): PageElement {
+        logger.debug(logPrefix, 'creating new page');
         this._tempContainer.appendChild(pageHtmlElement);
 
         if (this._transaction.isActive) {

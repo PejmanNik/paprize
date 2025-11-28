@@ -5,7 +5,6 @@ import { pageMargin } from './pageConst';
 import type { Monitor } from './EventDispatcher';
 import { EventDispatcher } from './EventDispatcher';
 import type {
-    PageContext,
     ReportBuilderEvents,
     SectionContext,
 } from './ReportBuilderEvents';
@@ -24,15 +23,9 @@ import logger from '../logger';
 import { adjustPageSize } from '../utils';
 import type { SectionOptions } from './SectionOptions';
 
-export interface ReportContext {
-    jsonData: unknown | null;
-}
-
 export interface SectionState {
-    options: SectionOptions;
     context: SectionContext;
-    components: SectionComponents;
-    onPaginationCompleted: (pages: PageContext[]) => Promise<unknown> | void;
+    onPaginationCompleted: (context: SectionContext) => Promise<unknown> | void;
 }
 
 const logPrefix = '\x1b[43mREPORT\x1b[0m';
@@ -117,9 +110,6 @@ export class ReportBuilder {
             isPaginated: false,
             isSuspended: !!options.suspense?.length,
             pages: [],
-        };
-        this._sections.set(options.id, {
-            context,
             options: {
                 ...options,
                 size: adjustPageSize(
@@ -128,6 +118,10 @@ export class ReportBuilder {
                 ),
             },
             components,
+        };
+        this._sections.set(options.id, {
+            context,
+
             onPaginationCompleted,
         });
 
@@ -225,11 +219,11 @@ export class ReportBuilder {
                 state.context.isPaginated = false;
 
                 const tracker = new PromiseTracker();
-                await tracker.add(state.options.suspense);
+                await tracker.add(state.context.options.suspense);
                 tracker.monitor.addEventListener('onChange', (pendingCount) => {
                     logger.debug(
                         logPrefix,
-                        `${pendingCount} pending promises in section '${state.options.id}'.`
+                        `${pendingCount} pending promises in section '${state.context.sectionId}'.`
                     );
                 });
 
@@ -240,7 +234,7 @@ export class ReportBuilder {
 
                     logger.debug(
                         logPrefix,
-                        `Start paginating section '${state.options.id}'.`
+                        `Start paginating section '${state.context.sectionId}'.`
                     );
                     state.context.isSuspended = false;
                     await this._paginateSection(state);
@@ -322,8 +316,8 @@ export class ReportBuilder {
         Object.assign(
             temporarilyContainer.style,
             reportStyles.page(
-                state.options.size,
-                state.options.margin ?? pageMargin.None
+                state.context.options.size,
+                state.context.options.margin ?? pageMargin.None
             )
         );
 
@@ -331,7 +325,7 @@ export class ReportBuilder {
             Object.assign(temporarilyContainer.style, reportStyles.outOfScreen);
         }
 
-        const components = cloneComponents(state.components);
+        const components = cloneComponents(state.context.components);
 
         if (components.sectionHeader) {
             Object.assign(
@@ -371,13 +365,13 @@ export class ReportBuilder {
 
         if (height === 0) {
             logger.error(
-                `Pagination failed for section '${state.options.id}': insufficient space for page content or content is empty. ` +
+                `Pagination failed for section '${state.context.sectionId}': insufficient space for page content or content is empty. ` +
                     `Ensure that the section has content and that the header and footer do not occupy all available space.`
             );
             temporarilyContainer.remove();
 
             throw new Error(
-                `Pagination failed: no available space for content in section '${state.options.id}'.`
+                `Pagination failed: no available space for content in section '${state.context.sectionId}'.`
             );
         }
 
@@ -385,9 +379,9 @@ export class ReportBuilder {
             components.pageContent,
             { height, width },
             {
-                id: state.options.id,
+                id: state.context.sectionId,
                 plugins: [
-                    ...(state.options.plugins ?? defaultPlugins),
+                    ...(state.context.options.plugins ?? defaultPlugins),
                     createSectionPageHeightPlugin(
                         height,
                         sectionHeaderHeight,
@@ -401,15 +395,9 @@ export class ReportBuilder {
         const pageContexts = paginatorResult.map((content, index) => ({
             pageIndex: index,
             totalPages: paginatorResult.length,
-            sectionId: state.options.id,
+            sectionId: state.context.sectionId,
             pageContentHtml: content,
         }));
-
-        await state.onPaginationCompleted(pageContexts);
-
-        for (const pageContext of pageContexts) {
-            await this._monitor.dispatch('pageCompleted', pageContext);
-        }
 
         const sectionContext: SectionContext = {
             ...state.context,
@@ -417,11 +405,16 @@ export class ReportBuilder {
             isSuspended: false,
             pages: pageContexts,
         };
-        this._sections.set(state.options.id, {
+        this._sections.set(state.context.sectionId, {
             ...state,
             context: sectionContext,
         });
 
+        await state.onPaginationCompleted(sectionContext);
+
+        for (const pageContext of pageContexts) {
+            await this._monitor.dispatch('pageCompleted', pageContext);
+        }
         await this._monitor.dispatch('sectionCompleted', sectionContext);
     }
 }

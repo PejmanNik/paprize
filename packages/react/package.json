@@ -38,7 +38,7 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "prepack": "node ../../scripts/prepack.mjs"
+        "prepack": "node ../../utils/scripts/prepack.mjs"
     },
     "dependencies": {
         "@paprize/core": "workspace:*"
@@ -49,12 +49,12 @@
     },
     "devDependencies": {
         "@paprize/config": "workspace:*",
-        "@types/react": "^19.2.0",
-        "@types/react-dom": "^19.2.0",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
         "@vitejs/plugin-react-swc": "^4.1.0",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0",
-        "typescript": "~5.9.3",
-        "vite": "^7.1.9"
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:"
     }
 }

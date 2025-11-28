@@ -8,9 +8,6 @@ on:
       - "packages/**"
   workflow_dispatch:
 
-env:
-  CI: true
-
 permissions:
   contents: write
   issues: write

@@ -10,7 +10,6 @@ import {
 import * as DomUtilities from '../paginate/domUtilities';
 import type { PageManager, PageState } from '../paginate/PageManager';
 import type { DomState } from '../paginate/DomState';
-import { SplitResult } from '../paginate/SplitResult';
 import { paprize_readJsonDataFile } from '../window';
 
 vi.mock('../paginate/domUtilities');
@@ -142,54 +141,41 @@ describe('createSectionPageHeightPlugin', () => {
         expect(pageManager.getPageState().pageHeight).toBe(130);
     });
 
-    it('afterVisitNode returns early when there is no last page or footer height is <= 0', () => {
-        const plugin = createSectionPageHeightPlugin(100, 10, 20);
+    it('afterPagination returns early when footer height is <= 0', () => {
+        const plugin = createSectionPageHeightPlugin(100, 10, 0);
         const pageManager = {
             hasEmptySpace: vi.fn(),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
-        const domState1 = { completed: null } as unknown as DomState;
+        const domState1 = {} as unknown as DomState;
 
-        // no last page -> should return early and not call pageManager
-        plugin.afterVisitNode!('id', SplitResult.None, domState1, pageManager);
+        plugin.afterPagination!('id', domState1, pageManager);
         expect(pageManager.hasEmptySpace).not.toHaveBeenCalled();
         expect(pageManager.nextPage).not.toHaveBeenCalled();
-
-        // footer height <= 0 -> should return early even if last page exists
-        const pluginNoFooter = createSectionPageHeightPlugin(100, 10, 0);
-        const pm2 = {
-            hasEmptySpace: vi.fn(),
-            nextPage: vi.fn(),
-        } as unknown as Mocked<PageManager>;
-        const domState2 = { completed: {} } as unknown as DomState;
-
-        pluginNoFooter.afterVisitNode!('id', SplitResult.None, domState2, pm2);
-        expect(pm2.hasEmptySpace).not.toHaveBeenCalled();
-        expect(pm2.nextPage).not.toHaveBeenCalled();
     });
 
-    it('afterVisitNode calls nextPage when there is not enough empty space', () => {
+    it('afterPagination calls nextPage when there is not enough empty space', () => {
         const plugin = createSectionPageHeightPlugin(100, 10, 20);
         const pageManager = {
             hasEmptySpace: vi.fn().mockReturnValue(false),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
-        const domState = { completed: {} } as unknown as DomState;
+        const domState = {} as unknown as DomState;
 
-        plugin.afterVisitNode!('id', SplitResult.None, domState, pageManager);
+        plugin.afterPagination!('id', domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).toHaveBeenCalled();
     });
 
-    it('afterVisitNode does not call nextPage when there is enough empty space', () => {
+    it('afterPagination does not call nextPage when there is enough empty space', () => {
         const plugin = createSectionPageHeightPlugin(100, 10, 20);
         const pageManager = {
             hasEmptySpace: vi.fn().mockReturnValue(true),
             nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
-        const domState = { completed: {} } as unknown as DomState;
-        plugin.afterVisitNode!('id', SplitResult.None, domState, pageManager);
+        const domState = {} as unknown as DomState;
+        plugin.afterPagination!('id', domState, pageManager);
 
         expect(pageManager.hasEmptySpace).toHaveBeenCalledWith(20);
         expect(pageManager.nextPage).not.toHaveBeenCalled();

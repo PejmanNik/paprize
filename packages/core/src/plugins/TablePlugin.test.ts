@@ -2,6 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TablePlugin } from './TablePlugin';
 import type { PageElement } from '../paginate/PageNodes';
 import type { PageManager, PageState } from '../paginate/PageManager';
+import type { DomState } from '../paginate/DomState';
+import type { VisitContext } from '../paginate/PaginationPlugin';
+import { SplitResult } from '../paginate/SplitResult';
 
 describe('TablePlugin', () => {
     const id = 'id';
@@ -9,16 +12,24 @@ describe('TablePlugin', () => {
     let mockPageElement: PageElement;
     let mockPageManager: PageManager;
     let mockOriginalTable: HTMLTableElement;
+    let mockEmptyTable: HTMLTableElement;
     let plugin: TablePlugin;
+    let mockDomState: DomState & { currentNode: PageElement };
 
     beforeEach(() => {
         plugin = new TablePlugin();
         mockElement = document.createElement('table');
+        mockEmptyTable = {
+            tHead: null,
+            tFoot: null,
+        } as HTMLTableElement;
+
         mockPageElement = {
             config: {},
             clonedFrom: {} as PageElement,
             cloneCount: 2,
             transaction: {},
+            getNode: vi.fn().mockReturnValue(mockEmptyTable),
             getOriginalNode: vi.fn(),
             appendChild: vi.fn(),
         } as unknown as PageElement;
@@ -35,15 +46,13 @@ describe('TablePlugin', () => {
         mockPageManager = {
             getPageState: vi.fn(),
         } as unknown as PageManager;
-    });
 
-    it('should set keepOnSamePage to true for TR elements', () => {
-        const trElement = { tagName: 'TR' } as Element;
-        const pageElement = { config: {} } as PageElement;
-
-        plugin.onClone(id, trElement, pageElement);
-
-        expect(pageElement.config.keepOnSamePage).toBe(true);
+        mockDomState = {
+            currentNode: {
+                config: {},
+                getNode: vi.fn().mockReturnValue(mockElement),
+            } as unknown as PageElement,
+        } as unknown as DomState & { currentNode: PageElement };
     });
 
     it('should return early for non TABLE/TR elements', () => {
@@ -68,17 +77,13 @@ describe('TablePlugin', () => {
         expect(pageElement.appendChild).not.toHaveBeenCalled();
     });
 
-    it('should return early when cloneCount is 1', () => {
-        const tableElement = { tagName: 'TABLE' } as Element;
-        const pageElement = {
-            ...mockPageElement,
-            cloneCount: 1,
-        } as PageElement;
+    it('should return early when table is cloned with its children', () => {
+        const plugin = new TablePlugin({ cloneHeader: true });
+        mockPageElement.getNode = vi.fn().mockReturnValue(mockOriginalTable);
 
-        plugin.onClone(id, tableElement, pageElement);
+        plugin.onClone(id, mockElement, mockPageElement);
 
-        expect(pageElement.getOriginalNode).not.toHaveBeenCalled();
-        expect(pageElement.appendChild).not.toHaveBeenCalled();
+        expect(mockPageElement.getOriginalNode).not.toHaveBeenCalled();
     });
 
     it('should clone header when cloneHeader option is true and table has tHead', () => {
@@ -287,31 +292,34 @@ describe('TablePlugin', () => {
         }
     );
 
-    it('should remove cloned table if it has no header and empty body', () => {
-        const plugin = new TablePlugin();
-        const clonedTable = {
-            getNode: vi.fn().mockReturnValue({
-                tagName: 'TABLE',
-                tHead: vi.fn(),
-                tBodies: [],
-            }),
-            remove: vi.fn(),
-        } as unknown as PageElement;
+    it.for([[], [{ rows: [] }], [{ rows: [{ cells: [] }] }]])(
+        'should remove cloned table if it has no header and empty body',
+        (body) => {
+            const plugin = new TablePlugin();
+            const clonedTable = {
+                getNode: vi.fn().mockReturnValue({
+                    tagName: 'TABLE',
+                    tHead: vi.fn(),
+                    tBodies: body,
+                }),
+                remove: vi.fn(),
+            } as unknown as PageElement;
 
-        vi.mocked(mockPageManager.getPageState).mockReturnValue({
-            parentStack: [
-                {
-                    getNode: vi.fn().mockReturnValue({
-                        tagName: 'TABLE',
-                    }),
-                    clonedFrom: clonedTable,
-                },
-            ],
-        } as unknown as PageState);
+            vi.mocked(mockPageManager.getPageState).mockReturnValue({
+                parentStack: [
+                    {
+                        getNode: vi.fn().mockReturnValue({
+                            tagName: 'TABLE',
+                        }),
+                        clonedFrom: clonedTable,
+                    },
+                ],
+            } as unknown as PageState);
 
-        plugin.onNewPage('id', mockPageManager);
-        expect(clonedTable.remove).toHaveBeenCalled();
-    });
+            plugin.onNewPage('id', mockPageManager);
+            expect(clonedTable.remove).toHaveBeenCalled();
+        }
+    );
 
     it('should clone the header to the new table when new table does not have a header', () => {
         const plugin = new TablePlugin();
@@ -347,5 +355,66 @@ describe('TablePlugin', () => {
 
         expect(clonedNodeOfHeader).toHaveBeenCalled();
         expect(newTable.appendChild).toHaveBeenCalled();
+    });
+
+    it('should set keepOnSamePage to true for table rows', () => {
+        const plugin = new TablePlugin({ cloneFooter: true });
+        const context: VisitContext = {};
+
+        vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
+            document.createElement('tr')
+        );
+
+        plugin.onVisitElement('id', mockDomState, mockPageManager, context);
+
+        expect(mockDomState.currentNode.config.keepOnSamePage).toBeTruthy();
+    });
+
+    it('should ignore table footer when clone footer is true', () => {
+        const plugin = new TablePlugin({ cloneFooter: true });
+        const context: VisitContext = {};
+        vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
+            document.createElement('tfoot')
+        );
+
+        plugin.onVisitElement('id', mockDomState, mockPageManager, context);
+
+        expect(context.result).toBe(SplitResult.FullNodePlaced);
+    });
+
+    it('should ignore table header when clone header is true', () => {
+        const plugin = new TablePlugin({ cloneHeader: true });
+        const context: VisitContext = {};
+        vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
+            document.createElement('thead')
+        );
+
+        plugin.onVisitElement('id', mockDomState, mockPageManager, context);
+
+        expect(context.result).toBe(SplitResult.FullNodePlaced);
+    });
+
+    it('should not ignore table header when clone is false', () => {
+        const plugin = new TablePlugin({});
+        const context: VisitContext = {};
+        vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
+            document.createElement('thead')
+        );
+
+        plugin.onVisitElement('id', mockDomState, mockPageManager, context);
+
+        expect(context.result).toBeUndefined();
+    });
+
+    it('should not ignore table footer when clone is false', () => {
+        const plugin = new TablePlugin({});
+        const context: VisitContext = {};
+        vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
+            document.createElement('tfoot')
+        );
+
+        plugin.onVisitElement('id', mockDomState, mockPageManager, context);
+
+        expect(context.result).toBeUndefined();
     });
 });

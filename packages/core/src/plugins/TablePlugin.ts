@@ -4,7 +4,12 @@ import {
     PageElement,
     type SafeElement,
 } from '../paginate/PageNodes';
-import type { PaginationPlugin } from '../paginate/PaginationPlugin';
+import type {
+    PaginationPlugin,
+    VisitContext,
+} from '../paginate/PaginationPlugin';
+import type { DomState } from '../paginate/DomState';
+import { SplitResult } from '../paginate/SplitResult';
 
 /**
  * Table plugin options
@@ -75,17 +80,33 @@ export class TablePlugin implements PaginationPlugin {
         }
     };
 
+    onVisitElement = (
+        _id: string,
+        domState: DomState & { currentNode: PageElement },
+        _pageManager: PageManager,
+        context: VisitContext
+    ) => {
+        const node = domState.currentNode.getNode();
+        if (node.tagName === 'TR') {
+            domState.currentNode.config.keepOnSamePage = true;
+        } else if (node.tagName === 'TFOOT' && this._options.cloneFooter) {
+            // ignore normal footer in the last page, as we are duplicating it in the onClone
+            context.result = SplitResult.FullNodePlaced;
+        } else if (node.tagName === 'THEAD' && this._options.cloneHeader) {
+            // ignore normal header in the first page, as we are duplicating it in the onClone
+            context.result = SplitResult.FullNodePlaced;
+        }
+    };
+
     onClone = (_id: string, source: Element, cloned: PageElement) => {
-        if (source.tagName === 'TR') {
-            cloned.config.keepOnSamePage = true;
+        if (!this._isTable(source) || !cloned.clonedFrom) {
             return;
         }
 
-        if (
-            !this._isTable(source) ||
-            !cloned.clonedFrom ||
-            cloned.cloneCount === 1
-        ) {
+        const node = cloned.getNode() as HTMLTableElement;
+        if (node.tHead || node.tFoot) {
+            // If the table is cloned with its children it mean it fits to the page and
+            // we don't need to add them again.
             return;
         }
 
@@ -99,7 +120,6 @@ export class TablePlugin implements PaginationPlugin {
             );
             cloned.appendChild(clonedHead);
         }
-
         const foot = originalNode.tFoot;
         if (foot && this._options.cloneFooter === true) {
             const clonedFoot = new PageElement(
@@ -123,12 +143,14 @@ export class TablePlugin implements PaginationPlugin {
         if (body.length === 0) return true;
 
         const tbody = body[0];
-        if (tbody.rows.length !== 1) return false;
+        if (tbody.rows.length === 0) return true;
+        if (tbody.rows.length > 1) return false;
 
         const row = tbody.rows[0];
-        if (row.cells.length !== 1) return false;
+        if (row.cells.length === 0) return true;
+        if (row.cells.length > 1) return false;
 
         const cell = row.cells[0];
-        return cell.textContent.trim() === '';
+        return cell.textContent?.trim().length === 0;
     }
 }
