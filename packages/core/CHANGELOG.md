@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.12
+
+### Patch Changes
+
+- 33f727c: update dependencies
+
 ## 0.0.11
 
 ### Patch Changes

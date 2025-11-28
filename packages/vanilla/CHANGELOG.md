@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.12
+
+### Patch Changes
+
+- 33f727c: update dependencies
+- Updated dependencies [33f727c]
+    - @paprize/core@0.0.12
+
 ## 0.0.11
 
 ### Patch Changes
