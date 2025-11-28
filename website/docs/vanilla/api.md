@@ -8,7 +8,7 @@ sidebar_position: 99
 
 ## PaprizeReport
 
-Defined in: [PaprizeReport.ts:72](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L72)
+Defined in: [PaprizeReport.ts:72](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L72)
 
 The report builder class that contains the logic for handling pagination
 and managing the report layout.
@@ -19,7 +19,7 @@ and managing the report layout.
 
 > **new PaprizeReport**(`options?`): [`PaprizeReport`](#paprizereport)
 
-Defined in: [PaprizeReport.ts:80](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L80)
+Defined in: [PaprizeReport.ts:80](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L80)
 
 ##### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [PaprizeReport.ts:80](https://github.com/PejmanNik/paprize/blob/2944
 
 > **get** **monitor**(): `Core.Monitor`\<[`PaprizeReportEvents`](#paprizereportevents)\>
 
-Defined in: [PaprizeReport.ts:159](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L159)
+Defined in: [PaprizeReport.ts:159](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L159)
 
 Monitor instance used to subscribe to pagination events.
 See [PaprizeReportEvents](#paprizereportevents) for available event types.
@@ -54,7 +54,7 @@ See [PaprizeReportEvents](#paprizereportevents) for available event types.
 
 > **addSection**(`options`): `Promise`\<[`PaprizeReport`](#paprizereport)\>
 
-Defined in: [PaprizeReport.ts:168](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L168)
+Defined in: [PaprizeReport.ts:168](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L168)
 
 Registers a section by its id, specifying the page size, margins, and other options.
 If a section with the same id already exists, the operation will be ignored.
@@ -73,7 +73,7 @@ If a section with the same id already exists, the operation will be ignored.
 
 > **schedulePagination**(): `Promise`\<[`DomScheduleResult`](#domscheduleresult)\>
 
-Defined in: [PaprizeReport.ts:143](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L143)
+Defined in: [PaprizeReport.ts:143](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L143)
 
 Schedules a pagination operation.
 
@@ -97,7 +97,7 @@ To wait for all sections to complete pagination, use the
 
 ## DomPageContext
 
-Defined in: [PaprizeReportEvents.ts:6](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReportEvents.ts#L6)
+Defined in: [PaprizeReportEvents.ts:6](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReportEvents.ts#L6)
 
 Context information for a paginated page.
 
@@ -115,7 +115,7 @@ Context information for a paginated page.
 
 ## DomPaginationCycleCompleted
 
-Defined in: [PaprizeReportEvents.ts:58](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReportEvents.ts#L58)
+Defined in: [PaprizeReportEvents.ts:58](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReportEvents.ts#L58)
 
 Context information for pagination cycle.
 
@@ -129,7 +129,7 @@ Context information for pagination cycle.
 
 ## DomScheduleResult
 
-Defined in: [PaprizeReport.ts:52](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L52)
+Defined in: [PaprizeReport.ts:52](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L52)
 
 Represents the result of a scheduled pagination process.
 
@@ -144,7 +144,7 @@ Represents the result of a scheduled pagination process.
 
 ## DomSectionContext
 
-Defined in: [PaprizeReportEvents.ts:32](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReportEvents.ts#L32)
+Defined in: [PaprizeReportEvents.ts:32](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReportEvents.ts#L32)
 
 Context information for a paginated section.
 
@@ -162,7 +162,7 @@ Context information for a paginated section.
 
 ## PaprizeReportEvents
 
-Defined in: [PaprizeReportEvents.ts:68](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReportEvents.ts#L68)
+Defined in: [PaprizeReportEvents.ts:68](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReportEvents.ts#L68)
 
 Available events that can be subscribed to, during the pagination process.
 
@@ -179,7 +179,7 @@ Available events that can be subscribed to, during the pagination process.
 
 ## PaprizeReportOptions
 
-Defined in: [PaprizeReport.ts:34](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/vanilla/src/PaprizeReport.ts#L34)
+Defined in: [PaprizeReport.ts:34](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/vanilla/src/PaprizeReport.ts#L34)
 
 Options for configuring a `PaprizeReport` instance.
 

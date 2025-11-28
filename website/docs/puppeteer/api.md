@@ -14,7 +14,7 @@ Design your report using the full power of JavaScript and CSS, mark the report s
 
 > **ReportOptions** = `Omit`\<`PDFOptions`, keyof *typeof* [`paprizeOptions`](#paprizeoptions)\>
 
-Defined in: [options.ts:33](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/options.ts#L33)
+Defined in: [options.ts:33](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/options.ts#L33)
 
 Options for generating a PDF report with Paprize.
 extends Puppeteer's [PDFOptions](https://pptr.dev/api/puppeteer.pdfoptions)
@@ -26,7 +26,7 @@ extends Puppeteer's [PDFOptions](https://pptr.dev/api/puppeteer.pdfoptions)
 
 > `const` **paprizeOptions**: `PDFOptions`
 
-Defined in: [options.ts:13](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/options.ts#L13)
+Defined in: [options.ts:13](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/options.ts#L13)
 
 Predefined static Paprize PDF options.
 
@@ -43,7 +43,7 @@ including:
 
 > **openReport**(`page`, `reportUrl`, `jsonData`, `timeout`): `Promise`\<`void`\>
 
-Defined in: [openReport.ts:21](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/openReport.ts#L21)
+Defined in: [openReport.ts:21](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/openReport.ts#L21)
 
 Opens a report in the given Puppeteer page, injects a JSON data file if provided,
 and waits for the report to be ready.
@@ -73,7 +73,7 @@ Will throw an error if the report does not become ready within the specified tim
 
 > **pageToPdf**(`page`, `options?`): `Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
 
-Defined in: [pageToPdf.ts:12](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/pageToPdf.ts#L12)
+Defined in: [pageToPdf.ts:12](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/pageToPdf.ts#L12)
 
 Generates a PDF from the given Puppeteer `Page` instance using the specified options.
 
@@ -96,7 +96,7 @@ A promise that resolves to a `Uint8Array` containing the generated PDF data.
 
 > **reportToPdf**(`page`, `reportUrl`, `jsonData?`, `pdfOptions?`): `Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
 
-Defined in: [reportToPdf.ts:15](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/reportToPdf.ts#L15)
+Defined in: [reportToPdf.ts:15](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/reportToPdf.ts#L15)
 
 Generates a PDF from a report by navigating to the specified report URL
 and optionally sending JSON data to the page.
@@ -122,7 +122,7 @@ A promise that resolves to a `Uint8Array` containing the generated PDF data.
 
 > **serveReport**(`dir`, `port?`): `Promise`\<`ReportServer`\>
 
-Defined in: [serveReport.ts:23](https://github.com/PejmanNik/paprize/blob/2944bb32e5c929fca78f571643326598f7cb3f19/packages/puppeteer/src/serveReport.ts#L23)
+Defined in: [serveReport.ts:23](https://github.com/PejmanNik/paprize/blob/72d7383d266835a2b4edc0aeaeb6d2d2ab22381b/packages/puppeteer/src/serveReport.ts#L23)
 
 Serves a static report from the specified directory over HTTP.
 
