@@ -1,25 +1,30 @@
 packages:
-    - packages/*
-    - examples/*
-    - website
-    - utils/*
-    - tests/*
+  - packages/*
+  - examples/*
+  - website
+  - utils/*
+  - tests/*
 
 catalog:
-    '@types/react': ^19.2.0
-    '@types/react-dom': ^19.2.0
-    esbuild: 0.25.10
-    preact: ^10.27.2
-    react: 19.2.0
-    react-dom: ^19.2.0
-    typescript: 5.9.3
-    typescript": ~5.9.3
-    vite: ^7.1.9
-    vitest: ^3.2.4
+  '@types/react': ^19.2.0
+  '@types/react-dom': ^19.2.0
+  esbuild: 0.25.10
+  preact: ^10.27.2
+  react: 19.2.0
+  react-dom: ^19.2.0
+  typescript: 5.9.3
+  typescript": ~5.9.3
+  vite: ^7.1.9
+  vitest: ^3.2.4
 
 onlyBuiltDependencies:
-    - '@swc/core'
-    - core-js
-    - core-js-pure
-    - esbuild
-    - puppeteer
+  - '@swc/core'
+  - core-js
+  - core-js-pure
+  - esbuild
+  - puppeteer
+
+overrides:
+  glob@>=10.2.0 <10.5.0: '>=10.5.0'
+  js-yaml@<3.14.2: '>=3.14.2'
+  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
