@@ -151,6 +151,10 @@ export class PaprizePage {
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
+            font-kerning: none;
+            letter-spacing: 0;
+            -webkit-text-stroke: 0;
+            text-rendering: geometricPrecision;
             }
             p, span, div, li, th, td, a {
                 line-height: 1.5 !important;
