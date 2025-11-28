@@ -9,8 +9,13 @@ export async function buildTypeDoc(dirname: string) {
     await fs.mkdir(tempDit);
 
     const settings: PluginOptions & TypeDoc.TypeDocOptions = {
-        entryPoints: ['../core', '../vanilla', '../react', '../puppeteer'],
-        tsconfig: '../../tsconfig.json',
+        entryPoints: [
+            '../packages/core',
+            '../packages/vanilla',
+            '../packages/react',
+            '../packages/puppeteer',
+        ],
+        tsconfig: '../tsconfig.json',
         out: tempDit,
         entryPointStrategy: 'packages',
         plugin: [

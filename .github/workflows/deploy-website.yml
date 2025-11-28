@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "packages/website/**"
+      - "website/**"
   workflow_dispatch:
 
 permissions:
@@ -38,7 +38,7 @@ jobs:
       - name: Upload web artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./packages/website/build"
+          path: "./website/build"
 
   deploy:
     needs: build
