@@ -16,8 +16,8 @@ catalogs:
       specifier: 0.25.10
       version: 0.25.10
     preact:
-      specifier: ^10.27.2
-      version: 10.27.2
+      specifier: ^10.27.3
+      version: 10.28.2
     react:
       specifier: 19.2.0
       version: 19.2.0
@@ -171,7 +171,7 @@ importers:
         version: 20.0.10
       preact:
         specifier: 'catalog:'
-        version: 10.27.2
+        version: 10.28.2
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -258,7 +258,7 @@ importers:
         version: 20.0.10
       preact:
         specifier: 'catalog:'
-        version: 10.27.2
+        version: 10.28.2
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -297,10 +297,10 @@ importers:
         version: 0.25.10
       preact:
         specifier: 'catalog:'
-        version: 10.27.2
+        version: 10.28.2
       preact-render-to-string:
         specifier: ^6.6.3
-        version: 6.6.3(preact@10.27.2)
+        version: 6.6.3(preact@10.28.2)
       react:
         specifier: 'catalog:'
         version: 19.2.0
@@ -6304,8 +6304,8 @@ packages:
     peerDependencies:
       preact: '>=10 || >= 11.0.0-0'
 
-  preact@10.27.2:
-    resolution: {integrity: sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==}
+  preact@10.28.2:
+    resolution: {integrity: sha512-lbteaWGzGHdlIuiJ0l2Jq454m6kcpI1zNje6d8MlGAFlYvP2GO4ibnat7P74Esfz4sPTdM6UxtTwh/d3pwM9JA==}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -7557,6 +7557,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -15069,11 +15070,11 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact-render-to-string@6.6.3(preact@10.27.2):
+  preact-render-to-string@6.6.3(preact@10.28.2):
     dependencies:
-      preact: 10.27.2
+      preact: 10.28.2
 
-  preact@10.27.2: {}
+  preact@10.28.2: {}
 
   prelude-ls@1.2.1: {}
 
