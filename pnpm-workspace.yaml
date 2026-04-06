@@ -14,7 +14,7 @@ catalog:
   react-dom: ^19.2.0
   typescript: 5.9.3
   typescript": ~5.9.3
-  vite: ^7.1.9
+  vite: ^7.3.2
   vitest: ^3.2.4
 
 onlyBuiltDependencies:
