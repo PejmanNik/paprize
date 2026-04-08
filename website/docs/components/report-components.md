@@ -59,14 +59,24 @@ For more advanced and fine grained customization, you can use [Plugins](/plugin.
 </TabItem>
 <TabItem value="Zero">
 
-- Page Size: use one of the [pageSize](/core/api.md#pagesize-1), including A1-6
-- Page Margin: use one the [pageMargin](/core/api.md#pagemargin-1) include `none`
+- **Page Size:** Use one of the predefined [pageSize](/core/api.md#pagesize-1) options (includes standard sizes from `A1` to `A6`).
+- **Page Width and Height:** If provided, these custom dimensions will override the Page Size. Values must include a number and a valid unit of measurement (e.g., `210mm`, `8.5in`).
+- **Page Orientation:** The default is `portrait`. If set to `landscape`, it will swap the page's height and width.
+- **Page Margin:** Use one of the predefined [pageMargin](/core/api.md#pagemargin-1) options, including `none`.
 
 ```html
 <div
     data-pz-section
     data-pz-section-page-size="A4"
     data-pz-section-page-margin="narrow"
+>
+    ...
+</div>
+
+<div
+    data-pz-section-page-height="297mm"
+    data-pz-section-page-width="210mm"
+    data-pz-section-page-orientation="portrait"
 >
     ...
 </div>

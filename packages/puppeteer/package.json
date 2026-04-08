@@ -35,7 +35,8 @@
     "author": "PejmanNikram",
     "scripts": {
         "build": "tsc && node ./build.mjs",
-        "prepack": "node ../../utils/scripts/prepack.mjs"
+        "prepack": "node ../../utils/scripts/prepack.mjs",
+        "test": "vitest"
     },
     "devDependencies": {
         "@paprize/vanilla": "workspace:*",
@@ -44,7 +45,8 @@
         "esbuild": "0.25.10",
         "puppeteer-core": "^24.23.0",
         "typescript": "~5.9.3",
-        "unplugin-dts": "^1.0.0-beta.6"
+        "unplugin-dts": "^1.0.0-beta.6",
+        "vitest": "catalog:"
     },
     "peerDependencies": {
         "puppeteer-core": ">=24.0.0"
