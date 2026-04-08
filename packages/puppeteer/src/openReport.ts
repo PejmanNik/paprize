@@ -41,8 +41,8 @@ export async function openReport(
             timeout: 100,
         })
         .catch(() => {
-            logger.warn(
-                'The page is not a valid paprize report. Using paprize fallback zero report.'
+            logger.info(
+                'Using Zero report mode (standard Paprize report format not detected)'
             );
 
             return page.addScriptTag({
