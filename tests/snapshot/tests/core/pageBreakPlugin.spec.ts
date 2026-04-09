@@ -1,8 +1,13 @@
 import { h } from 'preact';
 import { expect, test } from '../../utils/PaprizePage';
-import { pageBreakAttributeName } from '@paprize/core';
+import {
+    createLoremIpsumParagraph,
+    pageBreakAttributeName,
+} from '@paprize/core';
 
-test('should start a new page after page break', async ({ paprizePage }) => {
+test('should start a new page after page break with div elements', async ({
+    paprizePage,
+}) => {
     const app = h('div', { id: 'app' }, [
         h('div', { id: 'section-1' }, [
             h('div', { id: 'page-content' }, [
@@ -21,6 +26,24 @@ test('should start a new page after page break', async ({ paprizePage }) => {
                         backgroundColor: '#dde8d0ff',
                     },
                 }),
+            ]),
+        ]),
+    ]);
+
+    await paprizePage.core.setup(app);
+
+    await expect(paprizePage).toMatchReportSnapshot();
+});
+
+test('should start a new page after page break with texts', async ({
+    paprizePage,
+}) => {
+    const app = h('div', { id: 'app' }, [
+        h('div', { id: 'section-1' }, [
+            h('div', { id: 'page-content' }, [
+                createLoremIpsumParagraph(2, 0.2),
+                h('div', { [pageBreakAttributeName]: true }),
+                createLoremIpsumParagraph(2, 0.3),
             ]),
         ]),
     ]);
