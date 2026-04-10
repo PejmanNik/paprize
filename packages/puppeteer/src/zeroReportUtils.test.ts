@@ -57,10 +57,10 @@ describe('zeroReport', () => {
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
-                size: expect.objectContaining({
+                size: {
                     width: '148mm',
                     height: '210mm',
-                }),
+                },
             })
         );
     });
@@ -105,10 +105,7 @@ describe('zeroReport', () => {
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
-                size: expect.objectContaining({
-                    width: '210mm',
-                    height: '148mm',
-                }),
+                orientation: 'landscape',
             })
         );
     });
@@ -122,10 +119,10 @@ describe('zeroReport', () => {
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
-                size: expect.objectContaining({
+                size: {
                     width: '210mm',
                     height: '297mm',
-                }),
+                },
             })
         );
     });

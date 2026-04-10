@@ -1,3 +1,4 @@
+import { attributePrefix } from '../constants';
 import type { DomState } from '../paginate/DomState';
 import type { PageManager } from '../paginate/PageManager';
 import type { PageElement } from '../paginate/PageNodes';
@@ -7,7 +8,7 @@ import type {
 } from '../paginate/PaginationPlugin';
 import { SplitResult } from '../paginate/SplitResult';
 
-export const pageBreakAttributeName = 'data-pz-page-break';
+export const pageBreakAttributeName = `${attributePrefix}page-break`;
 
 export class PageBreakPlugin implements PaginationPlugin {
     public name = 'pageBreak';
@@ -19,11 +20,11 @@ export class PageBreakPlugin implements PaginationPlugin {
         pageManager: PageManager,
         context: VisitContext
     ) => {
-        if (
-            domState.currentNode
-                .getNode()
-                .getAttribute(pageBreakAttributeName) === 'true'
-        ) {
+        const attr = domState.currentNode
+            .getNode()
+            .getAttribute(pageBreakAttributeName);
+
+        if (attr === 'true' || attr === '') {
             pageManager.markPageAsFull();
 
             // ignore the page break node itself
