@@ -134,7 +134,7 @@ export class Paginator {
         logger.debug(logPrefix, "node skipped - couldn't paginate");
 
         DEV: markIgnoredNode(this._domState.currentNode);
-        this._domState.goToNextNode();
+        this._domState.goToNextSiblingOrParentSibling();
     }
 
     private handleFullNodePlaced(): void {

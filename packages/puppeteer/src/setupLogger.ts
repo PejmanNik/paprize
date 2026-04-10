@@ -8,19 +8,19 @@ export function setupLogger(page: Page) {
 
         switch (type) {
             case 'error':
-                logger.error(`[browser] ${text}`);
+                logger.error(`error: ${text}`);
                 break;
             case 'warn':
-                logger.warn(`[browser] ${text}`);
+                logger.warn(`warn: ${text}`);
                 break;
             case 'debug':
-                logger.debug(`[browser] ${text}`);
+                logger.debug(`debug: ${text}`);
                 break;
             case 'info':
-                logger.info(`[browser] ${text}`);
+                logger.info(`info: ${text}`);
                 break;
             default:
-                logger.log(`[browser] ${text}`);
+                logger.log(`log: ${text}`);
         }
     });
 }
