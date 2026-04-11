@@ -321,6 +321,7 @@ export class ReportBuilder {
             )
         );
 
+        /* v8 ignore if -- @preserve */
         if (!isDebugMode()) {
             Object.assign(temporarilyContainer.style, reportStyles.outOfScreen);
         }

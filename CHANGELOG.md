@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - puppeteer: Expand Zero report configs for sections (#24 (https://github.com/your-repo/pull/24))
+- core: expand plugin hooks with `beforePagination`
 
 ### Changed
 

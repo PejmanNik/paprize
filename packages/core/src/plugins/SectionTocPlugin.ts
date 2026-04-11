@@ -22,6 +22,11 @@ export class SectionTocPlugin implements PaginationPlugin {
         return Array.from(this._state.values()).flat();
     };
 
+    public beforePagination = (id: string) => {
+        // cleanup state for section
+        this._state.set(id, []);
+    };
+
     public onVisitElement = (
         id: string,
         domState: DomState & { currentNode: PageElement },
@@ -34,11 +39,6 @@ export class SectionTocPlugin implements PaginationPlugin {
             if (!headingLevel || !node.textContent) return;
 
             const pageIndex = pageManager.getPageState().pageIndex;
-
-            // cleanup state for first page of section
-            if (pageIndex === 0) {
-                this._state.set(id, []);
-            }
 
             this._state.get(id)?.push({
                 sectionId: id,

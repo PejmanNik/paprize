@@ -24,6 +24,12 @@ vi.mock('./utils', async () => {
     };
 });
 
+vi.mock('../debugUtilities/debugMode', () => {
+    return {
+        isDebugMode: () => false,
+    };
+});
+
 describe('ReportBuilder', () => {
     let rb: ReportBuilder;
     const components: SectionComponents = {
@@ -58,13 +64,13 @@ describe('ReportBuilder', () => {
 
     it.for([true, false])(
         'tryAddSection should add a section and dispatch sectionCreated',
-        async (withsuspense) => {
+        async (withSuspense) => {
             const sectionCreated = vi.fn();
             rb.monitor.addEventListener('sectionCreated', sectionCreated);
 
             const testOptions = {
                 ...options,
-                suspense: withsuspense ? [Promise.resolve()] : [],
+                suspense: withSuspense ? [Promise.resolve()] : [],
             };
 
             const added = await rb.tryAddSection(
@@ -79,7 +85,7 @@ describe('ReportBuilder', () => {
             expect(eventArg.sectionId).toBe('sec1');
             expect(eventArg.sectionIndex).toBe(0);
             expect(eventArg.pages).toEqual([]);
-            expect(eventArg.isSuspended).toEqual(withsuspense);
+            expect(eventArg.isSuspended).toEqual(withSuspense);
         }
     );
 
@@ -120,7 +126,7 @@ describe('ReportBuilder', () => {
         await rb.tryAddSection(options, testComponents, onPaginationCompleted);
 
         const result = await rb.schedulePagination();
-        await expect(result.suspension).rejects.toThrowError();
+        await expect(result.suspension).rejects.toThrow();
     });
 
     it('schedulePagination should call Paginator.paginate and dispatch lifecycle events', async () => {
@@ -328,6 +334,19 @@ describe('ReportBuilder', () => {
         const result = await rb.getJsonData();
 
         expect(result).toBeNull();
+    });
+
+    it('getJsonData should return default value when jsonDataReader throws an error', async () => {
+        const defaultData = {
+            a: 'a',
+        };
+        vi.mocked(jsonDataReader).mockRejectedValue(
+            new Error('Failed to read JSON data')
+        );
+
+        const result = await rb.getJsonData(defaultData);
+
+        expect(result).toMatchObject(defaultData);
     });
 });
 

@@ -26,6 +26,7 @@ describe('SectionTocPlugin', () => {
 
     describe('onVisitElement', () => {
         it('should add section info for heading element', () => {
+            plugin.beforePagination('section-1');
             plugin.onVisitElement('section-1', mockDomState, mockPageManager);
             expect(plugin.getContentList()).toHaveLength(1);
             expect(plugin.getContentList()[0]).toEqual({
@@ -36,13 +37,25 @@ describe('SectionTocPlugin', () => {
             });
         });
 
+        it('should clear section info before pagination', () => {
+            plugin.beforePagination('section-1');
+            plugin.onVisitElement('section-1', mockDomState, mockPageManager);
+            expect(plugin.getContentList()).toHaveLength(1);
+
+            plugin.beforePagination('section-1');
+            expect(plugin.getContentList()).toHaveLength(0);
+        });
+
         it('should not add section if not a heading', () => {
             mockElement = document.createElement('div');
             mockElement.textContent = 'Not a heading';
             vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
                 mockElement
             );
+
+            plugin.beforePagination('section-1');
             plugin.onVisitElement('section-2', mockDomState, mockPageManager);
+
             expect(plugin.getContentList()).toHaveLength(0);
         });
 
@@ -52,7 +65,9 @@ describe('SectionTocPlugin', () => {
             vi.mocked(mockDomState.currentNode.getNode).mockReturnValue(
                 mockElement
             );
+            plugin.beforePagination('section-1');
             plugin.onVisitElement('section-3', mockDomState, mockPageManager);
+
             expect(plugin.getContentList()).toHaveLength(0);
         });
     });
