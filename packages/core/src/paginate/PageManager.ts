@@ -221,11 +221,17 @@ export class PageManager {
 
     public isOverFlow(): boolean {
         return (
+            this._pageState.pageIsFull ||
             this._pageState.currentPage.getHeight() > this._pageState.pageHeight
         );
     }
 
     public markPageAsFull(): void {
+        logger.debug(
+            logPrefix,
+            'marking page as full',
+            this._pageState.activeElement
+        );
         this._pageState.pageIsFull = true;
     }
 

@@ -25,7 +25,7 @@ describe('callPluginHook', () => {
         const mockPlugin1: PaginationPlugin = {
             name: 'plugin1',
             order: 2,
-            onVisitText: vi.fn().mockImplementation(() => {
+            onVisitText: vi.fn().mockImplementation(function () {
                 callOrder.push('plugin1');
             }),
         };
@@ -33,7 +33,7 @@ describe('callPluginHook', () => {
         const mockPlugin2: PaginationPlugin = {
             name: 'plugin2',
             order: 1,
-            onVisitText: vi.fn().mockImplementation(() => {
+            onVisitText: vi.fn().mockImplementation(function () {
                 callOrder.push('plugin2');
             }),
         };

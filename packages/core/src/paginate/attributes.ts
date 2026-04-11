@@ -53,9 +53,7 @@ function assignAttribute<K extends keyof LayoutOptions>(
     }
 
     const parsedValue = reader(value);
-    if (parsedValue !== undefined) {
-        attributes[key] = parsedValue;
-    }
+    attributes[key] = parsedValue;
 }
 
 export function getNodeLayoutOptionsFromAttribute(

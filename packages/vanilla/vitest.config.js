@@ -5,9 +5,10 @@ export default defineConfig({
         environment: 'happy-dom',
         coverage: {
             exclude: [
+                ...coverageConfigDefaults.exclude,
                 'src/index.ts',
                 'src/debugUtilities/**',
-                ...coverageConfigDefaults.exclude,
+                '**/dist/**',
             ],
             reporter: ['text'],
         },

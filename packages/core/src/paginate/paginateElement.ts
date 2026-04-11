@@ -29,7 +29,7 @@ export function paginateElementAcrossPages(
     }
 
     rollback();
-    logger.debug('Element is too big to fit on a page', currentNode);
+    logger.error('Element is too big to fit on a page', currentNode);
     return SplitResult.None;
 }
 

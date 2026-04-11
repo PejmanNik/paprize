@@ -31,19 +31,22 @@ describe('PageBreakPlugin', () => {
     });
 
     describe('onVisitElement', () => {
-        it('should mark page as full when page break attribute is "true"', () => {
-            mockElement.setAttribute(pageBreakAttributeName, 'true');
+        it.for(['true', ''])(
+            'should mark page as full when page break attribute is "%s"',
+            (value) => {
+                mockElement.setAttribute(pageBreakAttributeName, value);
 
-            plugin.onVisitElement!(
-                id,
-                mockDomState,
-                mockPageManager,
-                mockContext
-            );
+                plugin.onVisitElement!(
+                    id,
+                    mockDomState,
+                    mockPageManager,
+                    mockContext
+                );
 
-            expect(mockPageManager.markPageAsFull).toHaveBeenCalledTimes(1);
-            expect(mockContext.result).toBe(SplitResult.FullNodePlaced);
-        });
+                expect(mockPageManager.markPageAsFull).toHaveBeenCalledTimes(1);
+                expect(mockContext.result).toBe(SplitResult.FullNodePlaced);
+            }
+        );
 
         it.for(['false', 'something'])(
             'should not mark page as full when page break attribute is "%s"',

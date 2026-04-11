@@ -1,26 +1,26 @@
 {
     "name": "paprize",
     "type": "module",
-    "packageManager": "pnpm@10.24.0",
+    "packageManager": "pnpm@10.33.0",
     "scripts": {
         "build:website": "pnpm -r -F @paprize/website build",
         "build": "pnpm -r -F './packages/**' build",
         "release": "pnpm -r -F './packages/**' build && pnpm -r -F './packages/**' publish --access public",
         "test": "pnpm run test:unit && pnpm run test:snapshot",
-        "test:unit": "pnpm -r -F=!@paprize/snapshot-tests --if-present test -- --run",
+        "test:unit": "pnpm -r -F=!@paprize/snapshot-tests -F=!paprize --if-present test -- --run",
         "test:snapshot": "pnpm -r -F @paprize/snapshot-tests test",
         "coverage": "pnpm -r --if-present coverage",
         "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "@eslint/js": "^9.39.1",
-        "@microsoft/api-extractor": "^7.55.1",
-        "eslint": "^9.39.1",
-        "eslint-plugin-react-hooks": "^6.1.1",
-        "eslint-plugin-react-refresh": "^0.4.24",
-        "globals": "^16.5.0",
-        "prettier": "3.6.2",
+        "@changesets/cli": "^2.30.0",
+        "@eslint/js": "^10.0.1",
+        "@microsoft/api-extractor": "^7.58.2",
+        "eslint": "^10.0.1",
+        "eslint-plugin-react-hooks": "next",
+        "eslint-plugin-react-refresh": "^0.5.2",
+        "globals": "^17.4.0",
+        "prettier": "3.8.2",
         "typescript-eslint": "^8.48.0"
     }
 }

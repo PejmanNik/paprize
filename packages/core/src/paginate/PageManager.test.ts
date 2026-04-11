@@ -204,6 +204,11 @@ describe('PageManager', () => {
             mockPageElement.getHeight.mockReturnValue(800);
             expect(pageManager.isOverFlow()).toBe(false);
         });
+
+        test('should return true when page is marked as full', () => {
+            pageManager.markPageAsFull();
+            expect(pageManager.isOverFlow()).toBe(true);
+        });
     });
 
     describe('appendChild', () => {

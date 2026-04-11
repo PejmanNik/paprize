@@ -74,12 +74,12 @@ describe('Paginator', () => {
             leaveElement: vi.fn(),
         };
 
-        vi.mocked(DomState).mockImplementation(
-            () => mockDomState as unknown as DomState
-        );
-        vi.mocked(PageManager).mockImplementation(
-            () => mockPageManager as unknown as PageManager
-        );
+        vi.mocked(DomState).mockImplementation(function () {
+            return mockDomState as unknown as DomState;
+        });
+        vi.mocked(PageManager).mockImplementation(function () {
+            return mockPageManager as unknown as PageManager;
+        });
     });
 
     it('should return plugin result for element node if plugin sets ctx.result', () => {
@@ -234,7 +234,10 @@ describe('Paginator', () => {
 
         Paginator.paginate(root, pageSize, config);
 
-        expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(2);
+        expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(1);
+        expect(
+            mockDomState.goToNextSiblingOrParentSibling
+        ).toHaveBeenCalledTimes(1);
     });
 
     it('should handle split children scenario', () => {
@@ -307,12 +310,14 @@ describe('Paginator', () => {
         expect(afterVisitNode).toHaveBeenCalledTimes(1);
     });
 
-    it('should call afterPagination plugin hook after pagination completes', () => {
+    it('should call beforePagination and afterPagination plugin hooks', () => {
+        const beforePagination = vi.fn();
         const afterPagination = vi.fn();
         config.plugins = [
             {
                 name: 'test-plugin',
                 order: 1,
+                beforePagination,
                 afterPagination,
             },
         ];
@@ -323,17 +328,31 @@ describe('Paginator', () => {
         mockDomState.goToNextNode.mockImplementation(() => {
             mockDomState.completed = true;
         });
+
         vi.mocked(paginateElementAcrossPages).mockReturnValue(
             SplitResult.FullNodePlaced
         );
 
         Paginator.paginate(root, pageSize, config);
 
+        expect(beforePagination).toHaveBeenCalledWith(
+            config.id,
+            mockDomState,
+            mockPageManager
+        );
+        expect(beforePagination).toHaveBeenCalledTimes(1);
+        expect(beforePagination).toHaveBeenCalledWith(
+            config.id,
+            mockDomState,
+            mockPageManager
+        );
+        expect(beforePagination).toHaveBeenCalledBefore(afterPagination);
+
+        expect(afterPagination).toHaveBeenCalledTimes(1);
         expect(afterPagination).toHaveBeenCalledWith(
             config.id,
             mockDomState,
             mockPageManager
         );
-        expect(afterPagination).toHaveBeenCalledTimes(1);
     });
 });

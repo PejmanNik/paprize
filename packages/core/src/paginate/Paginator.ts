@@ -86,6 +86,14 @@ export class Paginator {
     }
 
     private processAllNodes(): void {
+        callPluginHook(
+            this._config.plugins,
+            'beforePagination',
+            this._config.id,
+            this._domState,
+            this._pageManager
+        );
+
         this._domState.goToNextNode();
 
         do {
@@ -134,7 +142,7 @@ export class Paginator {
         logger.debug(logPrefix, "node skipped - couldn't paginate");
 
         DEV: markIgnoredNode(this._domState.currentNode);
-        this._domState.goToNextNode();
+        this._domState.goToNextSiblingOrParentSibling();
     }
 
     private handleFullNodePlaced(): void {
