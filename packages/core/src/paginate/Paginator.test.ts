@@ -75,10 +75,10 @@ describe('Paginator', () => {
         };
 
         vi.mocked(DomState).mockImplementation(
-            () => mockDomState as unknown as DomState
+           function () { return mockDomState as unknown as DomState; }
         );
         vi.mocked(PageManager).mockImplementation(
-            () => mockPageManager as unknown as PageManager
+            function () { return mockPageManager as unknown as PageManager; }
         );
     });
 
@@ -234,7 +234,8 @@ describe('Paginator', () => {
 
         Paginator.paginate(root, pageSize, config);
 
-        expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(2);
+        expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(1);
+        expect(mockDomState.goToNextSiblingOrParentSibling).toHaveBeenCalledTimes(1);
     });
 
     it('should handle split children scenario', () => {

@@ -22,11 +22,12 @@ vi.mock('@paprize/vanilla', () => {
 describe('zeroReport', () => {
     beforeEach(() => {
         vi.mocked(PaprizeReport).mockImplementation(
-            () =>
-                ({
-                    addSection: mockAddSection,
-                    schedulePagination: mockSchedulePagination,
-                }) as unknown as PaprizeReport
+          function () {
+            return {
+                addSection: mockAddSection,
+                schedulePagination: mockSchedulePagination,
+            } as unknown as PaprizeReport;
+          }
         );
     });
 
