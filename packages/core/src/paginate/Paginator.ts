@@ -86,6 +86,14 @@ export class Paginator {
     }
 
     private processAllNodes(): void {
+        callPluginHook(
+            this._config.plugins,
+            'beforePagination',
+            this._config.id,
+            this._domState,
+            this._pageManager
+        );
+
         this._domState.goToNextNode();
 
         do {
