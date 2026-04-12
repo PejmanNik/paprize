@@ -12,4 +12,3 @@ export function copyFile(fileName) {
 }
 
 copyFile('README.md');
-copyFile('CHANGELOG.md');

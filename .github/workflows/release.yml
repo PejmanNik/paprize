@@ -13,6 +13,7 @@ permissions:
   issues: write
   pull-requests: write
   packages: write
+  id-token: write
 
 jobs:
   release:
@@ -20,19 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Create and publish versions
         uses: changesets/action@v1
@@ -43,4 +44,3 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
