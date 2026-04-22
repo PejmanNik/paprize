@@ -17,8 +17,8 @@ const logPrefix = '\x1b[102mPAGE\x1b[0m';
 
 export class PageState {
     public currentPage: PageElement;
-    public activeElement: PageNode | null;
-    public currentElement: PageElement;
+    public activeElement: PageNode | null; // most recently added/handled node
+    public currentElement: PageElement; // the current parent container/context
     public parentStack: PageElement[];
     public pageIsFull: boolean;
     public pageIndex: number;
