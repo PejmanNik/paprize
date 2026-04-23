@@ -111,6 +111,16 @@ describe('PageElement', () => {
         );
     });
 
+    it('should return the internal node when the element is not a clone', () => {
+        const pageElem = new PageElement(
+            element,
+            transaction,
+            defaultPaginationOptions
+        );
+
+        expect(pageElem.getOriginalNode()).toBe(pageElem.getNode());
+    });
+
     it('should call plugins on clone', () => {
         const plugin1 = { onClone: vi.fn() } as unknown as PaginationPlugin;
         const plugin2 = { onClone: vi.fn() } as unknown as PaginationPlugin;
