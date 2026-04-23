@@ -26,8 +26,10 @@ describe('TablePlugin', () => {
 
         mockPageElement = {
             config: {},
-            clonedFrom: {} as PageElement,
-            cloneCount: 2,
+            clonedData: {
+                clonedFrom: {} as PageElement,
+                cloneCount: 2,
+            },
             transaction: {},
             getNode: vi.fn().mockReturnValue(mockEmptyTable),
             getOriginalNode: vi.fn(),
@@ -68,7 +70,9 @@ describe('TablePlugin', () => {
         const tableElement = { tagName: 'TABLE' } as Element;
         const pageElement = {
             ...mockPageElement,
-            clonedFrom: undefined,
+            clonedData: {
+                clonedFrom: undefined,
+            },
         } as PageElement;
 
         plugin.onClone(id, tableElement, pageElement);
@@ -224,7 +228,10 @@ describe('TablePlugin', () => {
                     getNode: vi.fn().mockReturnValue({
                         tagName: 'TABLE',
                     }),
-                    clonedFrom: undefined,
+                    clonedData: {
+                        clonedFrom: undefined,
+                        cloneCount: 0,
+                    },
                 },
             ],
         } as unknown as PageState);
@@ -248,7 +255,10 @@ describe('TablePlugin', () => {
                     getNode: vi.fn().mockReturnValue({
                         tagName: 'TABLE',
                     }),
-                    clonedFrom: clonedTable,
+                    clonedData: {
+                        clonedFrom: clonedTable,
+                        cloneCount: 2,
+                    },
                 },
             ],
         } as unknown as PageState);
@@ -281,7 +291,10 @@ describe('TablePlugin', () => {
                         getNode: vi.fn().mockReturnValue({
                             tagName: 'TABLE',
                         }),
-                        clonedFrom: clonedTable,
+                        clonedData: {
+                            clonedFrom: clonedTable,
+                            cloneCount: 2,
+                        },
                     },
                 ],
             } as unknown as PageState);
@@ -311,7 +324,10 @@ describe('TablePlugin', () => {
                         getNode: vi.fn().mockReturnValue({
                             tagName: 'TABLE',
                         }),
-                        clonedFrom: clonedTable,
+                        clonedData: {
+                            clonedFrom: clonedTable,
+                            cloneCount: 2,
+                        },
                     },
                 ],
             } as unknown as PageState);
@@ -343,7 +359,10 @@ describe('TablePlugin', () => {
                 tagName: 'TABLE',
                 tHead: null,
             }),
-            clonedFrom: clonedTable,
+            clonedData: {
+                clonedFrom: clonedTable,
+                cloneCount: 2,
+            },
             appendChild: vi.fn(),
         } as unknown as PageElement;
 

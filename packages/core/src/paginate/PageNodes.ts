@@ -15,6 +15,16 @@ export const PageNodeType = {
     Text: 'text',
 } as const;
 
+export type ElementCloneData =
+    | {
+          clonedFrom: undefined;
+          cloneCount: 0;
+      }
+    | {
+          clonedFrom: PageElement;
+          cloneCount: number;
+      };
+
 export class PageElement {
     private readonly _node: Element;
 
@@ -22,8 +32,7 @@ export class PageElement {
 
     public readonly type: 'element' = PageNodeType.Element;
     public readonly transaction: Transaction;
-    public readonly clonedFrom?: PageElement;
-    public readonly cloneCount: number;
+    public readonly clonedData: ElementCloneData;
 
     constructor(
         element: Element,
@@ -34,16 +43,23 @@ export class PageElement {
         this._node = element;
         this.transaction = transaction;
         this.config = config;
-        this.clonedFrom = clonedFrom;
-        this.cloneCount = clonedFrom ? clonedFrom.cloneCount + 1 : 0;
+        this.clonedData = clonedFrom
+            ? {
+                  clonedFrom: clonedFrom,
+                  cloneCount: clonedFrom.clonedData.cloneCount + 1,
+              }
+            : {
+                  clonedFrom: undefined,
+                  cloneCount: 0,
+              };
     }
 
-    getOriginalNode(): Node | undefined {
-        let current: PageElement | undefined = this.clonedFrom;
-        while (current?.clonedFrom) {
-            current = current.clonedFrom;
+    getOriginalNode(): SafeElement {
+        let current: PageElement | undefined = this.clonedData.clonedFrom;
+        while (current?.clonedData.clonedFrom) {
+            current = current.clonedData.clonedFrom;
         }
-        return current?._node;
+        return current?._node ?? this._node;
     }
 
     appendChild(node: PageNode): void {

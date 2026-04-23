@@ -48,12 +48,12 @@ export class TablePlugin implements PaginationPlugin {
         const tableElement = pageState.parentStack.find((node) =>
             this._isTable(node.getNode())
         );
-        if (!tableElement || !tableElement.clonedFrom) {
+        if (!tableElement || !tableElement.clonedData.clonedFrom) {
             return;
         }
 
         // need to check previous page elements, so have to use clonedFrom
-        const openTable = tableElement.clonedFrom;
+        const openTable = tableElement.clonedData.clonedFrom;
         const openTableNode = openTable.getNode() as HTMLTableElement;
 
         const header = openTableNode.tHead;
@@ -99,7 +99,7 @@ export class TablePlugin implements PaginationPlugin {
     };
 
     onClone = (_id: string, source: Element, cloned: PageElement) => {
-        if (!this._isTable(source) || !cloned.clonedFrom) {
+        if (!this._isTable(source) || !cloned.clonedData.clonedFrom) {
             return;
         }
 

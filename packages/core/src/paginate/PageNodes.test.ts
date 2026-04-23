@@ -89,8 +89,10 @@ describe('PageElement', () => {
         const clone = pageElem.clone();
 
         expect(clone).toBeInstanceOf(PageElement);
-        expect(clone.clonedFrom).toBe(pageElem);
-        expect(clone.cloneCount).toBe(pageElem.cloneCount + 1);
+        expect(clone.clonedData.clonedFrom).toBe(pageElem);
+        expect(clone.clonedData.cloneCount).toBe(
+            pageElem.clonedData.cloneCount + 1
+        );
     });
 
     it('should return the original element when getOriginalNode is called', () => {
@@ -104,7 +106,19 @@ describe('PageElement', () => {
 
         expect(clone2.getOriginalNode()).toBe(pageElem.getNode());
         expect(clone1.getOriginalNode()).toBe(pageElem.getNode());
-        expect(clone2.cloneCount).toBe(pageElem.cloneCount + 2);
+        expect(clone2.clonedData.cloneCount).toBe(
+            pageElem.clonedData.cloneCount + 2
+        );
+    });
+
+    it('should return the internal node when the element is not a clone', () => {
+        const pageElem = new PageElement(
+            element,
+            transaction,
+            defaultPaginationOptions
+        );
+
+        expect(pageElem.getOriginalNode()).toBe(pageElem.getNode());
     });
 
     it('should call plugins on clone', () => {

@@ -30,6 +30,7 @@ The default plugin set includes:
 
 1. **PageBreakPlugin:** Provides support for the PageBreak component.
 1. **TablePlugin:** Provides consistent HTML table rendering, ensuring that rows are kept intact and not broken across pages.
+1. **OrderedListPlugin** : Keeps numbered lists counting correctly when their content splits across multiple pages.
 
 ## PageBreak Plugin
 
@@ -51,4 +52,16 @@ By default, the Table plugin prevents adding a table header at the end of a page
 import { TablePlugin } from '@paprize/core';
 
 const plugins = [new TablePlugin({ cloneHeader: true })];
+```
+
+## OrderedListPlugin
+
+When a [numbered list (`OL`)](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol) is long enough to span a page break, a naive approach would restart numbering at 1 on the next page. This plugin prevents that by tracking how many items have already been rendered on previous pages and shifting the starting number of each continuation list accordingly.
+
+It also handles the edge case where a single [list item (`LI`)](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/li) itself is split across two pages. in that case, the duplicate item has its number marker hidden so the same number doesn't appear twice, and the item count bookkeeping is adjusted.
+
+```tsx
+import { OrderedListPlugin } from '@paprize/core';
+
+const plugins = [new OrderedListPlugin()];
 ```
