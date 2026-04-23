@@ -7,7 +7,10 @@ export type * from './paginate/RealizedPageSize';
 export type * from './paginate/DomState';
 export type * from './paginate/PaginationPlugin';
 export { layoutOptionsToAttributes } from './paginate/attributes';
-export type { LayoutOptions } from './paginate/LayoutOptions';
+export type {
+    LayoutOptions,
+    KeepOnSamePageOptions,
+} from './paginate/LayoutOptions';
 export type { PaginationOptions } from './paginate/PaginationOptions';
 
 export * from './report/EventDispatcher';

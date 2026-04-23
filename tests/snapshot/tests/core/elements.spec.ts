@@ -152,3 +152,93 @@ test('should not break element with KeepOnSamePage when it does not fit', async 
 
     await expect(paprizePage).toMatchReportSnapshot();
 });
+
+test('should not break element with preferred KeepOnSamePage when does fit in a single page', async ({
+    paprizePage,
+}) => {
+    const app = h('div', { id: 'app' }, [
+        h('div', { id: 'section-1' }, [
+            h('div', { id: 'page-content' }, [
+                h('div', {
+                    id: '1',
+                    style: {
+                        height: '105px',
+                        backgroundColor: '#8b8b8b',
+                    },
+                }),
+                h(
+                    'div',
+                    {
+                        id: '1',
+                        [layoutOptionKeepOnSamePageAttribute]: 'prefer',
+                    },
+                    [
+                        h('div', {
+                            id: '2',
+                            style: {
+                                height: '100px',
+                                backgroundColor: '#dde8d0ff',
+                            },
+                        }),
+                        h('div', {
+                            id: '2',
+                            style: {
+                                height: '200px',
+                                backgroundColor: '#d0d7e8ff',
+                            },
+                        }),
+                    ]
+                ),
+            ]),
+        ]),
+    ]);
+
+    await paprizePage.core.setup(app);
+
+    await expect(paprizePage).toMatchReportSnapshot();
+});
+
+test('should break element with preferred KeepOnSamePage when does not fit', async ({
+    paprizePage,
+}) => {
+    const app = h('div', { id: 'app' }, [
+        h('div', { id: 'section-1' }, [
+            h('div', { id: 'page-content' }, [
+                h('div', {
+                    id: '1',
+                    style: {
+                        height: '105px',
+                        backgroundColor: '#8b8b8b',
+                    },
+                }),
+                h(
+                    'div',
+                    {
+                        id: '1',
+                        [layoutOptionKeepOnSamePageAttribute]: 'prefer',
+                    },
+                    [
+                        h('div', {
+                            id: '2',
+                            style: {
+                                height: '201px',
+                                backgroundColor: '#dde8d0ff',
+                            },
+                        }),
+                        h('div', {
+                            id: '2',
+                            style: {
+                                height: '201px',
+                                backgroundColor: '#d0d7e8ff',
+                            },
+                        }),
+                    ]
+                ),
+            ]),
+        ]),
+    ]);
+
+    await paprizePage.core.setup(app);
+
+    await expect(paprizePage).toMatchReportSnapshot();
+});

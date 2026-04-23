@@ -19,7 +19,18 @@ const layoutOptionsAttributes: LayoutOptionsAttributes = {
     },
     keepOnSamePage: {
         key: layoutOptionKeepOnSamePageAttribute,
-        reader: (value) => value === 'true',
+        reader: (value) => {
+            switch (value) {
+                case 'true':
+                    return true;
+                case 'false':
+                    return false;
+                case 'prefer':
+                    return 'prefer';
+                default:
+                    return defaultLayoutOptions.keepOnSamePage;
+            }
+        },
     },
     hyphenationDisabled: {
         key: layoutOptionHyphenationDisabledAttribute,

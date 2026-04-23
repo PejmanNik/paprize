@@ -376,7 +376,7 @@ describe('TablePlugin', () => {
         expect(newTable.appendChild).toHaveBeenCalled();
     });
 
-    it('should set keepOnSamePage to true for table rows', () => {
+    it('should set keepOnSamePage to "prefer" for table rows', () => {
         const plugin = new TablePlugin({ cloneFooter: true });
         const context: VisitContext = {};
 
@@ -386,7 +386,7 @@ describe('TablePlugin', () => {
 
         plugin.onVisitElement('id', mockDomState, mockPageManager, context);
 
-        expect(mockDomState.currentNode.config.keepOnSamePage).toBeTruthy();
+        expect(mockDomState.currentNode.config.keepOnSamePage).toBe('prefer');
     });
 
     it('should ignore table footer when clone footer is true', () => {

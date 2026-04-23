@@ -1,4 +1,15 @@
 /**
+ * Controls how elements handle page breaks when they exceed the remaining space on a page.
+ * - `true` (**Strict Keep**): Forces the element to stay whole. Moves it to the next page
+ * if it doesn't fit. If it's larger than a full empty page, it is dropped.
+ * - `false` (**Allow Split**): Prioritizes rendering immediately. Splits the element across
+ * pages; if splitting is impossible, it moves to the next page or is dropped.
+ * - `'prefer'` (**Balanced**): Attempts to keep the element whole by moving it to the next
+ * page first. If it still doesn't fit a full page, it falls back to splitting.
+ */
+export type KeepOnSamePageOptions = true | false | 'prefer';
+
+/**
  * Layout options for the pagination engine
  */
 export interface LayoutOptions {
@@ -10,12 +21,9 @@ export interface LayoutOptions {
 
     /**
      * Prevents an element from being split across pages.
-     * If an element does not fit in the available space on the current page,
-     * it will be moved entirely to the next page. If it still does not fit on an empty page,
-     * it will be skipped and not rendered.
      * @defaultValue false
      */
-    keepOnSamePage?: boolean;
+    keepOnSamePage?: KeepOnSamePageOptions;
 
     /**
      * Disables automatic word hyphenation.

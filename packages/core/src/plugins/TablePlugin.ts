@@ -88,7 +88,7 @@ export class TablePlugin implements PaginationPlugin {
     ) => {
         const node = domState.currentNode.getNode();
         if (node.tagName === 'TR') {
-            domState.currentNode.config.keepOnSamePage = true;
+            domState.currentNode.config.keepOnSamePage = 'prefer';
         } else if (node.tagName === 'TFOOT' && this._options.cloneFooter) {
             // ignore normal footer in the last page, as we are duplicating it in the onClone
             context.result = SplitResult.FullNodePlaced;

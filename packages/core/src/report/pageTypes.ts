@@ -29,11 +29,10 @@ export interface PageMargin {
 }
 
 /**
- * Describes the page orientation.
- *
- * - 'portrait' (default): the page is taller than it is wide. Use the provided
- *   width and height as-is.
- * - 'landscape': the page is wider than it is tall. When applying landscape,
- *   swap the width and height.
+ * Defines the physical orientation of the page.
+ * - `portrait`: Standard vertical orientation (height > width).
+ * Dimensions are applied exactly as defined. **Default.**
+ * - `landscape`: Horizontal orientation (width > height).
+ * The provided width and height values are automatically swapped.
  */
 export type PageOrientation = 'portrait' | 'landscape';

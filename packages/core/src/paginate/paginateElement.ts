@@ -29,6 +29,11 @@ export function paginateElementAcrossPages(
     }
 
     rollback();
+
+    if (currentNode.config.keepOnSamePage === 'prefer') {
+        return tryPlaceElementWithoutChildren(currentNode, pageManager);
+    }
+
     logger.error('Element is too big to fit on a page', currentNode);
     return SplitResult.None;
 }
@@ -53,15 +58,24 @@ function tryPlaceElement(
         }
     }
 
-    if (
-        currentNode.config.keepOnSamePage ||
-        currentNode.getChildrenCount() === 0
-    ) {
-        // cannot (or not allowed to) split from its children
+    // allowed to split the element
+    if (currentNode.config.keepOnSamePage === false) {
+        return tryPlaceElementWithoutChildren(currentNode, pageManager);
+    }
+
+    return SplitResult.None;
+}
+
+function tryPlaceElementWithoutChildren(
+    currentNode: PageElement,
+    pageManager: PageManager
+): SplitResult {
+    if (currentNode.getChildrenCount() === 0) {
+        // cannot split the element
         return SplitResult.None;
     }
 
-    // Try placing only the element shell (children will render later)
+    // Try placing only the element without children (children will render later)
     const clonedNode = pageManager.appendChild(currentNode, false);
     if (pageManager.isOverFlow()) {
         clonedNode.remove();
