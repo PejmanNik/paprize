@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- 8e2ef6e: add `prefer` option to keepOnSamePage
+- c73b65f: add OrderedListPlugin to manage numbered lists across page breaks
+
 ## 0.1.0
 
 ### Minor Changes
