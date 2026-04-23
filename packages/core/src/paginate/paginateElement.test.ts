@@ -3,11 +3,12 @@ import { paginateElementAcrossPages } from './paginateElement';
 import { SplitResult } from './SplitResult';
 import type { PageElement } from './PageNodes';
 import type { PageManager } from './PageManager';
+import type { KeepOnSamePageOptions } from './LayoutOptions';
 
 function createMockPageElement({
     height = 10,
     childrenCount = 0,
-    keepOnSamePage = false,
+    keepOnSamePage = false as KeepOnSamePageOptions,
 } = {}): PageElement {
     return {
         getHeight: vi.fn(() => height),
@@ -155,7 +156,7 @@ describe('paginateElementAcrossPages', () => {
         expect(pageManager.nextPage).toHaveBeenCalledOnce();
     });
 
-    it("returns None if keepOnSamePage is set and node can't fit", () => {
+    it("returns None if keepOnSamePage is set 'true' and node can't fit", () => {
         const element = createMockPageElement({
             childrenCount: 2,
             keepOnSamePage: true,
@@ -178,5 +179,29 @@ describe('paginateElementAcrossPages', () => {
         const result = paginateElementAcrossPages(element, pageManager);
         expect(result).toBe(SplitResult.None);
         expect(pageManager.nextPage).toHaveBeenCalledOnce();
+    });
+
+    it("falls back to SplitChildren if keepOnSamePage is set 'prefer' and node can't fit", () => {
+        const element = createMockPageElement({
+            childrenCount: 2,
+            keepOnSamePage: 'prefer',
+        });
+        const pageManager = createMockPageManager({
+            emptySpace: 5,
+            overflow: true,
+        });
+        // first call: not enough space for full node, second call: enough for shell
+        pageManager.hasEmptySpace = vi
+            .fn()
+            .mockReturnValueOnce(false)
+            .mockReturnValueOnce(true);
+
+        pageManager.isOverFlow = vi
+            .fn()
+            .mockReturnValueOnce(true)
+            .mockReturnValue(false);
+
+        const result = paginateElementAcrossPages(element, pageManager);
+        expect(result).toBe(SplitResult.SplitChildren);
     });
 });

@@ -70,6 +70,23 @@ describe('getNodeLayoutOptionsFromAttribute', () => {
             hyphen: 'c', // child's own
         });
     });
+
+    it.for([
+        { value: 'true', expected: true },
+        { value: 'false', expected: false },
+        { value: 'prefer', expected: 'prefer' as const },
+        { value: 'invalid', expected: false }, // default fallback
+    ])(
+        'should parse $value as a valid value for keepOnSamePage',
+        ({ value, expected }) => {
+            const element = document.createElement('div');
+            element.setAttribute('data-pz-keep-on-same-page', value);
+
+            const result = getNodeLayoutOptionsFromAttribute(element);
+
+            expect(result.keepOnSamePage).toEqual(expected);
+        }
+    );
 });
 
 describe('layoutOptionsToAttributes', () => {
