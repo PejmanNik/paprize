@@ -1,11 +1,10 @@
 # Changelog
 
-## 0.1.1
+## 0.2.0
 
-### Patch Changes
+### Minor Changes
 
 - Updated dependencies [8e2ef6e]
-- Updated dependencies [c73b65f]
     - @paprize/core@0.2.0
 
 ## 0.1.0

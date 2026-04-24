@@ -1,5 +1,12 @@
 # @paprize/puppeteer
 
+## 0.2.0
+
+### Minor Changes
+
+- Updated dependencies [8e2ef6e]
+    - @paprize/core@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
