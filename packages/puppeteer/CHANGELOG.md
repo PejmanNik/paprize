@@ -1,5 +1,17 @@
 # @paprize/puppeteer
 
+## 0.3.0
+
+### Fixed
+
+- Fix missing type deceleration
+
+### Changed
+
+- Updated dependencies
+    - @paprize/core@0.3.0
+- Improve zero report by preloading it to page
+
 ## 0.2.0
 
 ### Minor Changes

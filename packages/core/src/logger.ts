@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import loglevel from 'loglevel';
 import { loggerName } from './constants';
 

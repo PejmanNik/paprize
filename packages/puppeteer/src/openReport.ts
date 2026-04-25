@@ -31,10 +31,20 @@ export async function openReport(
         return jsonDataStr;
     });
 
-    await page.goto(reportUrl.toString(), {
-        waitUntil: 'networkidle0',
-        timeout,
+    await page.goto(reportUrl.toString());
+
+    // preload the paprize-zero.js
+    const task1 = page.addScriptTag({
+        type: 'module',
+        path: `${import.meta.dirname}/paprize-zero.js`,
     });
+
+    const task2 = page.waitForNetworkIdle({
+        idleTime: 500,
+        timeout: timeout,
+    });
+
+    await Promise.all([task1, task2]);
 
     await page
         .waitForFunction(`window.${paprize_isInitialized} === true`, {
@@ -45,9 +55,8 @@ export async function openReport(
                 'Using Zero report mode (standard Paprize report format not detected)'
             );
 
-            return page.addScriptTag({
-                type: 'module',
-                path: `${import.meta.dirname}/paprize-zero.js`,
+            return page.evaluate(() => {
+                return window.runZeroReport();
             });
         });
 

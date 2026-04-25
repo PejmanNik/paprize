@@ -6,7 +6,7 @@ import { paginateElementAcrossPages } from './paginateElement';
 import { paginateTextByWord } from './paginateText';
 import { SplitResult } from './SplitResult';
 import { Transaction } from './Transaction';
-import logger from 'loglevel';
+import logger from '../logger';
 import {
     defaultPaginationOptions,
     type PaginationOptions,
@@ -16,6 +16,7 @@ import { callPluginHook, type VisitContext } from './PaginationPlugin';
 import { attributePrefix, tempContainerClassName } from '../constants';
 import { isDebugMode } from '../debugUtilities/debugMode';
 import { isElement, moveOffscreen } from './domUtilities';
+import { pageNodeToString } from '../utils';
 
 const logPrefix = '\x1b[103mPAGINATOR\x1b[0m';
 
@@ -139,7 +140,11 @@ export class Paginator {
     }
 
     private handleNodeSkipped(): void {
-        logger.debug(logPrefix, "node skipped - couldn't paginate");
+        logger.error(
+            'Node is too big to fit on a page. Skipping node:',
+            pageNodeToString(this._domState.currentNode),
+            this._domState.currentNode
+        );
 
         DEV: markIgnoredNode(this._domState.currentNode);
         this._domState.goToNextSiblingOrParentSibling();

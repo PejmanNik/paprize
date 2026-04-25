@@ -21,12 +21,13 @@ export default defineConfig([
         },
         rules: {
             'no-unused-labels': 'off',
+            'no-restricted-imports': ['error', 'loglevel'],
         },
     },
     {
         files: ['packages/react/**/*.{ts,tsx}'],
         extends: [
-            reactHooks.configs['recommended-latest'],
+            reactHooks.configs.flat['recommended-latest'],
             reactRefresh.configs.vite,
         ],
     },

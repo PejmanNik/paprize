@@ -7,7 +7,6 @@
         "ssg": "pnpm tsx ssg.ts"
     },
     "dependencies": {
-        "@paprize/core": "workspace:*",
         "@paprize/puppeteer": "workspace:*",
         "puppeteer": "^24.23.0"
     },

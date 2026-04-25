@@ -6,8 +6,7 @@ import {
     sectionPageOrientationAttribute,
     sectionPageSizeAttribute,
     sectionPageWidthAttribute,
-    runZeroReport,
-} from './zeroReportUtils';
+} from './zeroReport';
 
 const mockAddSection = vi.fn();
 const mockSchedulePagination = vi.fn();
@@ -21,14 +20,12 @@ vi.mock('@paprize/vanilla', () => {
 
 describe('zeroReport', () => {
     beforeEach(() => {
-        vi.mocked(PaprizeReport).mockImplementation(
-          function () {
+        vi.mocked(PaprizeReport).mockImplementation(function () {
             return {
                 addSection: mockAddSection,
                 schedulePagination: mockSchedulePagination,
             } as unknown as PaprizeReport;
-          }
-        );
+        });
     });
 
     it('should add sections for elements with sectionAttribute', async () => {
@@ -37,7 +34,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute} id="s2">Section 2</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledTimes(2);
         expect(mockAddSection).toHaveBeenCalledWith(
@@ -54,7 +51,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute} ${sectionPageSizeAttribute}="A5">Section</div>
         `;
 
-        await import('./zeroReport');
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -74,7 +71,7 @@ describe('zeroReport', () => {
                  ${sectionPageHeightAttribute}="200mm">Section</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -88,7 +85,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute} ${sectionPageMarginAttribute}="Normal">Section</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -102,7 +99,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute} ${sectionPageSizeAttribute}="A5" ${sectionPageOrientationAttribute}="landscape">Section</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -116,7 +113,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute}>Section</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -133,7 +130,7 @@ describe('zeroReport', () => {
             <div ${sectionAttribute}>Section</div>
         `;
 
-        await runZeroReport();
+        await window.runZeroReport();
 
         expect(mockAddSection).toHaveBeenCalledWith(
             expect.objectContaining({

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0
+
+### Fixed
+
+- Fix missing type deceleration
+
+### Changed
+
+- Drop the pageIsFull flag in favor of using nextPage
+- Improve error for skipped elements
+
 ## 0.2.0
 
 ### Minor Changes

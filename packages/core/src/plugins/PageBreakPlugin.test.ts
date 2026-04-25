@@ -24,7 +24,7 @@ describe('PageBreakPlugin', () => {
         } as unknown as Mocked<DomState & { currentNode: PageElement }>;
 
         mockPageManager = {
-            markPageAsFull: vi.fn(),
+            nextPage: vi.fn(),
         } as unknown as Mocked<PageManager>;
 
         mockContext = {};
@@ -32,7 +32,7 @@ describe('PageBreakPlugin', () => {
 
     describe('onVisitElement', () => {
         it.for(['true', ''])(
-            'should mark page as full when page break attribute is "%s"',
+            'should go to next page when page break attribute is "%s"',
             (value) => {
                 mockElement.setAttribute(pageBreakAttributeName, value);
 
@@ -43,13 +43,13 @@ describe('PageBreakPlugin', () => {
                     mockContext
                 );
 
-                expect(mockPageManager.markPageAsFull).toHaveBeenCalledTimes(1);
+                expect(mockPageManager.nextPage).toHaveBeenCalledTimes(1);
                 expect(mockContext.result).toBe(SplitResult.FullNodePlaced);
             }
         );
 
         it.for(['false', 'something'])(
-            'should not mark page as full when page break attribute is "%s"',
+            'should not go to next page when page break attribute is "%s"',
             (value) => {
                 mockElement.setAttribute(pageBreakAttributeName, value);
 
@@ -60,12 +60,12 @@ describe('PageBreakPlugin', () => {
                     mockContext
                 );
 
-                expect(mockPageManager.markPageAsFull).not.toHaveBeenCalled();
+                expect(mockPageManager.nextPage).not.toHaveBeenCalled();
                 expect(mockContext.result).toBeUndefined();
             }
         );
 
-        it('should not mark page as full when page break attribute is not set', () => {
+        it('should not mark go to next page when page break attribute is not set', () => {
             mockElement.removeAttribute(pageBreakAttributeName);
             plugin.onVisitElement!(
                 id,
@@ -74,7 +74,7 @@ describe('PageBreakPlugin', () => {
                 mockContext
             );
 
-            expect(mockPageManager.markPageAsFull).not.toHaveBeenCalled();
+            expect(mockPageManager.nextPage).not.toHaveBeenCalled();
             expect(mockContext.result).toBeUndefined();
         });
 
@@ -103,7 +103,7 @@ describe('PageBreakPlugin', () => {
                 mockContext
             );
 
-            expect(mockPageManager.markPageAsFull).toHaveBeenCalledTimes(1);
+            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(1);
             expect(mockContext.result).toBe(SplitResult.FullNodePlaced);
         });
     });
