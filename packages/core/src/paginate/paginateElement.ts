@@ -1,4 +1,3 @@
-import logger from '../logger';
 import { type PageManager } from './PageManager';
 import { SplitResult } from './SplitResult';
 import type { PageElement } from './PageNodes';
@@ -34,7 +33,6 @@ export function paginateElementAcrossPages(
         return tryPlaceElementWithoutChildren(currentNode, pageManager);
     }
 
-    logger.error('Element is too big to fit on a page', currentNode);
     return SplitResult.None;
 }
 

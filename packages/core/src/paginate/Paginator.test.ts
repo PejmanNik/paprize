@@ -21,15 +21,15 @@ import { tempContainerClassName } from '../constants';
 import { paginateTextByWord } from './paginateText';
 import { paginateElementAcrossPages } from './paginateElement';
 import { disableDebugMode, enableDebugMode } from '../debugUtilities/debugMode';
+import { pageNodeToString } from '../utils';
 
 vi.mock('./DomState');
 vi.mock('./PageManager');
 vi.mock('./Transaction');
 vi.mock('./paginateElement');
 vi.mock('./paginateText');
-vi.mock('../utilities/pageNodeMarker', () => ({
-    markIgnoredNode: vi.fn(),
-}));
+vi.mock('../debugUtilities/pageNodeMarker');
+vi.mock('../utils');
 
 describe('Paginator', () => {
     let root: Element;
@@ -234,6 +234,7 @@ describe('Paginator', () => {
 
         Paginator.paginate(root, pageSize, config);
 
+        expect(vi.mocked(pageNodeToString)).toHaveBeenCalledWith(node);
         expect(mockDomState.goToNextNode).toHaveBeenCalledTimes(1);
         expect(
             mockDomState.goToNextSiblingOrParentSibling
