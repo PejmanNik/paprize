@@ -21,6 +21,7 @@ export default defineConfig([
         },
         rules: {
             'no-unused-labels': 'off',
+            "no-restricted-imports": ["error", "loglevel"]
         },
     },
     {

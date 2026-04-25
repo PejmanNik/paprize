@@ -6,7 +6,7 @@ import { paginateElementAcrossPages } from './paginateElement';
 import { paginateTextByWord } from './paginateText';
 import { SplitResult } from './SplitResult';
 import { Transaction } from './Transaction';
-import logger from 'loglevel';
+import logger from '../logger';
 import {
     defaultPaginationOptions,
     type PaginationOptions,
