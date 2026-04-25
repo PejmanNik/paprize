@@ -109,7 +109,7 @@ describe('paginateText', () => {
 
             const result = paginateTextByWord(mockText, mockPageManager);
             expect(result).toBe(SplitResult.FullNodePlaced);
-            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(1);
+            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(2);
         });
 
         it('should creates a new page before hyphenation if needed', () => {
@@ -135,7 +135,10 @@ describe('paginateText', () => {
             const result = paginateTextByWord(mockText, mockPageManager);
             expect(result).toBe(SplitResult.FullNodePlaced);
 
-            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(2);
+            // one for try on a fresh page
+            // one for the actual hyphenation attempt
+            // one after hyphenation to place the remainder in next page
+            expect(mockPageManager.nextPage).toHaveBeenCalledTimes(3);
         });
     });
 
@@ -155,7 +158,7 @@ describe('paginateText', () => {
 
             const result = hyphenation('testing', '-', mockPageManager);
             expect(result).toBe('sting');
-            expect(mockPageManager.markPageAsFull).toHaveBeenCalled();
+            expect(mockPageManager.nextPage).toHaveBeenCalled();
         });
 
         it('should handle single character words', () => {
@@ -168,7 +171,7 @@ describe('paginateText', () => {
             mockPageManager.hasEmptySpace.mockReturnValue(false);
             const result = hyphenation('test', '-', mockPageManager);
             expect(result).toBe('test');
-            expect(mockPageManager.markPageAsFull).toHaveBeenCalled();
+            expect(mockPageManager.nextPage).toHaveBeenCalled();
         });
     });
 

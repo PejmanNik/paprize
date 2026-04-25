@@ -20,7 +20,9 @@ function createMockPageElement(): Mocked<PageElement> {
         getHeight: vi.fn().mockReturnValue(0),
         appendChild: vi.fn(),
         clone: vi.fn(),
-        getNode: vi.fn(),
+        getNode: vi.fn(() => ({
+            cloneNode: () => document.createElement('div'),
+        })),
         remove: vi.fn(),
         isEmpty: vi.fn().mockReturnValue(false),
         type: PageNodeType.Element,
@@ -58,13 +60,6 @@ describe('PageManager', () => {
     });
 
     describe('hasEmptySpace', () => {
-        test('should return false when page is marked as full regardless of height', () => {
-            mockPageElement.getHeight.mockReturnValue(100);
-            pageManager.markPageAsFull();
-
-            expect(pageManager.hasEmptySpace(1)).toBe(false);
-        });
-
         test('should return true when there is space and no element height provided', () => {
             mockPageElement.getHeight.mockReturnValue(pageSize.height - 100);
 
@@ -204,11 +199,6 @@ describe('PageManager', () => {
             mockPageElement.getHeight.mockReturnValue(800);
             expect(pageManager.isOverFlow()).toBe(false);
         });
-
-        test('should return true when page is marked as full', () => {
-            pageManager.markPageAsFull();
-            expect(pageManager.isOverFlow()).toBe(true);
-        });
     });
 
     describe('appendChild', () => {
@@ -299,11 +289,13 @@ describe('PageManager', () => {
             );
 
             pageManager.startTransaction();
-            pageManager.markPageAsFull();
+            pageManager.nextPage();
+            pageManager.nextPage();
+            expect(pageManager.getPageState().pageIndex).toBe(2);
 
             callbacks.forEach((cb) => cb());
 
-            expect(pageManager.hasEmptySpace()).toBe(true);
+            expect(pageManager.getPageState().pageIndex).toBe(0);
         });
     });
 

@@ -20,7 +20,6 @@ export class PageState {
     public activeElement: PageNode | null; // most recently added/handled node
     public currentElement: PageElement; // the current parent container/context
     public parentStack: PageElement[];
-    public pageIsFull: boolean;
     public pageIndex: number;
     public pageHeight: number;
 
@@ -29,7 +28,6 @@ export class PageState {
         activeElement: PageNode | null,
         currentElement: PageElement,
         parentStack: PageElement[],
-        pageIsFull: boolean,
         pageIndex: number,
         pageHeight: number
     ) {
@@ -37,7 +35,6 @@ export class PageState {
         this.activeElement = activeElement;
         this.currentElement = currentElement;
         this.parentStack = parentStack;
-        this.pageIsFull = pageIsFull;
         this.pageIndex = pageIndex;
         this.pageHeight = pageHeight;
     }
@@ -53,7 +50,6 @@ export class PageState {
             null,
             currentPage,
             parentStack,
-            false,
             pageIndex,
             pageHeight
         );
@@ -65,7 +61,6 @@ export class PageState {
             this.activeElement,
             this.currentElement,
             [...this.parentStack],
-            this.pageIsFull,
             this.pageIndex,
             this.pageHeight
         );
@@ -212,27 +207,16 @@ export class PageManager {
 
     public hasEmptySpace(elementHeight?: number): boolean {
         return (
-            !this._pageState.pageIsFull &&
             this._pageState.currentPage.getHeight() +
                 (elementHeight || 0.0001) <=
-                this._pageState.pageHeight
+            this._pageState.pageHeight
         );
     }
 
     public isOverFlow(): boolean {
         return (
-            this._pageState.pageIsFull ||
             this._pageState.currentPage.getHeight() > this._pageState.pageHeight
         );
-    }
-
-    public markPageAsFull(): void {
-        logger.debug(
-            logPrefix,
-            'marking page as full',
-            this._pageState.activeElement
-        );
-        this._pageState.pageIsFull = true;
     }
 
     public appendChild(node: PageElement, withChildren: boolean): PageElement {

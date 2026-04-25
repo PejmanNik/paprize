@@ -146,7 +146,7 @@ export function hyphenation(
             // overflow: revert to previous appended
             textNode.textContent = appended ? appended + hyphen : '';
 
-            pageManager.markPageAsFull();
+            pageManager.nextPage();
 
             // return leftover starting from the char that did not fit
             return word.slice(i);

@@ -25,7 +25,7 @@ export class PageBreakPlugin implements PaginationPlugin {
             .getAttribute(pageBreakAttributeName);
 
         if (attr === 'true' || attr === '') {
-            pageManager.markPageAsFull();
+            pageManager.nextPage();
 
             // ignore the page break node itself
             context.result = SplitResult.FullNodePlaced;
