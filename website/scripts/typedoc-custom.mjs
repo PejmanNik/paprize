@@ -12,6 +12,10 @@ export function load(app) {
                 title: page.model.name,
                 sidebar_position: 99,
             };
+
+            if (page.model.readme) {
+                delete page.model.readme;
+            }
         }
     );
 

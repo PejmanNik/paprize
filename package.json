@@ -13,14 +13,14 @@
         "lint": "eslint && prettier '*.{js,ts,tsx,mjs,cjs,json,html}' --check"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.30.0",
-        "@eslint/js": "^10.0.1",
-        "@microsoft/api-extractor": "^7.58.2",
-        "eslint": "^10.0.1",
-        "eslint-plugin-react-hooks": "next",
-        "eslint-plugin-react-refresh": "^0.5.2",
-        "globals": "^17.4.0",
-        "prettier": "3.8.2",
-        "typescript-eslint": "^8.48.0"
+        "@changesets/cli": "catalog:",
+        "@eslint/js": "catalog:",
+        "@microsoft/api-extractor": "catalog:",
+        "eslint": "catalog:",
+        "eslint-plugin-react-hooks": "catalog:",
+        "eslint-plugin-react-refresh": "catalog:",
+        "globals": "catalog:",
+        "prettier": "catalog:",
+        "typescript-eslint": "catalog:"
     }
 }

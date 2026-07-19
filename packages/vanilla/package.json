@@ -1,6 +1,6 @@
 {
     "name": "@paprize/vanilla",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Paginate DOM elements for professional, print-ready reports",
     "type": "module",
     "files": [
@@ -51,7 +51,7 @@
     "devDependencies": {
         "@paprize/config": "workspace:*",
         "@vitest/coverage-v8": "catalog:",
-        "happy-dom": "^20.0.0",
+        "happy-dom": "catalog:",
         "preact": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",

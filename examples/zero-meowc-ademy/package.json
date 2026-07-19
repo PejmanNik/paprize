@@ -8,10 +8,10 @@
     },
     "dependencies": {
         "@paprize/puppeteer": "workspace:*",
-        "puppeteer": "^24.23.0"
+        "puppeteer": "catalog:"
     },
     "devDependencies": {
-        "tsx": "^4.20.6",
+        "tsx": "catalog:",
         "typescript": "catalog:"
     }
 }

@@ -13,17 +13,17 @@
         "@paprize/core": "workspace:*",
         "@paprize/puppeteer": "workspace:*",
         "@paprize/react": "workspace:*",
-        "puppeteer": "^24.23.0",
+        "puppeteer": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "recharts": "^3.2.1"
+        "recharts": "catalog:"
     },
     "devDependencies": {
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
-        "@vitejs/plugin-react-swc": "^4.1.0",
-        "globals": "^17.4.0",
-        "tsx": "^4.20.6",
+        "@vitejs/plugin-react-swc": "catalog:",
+        "globals": "catalog:",
+        "tsx": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:"
     }

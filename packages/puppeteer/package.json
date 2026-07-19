@@ -1,6 +1,6 @@
 {
     "name": "@paprize/puppeteer",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Convert HTML reports to print-ready PDFs",
     "type": "module",
     "files": [
@@ -39,19 +39,19 @@
         "test": "vitest"
     },
     "devDependencies": {
-        "@paprize/vanilla": "workspace:*",
         "@paprize/core": "workspace:*",
-        "@types/serve-handler": "^6.1.4",
+        "@paprize/vanilla": "workspace:*",
+        "@types/serve-handler": "catalog:",
         "esbuild": "catalog:",
-        "puppeteer-core": "^24.23.0",
+        "puppeteer-core": "catalog:",
         "typescript": "catalog:",
-        "unplugin-dts": "^1.0.0-beta.6",
+        "unplugin-dts": "catalog:",
         "vitest": "catalog:"
     },
     "peerDependencies": {
         "puppeteer-core": ">=24.0.0"
     },
     "dependencies": {
-        "serve-handler": "^6.1.6"
+        "serve-handler": "catalog:"
     }
 }

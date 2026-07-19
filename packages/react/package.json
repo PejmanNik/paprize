@@ -1,6 +1,6 @@
 {
     "name": "@paprize/react",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "React library for creating professional, print-ready reports",
     "type": "module",
     "files": [
@@ -51,7 +51,7 @@
         "@paprize/config": "workspace:*",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
-        "@vitejs/plugin-react-swc": "^4.1.0",
+        "@vitejs/plugin-react-swc": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "typescript": "catalog:",

@@ -1,5 +1,11 @@
 # @paprize/puppeteer
 
+## 0.4.0
+
+### Changed
+
+- Upgrade dependencies
+
 ## 0.3.0
 
 ### Fixed
