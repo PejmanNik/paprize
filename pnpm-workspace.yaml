@@ -61,4 +61,4 @@ catalog:
   unplugin-dts: ^1.0.3
   vite: ^8.1.5
   vite-plugin-checker: ^0.14.0
-  vitest: ^4.1.10
+  vitest: ^4.1.11
