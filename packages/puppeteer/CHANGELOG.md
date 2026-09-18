@@ -1,5 +1,13 @@
 # @paprize/puppeteer
 
+## 0.4.1
+
+### Changed
+- Add `@paprize/core` to dependencies
+ 
+### Fixed
+- Fix missing type deceleration for functions
+
 ## 0.4.0
 
 ### Changed
