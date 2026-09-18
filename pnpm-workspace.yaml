@@ -4,13 +4,6 @@ packages:
   - website
   - utils/*
   - tests/*
-onlyBuiltDependencies:
-  - "@swc/core"
-  - core-js
-  - core-js-pure
-  - esbuild
-  - puppeteer
-
 catalog:
   "@changesets/cli": ^2.31.1
   "@docusaurus/core": ^3.10.2
@@ -62,3 +55,8 @@ catalog:
   vite: ^8.1.5
   vite-plugin-checker: ^0.14.0
   vitest: ^4.1.11
+allowBuilds:
+  '@swc/core': true
+  core-js: true
+  esbuild: true
+  puppeteer: true
