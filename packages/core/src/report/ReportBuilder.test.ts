@@ -65,6 +65,7 @@ describe('ReportBuilder', () => {
     it.for([true, false])(
         'tryAddSection should add a section and dispatch sectionCreated',
         async (withSuspense) => {
+            document.getElementById(globalStyleId)?.remove();
             const sectionCreated = vi.fn();
             rb.monitor.addEventListener('sectionCreated', sectionCreated);
 
@@ -79,6 +80,11 @@ describe('ReportBuilder', () => {
                 () => {}
             );
             expect(added).toBe(true);
+
+            const stylesheet =
+                document.getElementById(globalStyleId)?.textContent;
+            expect(stylesheet).toContain('@page section-sec1{margin:0;');
+            expect(stylesheet).not.toContain('margin:none;');
 
             expect(sectionCreated).toHaveBeenCalled();
             const eventArg = sectionCreated.mock.calls[0][0];
