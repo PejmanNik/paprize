@@ -80,6 +80,11 @@ describe('ReportBuilder', () => {
             );
             expect(added).toBe(true);
 
+            const stylesheet =
+                document.getElementById(globalStyleId)?.textContent;
+            expect(stylesheet).toContain('@page section-sec1{margin:0;');
+            expect(stylesheet).not.toContain('margin:none;');
+
             expect(sectionCreated).toHaveBeenCalled();
             const eventArg = sectionCreated.mock.calls[0][0];
             expect(eventArg.sectionId).toBe('sec1');

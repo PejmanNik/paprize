@@ -102,7 +102,7 @@ const section = (sectionId: string): CSSProperties => ({
 
 function sectionPageMedia(sectionId: string, size: PageSize): string {
     return `@page section-${sectionId} {
-      margin: none; 
+      margin: 0;
       size:${size.width} ${size.height}; 
       width:${size.width};
       height:${size.height};
