@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- 229cf54: Fix invalid CSS in generated section page rules by using `margin: 0` instead of `margin: none`.
+
 ## 0.4.0
 
 ### Changed

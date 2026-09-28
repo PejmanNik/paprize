@@ -1,11 +1,20 @@
 # @paprize/puppeteer
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [229cf54]
+    - @paprize/core@0.4.1
+
 ## 0.4.1
 
 ### Changed
+
 - Add `@paprize/core` to dependencies
- 
+
 ### Fixed
+
 - Fix missing type deceleration for functions
 
 ## 0.4.0

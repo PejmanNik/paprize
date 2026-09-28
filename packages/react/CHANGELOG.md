@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [229cf54]
+    - @paprize/core@0.4.1
+
 ## 0.4.0
 
 ### Changed
