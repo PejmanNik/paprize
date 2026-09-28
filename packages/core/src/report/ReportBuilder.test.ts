@@ -65,7 +65,6 @@ describe('ReportBuilder', () => {
     it.for([true, false])(
         'tryAddSection should add a section and dispatch sectionCreated',
         async (withSuspense) => {
-            document.getElementById(globalStyleId)?.remove();
             const sectionCreated = vi.fn();
             rb.monitor.addEventListener('sectionCreated', sectionCreated);
 
