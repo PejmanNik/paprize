@@ -12,7 +12,7 @@
         ".": {
             "types": "./dist/paprize-react.d.ts",
             "import": "./dist/paprize-react.js",
-            "require": "./dist/paprize-core.umd.cjs"
+            "require": "./dist/paprize-react.umd.cjs"
         }
     },
     "keywords": [
